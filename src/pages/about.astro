@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CTA from '../components/CTA.astro';
+---
+
+<Layout
+  title="About VanHeight | The Woodlands, TX Remodeling"
+  description="Learn about VanHeight — a premium home remodeling company serving The Woodlands and Greater Houston area for over 10 years."
+>
+  <Header />
+
+  <!-- Hero -->
+  <section class="pt-40 pb-20 relative overflow-hidden" style="background: #0C0C0C;">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="fade-in">
+          <p class="section-label mb-4">Our Story</p>
+          <h1
+            class="text-5xl md:text-6xl font-light leading-tight mb-6"
+            style="font-family: 'Playfair Display', serif;"
+          >
+            Built on<br />
+            <span class="text-gold italic">Craftsmanship</span>
+          </h1>
+          <p class="text-white/60 text-lg leading-relaxed mb-6">
+            VanHeight was founded with a simple belief: every homeowner deserves
+            a contractor they can trust. We combine old-world attention to detail
+            with modern design to create spaces that truly feel like home.
+          </p>
+          <p class="text-white/60 text-lg leading-relaxed">
+            Based in The Woodlands, TX, we've spent over a decade building our
+            reputation one project at a time — always showing up, always
+            delivering, always exceeding expectations.
+          </p>
+        </div>
+        <div class="fade-in relative" style="transition-delay: 0.15s;">
+          <img
+            src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=900&q=75"
+            alt="VanHeight team at work"
+            class="w-full object-cover"
+            style="aspect-ratio: 4/3;"
+            loading="lazy"
+          />
+          <div class="absolute top-0 left-0 w-1 h-24 bg-gold"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="py-24" style="background: #141414;">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="fade-in mb-16 text-center max-w-2xl mx-auto">
+        <p class="section-label mb-4">What Drives Us</p>
+        <h2
+          class="text-4xl md:text-5xl font-light leading-tight"
+          style="font-family: 'Playfair Display', serif;"
+        >
+          Our Values
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-px" style="background: #2A2A2A;">
+        {[
+          { title: 'Precision', text: 'We measure twice and cut once. Every detail matters, from the first design meeting to the final walkthrough.' },
+          { title: 'Integrity', text: 'Honest pricing. Honest timelines. We tell you what a job will truly cost and how long it will really take — then we deliver on that promise.' },
+          { title: 'Quality', text: 'We use only premium materials and proven techniques. Your home deserves nothing less, and neither do you.' },
+        ].map((v, i) => (
+          <div
+            class="fade-in p-10"
+            style={`background: #141414; transition-delay: ${i * 0.1}s;`}
+          >
+            <div class="w-12 h-1 bg-gold mb-6"></div>
+            <h3 class="text-2xl font-semibold mb-4" style="font-family: 'Playfair Display', serif;">
+              {v.title}
+            </h3>
+            <p class="text-white/60 text-sm leading-relaxed">{v.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="py-24" style="background: #0C0C0C;">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-px border border-subtle">
+        {[
+          { number: '10+', label: 'Years in Business' },
+          { number: '500+', label: 'Projects Completed' },
+          { number: '100%', label: 'Licensed & Insured' },
+          { number: '5★', label: 'Google Rating' },
+        ].map((stat, i) => (
+          <div
+            class="fade-in text-center p-10"
+            style={`transition-delay: ${i * 0.1}s;`}
+          >
+            <p class="text-4xl md:text-5xl font-light text-white mb-2">{stat.number}</p>
+            <p class="text-xs text-muted-custom uppercase tracking-widest">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+  <Footer />
+</Layout>

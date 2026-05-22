@@ -1,0 +1,219 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const services = [
+  'Kitchen Remodeling',
+  'Bathroom Remodeling',
+  'Flooring',
+  'Interior Painting',
+  'Exterior Painting',
+  'Home Addition',
+  'Custom Carpentry',
+  'Other',
+];
+---
+
+<Layout
+  title="Contact & Free Quote | VanHeight — The Woodlands, TX"
+  description="Request a free remodeling quote from VanHeight. Serving The Woodlands, Spring, Conroe, Tomball and Greater Houston, TX."
+>
+  <Header />
+
+  <section class="pt-40 pb-24" style="background: #0C0C0C;">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+
+        <!-- Left: Info -->
+        <div class="fade-in">
+          <p class="section-label mb-4">Let's Talk</p>
+          <h1
+            class="text-5xl md:text-6xl font-light leading-tight mb-6"
+            style="font-family: 'Playfair Display', serif;"
+          >
+            Get Your<br />
+            <span class="text-gold italic">Free Quote</span>
+          </h1>
+          <p class="text-white/60 text-lg leading-relaxed mb-12">
+            Tell us about your project and we'll get back to you within 24 hours
+            with a free, no-obligation estimate.
+          </p>
+
+          <div class="flex flex-col gap-8">
+            <div class="flex gap-4 items-start">
+              <div class="w-10 h-10 border border-subtle flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1">Phone</p>
+                <a href="tel:+18322763331" class="text-white hover:text-gold transition-colors">(832) 276-3331</a>
+              </div>
+            </div>
+
+            <div class="flex gap-4 items-start">
+              <div class="w-10 h-10 border border-subtle flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1">Email</p>
+                <a href="mailto:info@vanheight.com" class="text-white hover:text-gold transition-colors">info@vanheight.com</a>
+              </div>
+            </div>
+
+            <div class="flex gap-4 items-start">
+              <div class="w-10 h-10 border border-subtle flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1">Service Area</p>
+                <p class="text-white">The Woodlands, Spring, Conroe,<br />Tomball & Greater Houston, TX</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="fade-in" style="transition-delay: 0.15s;">
+          <form
+            id="contact-form"
+            class="flex flex-col gap-6"
+          >
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="firstName">
+                  First Name *
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  required
+                  class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom"
+                  placeholder="John"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="lastName">
+                  Last Name *
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  required
+                  class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom"
+                  placeholder="Smith"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="email">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom"
+                placeholder="john@example.com"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="phone">
+                Phone
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom"
+                placeholder="(832) 000-0000"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="service">
+                Service Interested In *
+              </label>
+              <select
+                id="service"
+                name="service"
+                required
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors"
+                style="background: #0C0C0C;"
+              >
+                <option value="" disabled selected>Select a service</option>
+                {services.map((s) => (
+                  <option value={s} style="background: #141414;">{s}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="message">
+                Tell Us About Your Project *
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                required
+                rows="5"
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors resize-none placeholder-muted-custom"
+                placeholder="Describe your project, timeline, and any questions you have..."
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-gold w-full text-center py-4">
+              Send My Request
+            </button>
+
+            <p class="text-xs text-muted-custom text-center">
+              We respond within 24 hours. Your information is never shared.
+            </p>
+          </form>
+
+          <!-- Success message (hidden by default) -->
+          <div id="success-msg" class="hidden text-center py-12">
+            <div class="w-16 h-16 border border-gold flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-light mb-2" style="font-family: 'Playfair Display', serif;">
+              Message Sent!
+            </h3>
+            <p class="text-muted-custom text-sm">
+              We'll be in touch within 24 hours. Thank you for choosing VanHeight.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const successMsg = document.getElementById('success-msg');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // TODO: wire up to a form service (Formspree, Netlify Forms, etc.)
+    form.style.display = 'none';
+    successMsg?.classList.remove('hidden');
+  });
+</script>

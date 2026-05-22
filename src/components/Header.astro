@@ -1,0 +1,147 @@
+---
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/services', label: 'Services' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/about', label: 'About' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  id="header"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+  style="background: transparent;"
+>
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2 group">
+      <div class="w-8 h-8 bg-gold flex items-center justify-center">
+        <span class="text-black font-bold text-sm tracking-tight">VH</span>
+      </div>
+      <span class="text-white font-semibold text-xl tracking-wide group-hover:text-gold transition-colors">
+        VanHeight
+      </span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class={`text-sm tracking-widest uppercase font-medium transition-colors ${
+            currentPath === link.href
+              ? 'text-gold'
+              : 'text-white/70 hover:text-white'
+          }`}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- CTA + Language Toggle -->
+    <div class="hidden md:flex items-center gap-4">
+      <button
+        id="lang-toggle"
+        class="text-xs text-white/60 hover:text-gold transition-colors font-medium tracking-widest uppercase px-3 py-2 border border-transparent hover:border-gold/30"
+        title="Toggle language"
+      >
+        <span id="lang-text">ES</span>
+      </button>
+      <a href="tel:+18322763331" class="text-sm text-white/60 hover:text-gold transition-colors">
+        (832) 276-3331
+      </a>
+      <a href="/contact" class="btn-gold text-xs px-5 py-3">
+        Free Quote
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden flex flex-col gap-1.5 p-2"
+      aria-label="Toggle menu"
+    >
+      <span class="w-6 h-0.5 bg-white transition-all duration-300 block" id="line1"></span>
+      <span class="w-6 h-0.5 bg-white transition-all duration-300 block" id="line2"></span>
+      <span class="w-4 h-0.5 bg-white transition-all duration-300 block" id="line3"></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="md:hidden hidden flex-col gap-0 border-t border-subtle"
+    style="background: #0C0C0C;"
+  >
+    {navLinks.map((link) => (
+      <a
+        href={link.href}
+        class="px-6 py-4 text-sm tracking-widest uppercase font-medium text-white/70 hover:text-gold hover:bg-white/5 transition-colors border-b border-subtle"
+      >
+        {link.label}
+      </a>
+    ))}
+    <div class="px-6 py-5 flex flex-col gap-3">
+      <a href="tel:+18322763331" class="text-sm text-muted-custom">
+        (832) 276-3331
+      </a>
+      <a href="/contact" class="btn-gold text-center text-xs py-3">
+        Free Quote
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('header') as HTMLElement;
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const line1 = document.getElementById('line1');
+  const line2 = document.getElementById('line2');
+  const line3 = document.getElementById('line3');
+  const langToggle = document.getElementById('lang-toggle');
+  const langText = document.getElementById('lang-text');
+
+  // Get current language from localStorage
+  let currentLang = (localStorage.getItem('language') || 'en') as 'en' | 'es';
+  if (langText) langText.textContent = currentLang === 'en' ? 'ES' : 'EN';
+
+  // Language toggle
+  langToggle?.addEventListener('click', () => {
+    currentLang = currentLang === 'en' ? 'es' : 'en';
+    localStorage.setItem('language', currentLang);
+    if (langText) langText.textContent = currentLang === 'en' ? 'ES' : 'EN';
+    window.dispatchEvent(new CustomEvent('languageChange', { detail: { lang: currentLang } }));
+  });
+
+  // Scroll effect
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      header.style.background = 'rgba(12,12,12,0.97)';
+      header.style.borderBottom = '1px solid #2A2A2A';
+      header.style.backdropFilter = 'blur(10px)';
+    } else {
+      header.style.background = 'transparent';
+      header.style.borderBottom = 'none';
+      header.style.backdropFilter = 'none';
+    }
+  });
+
+  // Mobile toggle
+  let menuOpen = false;
+  mobileMenuBtn?.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    mobileMenu?.classList.toggle('hidden', !menuOpen);
+    mobileMenu?.classList.toggle('flex', menuOpen);
+    if (line1) line1.style.transform = menuOpen ? 'translateY(8px) rotate(45deg)' : '';
+    if (line2) line2.style.opacity = menuOpen ? '0' : '1';
+    if (line3) {
+      line3.style.transform = menuOpen ? 'translateY(-8px) rotate(-45deg)' : '';
+      line3.style.width = menuOpen ? '24px' : '16px';
+    }
+  });
+</script>

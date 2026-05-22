@@ -1,0 +1,92 @@
+---
+const projects = [
+  {
+    title: 'Modern Kitchen — The Woodlands',
+    category: 'Kitchen',
+    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=75',
+  },
+  {
+    title: 'Spa Master Bathroom — Spring, TX',
+    category: 'Bathroom',
+    image: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=900&q=75',
+  },
+  {
+    title: 'Hardwood Flooring — Conroe, TX',
+    category: 'Flooring',
+    image: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=900&q=75',
+  },
+  {
+    title: 'Open Concept Addition — Tomball, TX',
+    category: 'Addition',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=75',
+  },
+];
+---
+
+<section id="gallery" class="py-24 md:py-32" style="background: #141414;">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- Header -->
+    <div class="mb-16 fade-in flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        <p class="section-label mb-4">Our Work</p>
+        <h2
+          class="text-4xl md:text-5xl font-light leading-tight"
+          style="font-family: 'Playfair Display', serif;"
+        >
+          Featured Projects
+        </h2>
+      </div>
+      <a href="/gallery" class="btn-outline self-start md:self-auto text-xs">
+        Full Gallery
+      </a>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {projects.map((project, i) => (
+        <a
+          href="/gallery"
+          class="group relative overflow-hidden block fade-in"
+          style={`transition-delay: ${i * 0.1}s;`}
+        >
+          <div class="relative overflow-hidden" style="aspect-ratio: 4/3;">
+            <img
+              src={project.image}
+              alt={project.title}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <!-- Overlay -->
+            <div
+              class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6"
+              style="background: linear-gradient(to top, rgba(12,12,12,0.92) 0%, rgba(12,12,12,0.1) 60%);"
+            >
+              <div>
+                <p class="text-gold text-xs tracking-widest uppercase font-semibold mb-1">
+                  {project.category}
+                </p>
+                <p class="text-white text-lg font-medium">{project.title}</p>
+              </div>
+            </div>
+            <!-- Always visible category tag -->
+            <div class="absolute top-4 left-4">
+              <span
+                class="text-xs tracking-widest uppercase font-semibold px-3 py-1"
+                style="background: rgba(201,168,76,0.9); color: #000;"
+              >
+                {project.category}
+              </span>
+            </div>
+          </div>
+          <!-- Title below image (visible by default) -->
+          <div class="pt-4 pb-2">
+            <p class="text-white/80 text-sm font-medium group-hover:text-white transition-colors">
+              {project.title}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

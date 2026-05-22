@@ -1,0 +1,103 @@
+---
+const reasons = [
+  {
+    number: '01',
+    title: 'Licensed & Insured',
+    description:
+      'Fully licensed Texas contractor with comprehensive insurance coverage on every project, giving you complete peace of mind.',
+  },
+  {
+    number: '02',
+    title: 'Transparent Pricing',
+    description:
+      'Detailed, written quotes with no hidden fees. You know exactly what you\'re paying before a single nail is driven.',
+  },
+  {
+    number: '03',
+    title: 'On Time, Every Time',
+    description:
+      'We respect your schedule. Projects are planned meticulously and completed on the agreed timeline — always.',
+  },
+  {
+    number: '04',
+    title: 'Local Expertise',
+    description:
+      'Serving The Woodlands and Greater Houston area for over 10 years. We know the local codes, climate, and style.',
+  },
+];
+---
+
+<section class="py-24 md:py-32" style="background: #0C0C0C;">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- Two-column layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
+      <!-- Left: Image + quote -->
+      <div class="fade-in">
+        <div class="relative">
+          <img
+            src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=900&q=75"
+            alt="VanHeight craftsmanship"
+            class="w-full object-cover"
+            style="aspect-ratio: 3/4;"
+            loading="lazy"
+          />
+          <!-- Gold accent bar -->
+          <div class="absolute top-0 left-0 w-1 h-24 bg-gold"></div>
+          <!-- Quote card -->
+          <div
+            class="absolute bottom-0 right-0 p-6 max-w-xs"
+            style="background: #141414; border-left: 2px solid #C9A84C;"
+          >
+            <p class="text-white/80 text-sm leading-relaxed italic">
+              "We don't just remodel homes — we transform the way our clients
+              experience their most important spaces."
+            </p>
+            <p class="text-gold text-xs font-semibold mt-3 tracking-widest uppercase">
+              — VanHeight Team
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Reasons list -->
+      <div>
+        <div class="fade-in mb-12">
+          <p class="section-label mb-4">Why Choose Us</p>
+          <h2
+            class="text-4xl md:text-5xl font-light leading-tight"
+            style="font-family: 'Playfair Display', serif;"
+          >
+            The VanHeight<br />
+            <span class="text-gold italic">Difference</span>
+          </h2>
+        </div>
+
+        <div class="flex flex-col gap-0">
+          {reasons.map((reason, i) => (
+            <div
+              class="fade-in py-8 border-t border-subtle flex gap-6 group"
+              style={`transition-delay: ${i * 0.1}s;`}
+            >
+              <span class="text-gold font-light text-sm mt-1 shrink-0 w-6">
+                {reason.number}
+              </span>
+              <div>
+                <h3 class="text-lg font-semibold mb-2 group-hover:text-gold transition-colors">
+                  {reason.title}
+                </h3>
+                <p class="text-sm text-muted-custom leading-relaxed">
+                  {reason.description}
+                </p>
+              </div>
+            </div>
+          ))}
+          <div class="pt-8 border-t border-subtle">
+            <a href="/about" class="btn-outline text-xs">Our Story</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,112 @@
+---
+const services = [
+  {
+    id: 'kitchens',
+    title: 'Kitchen Remodeling',
+    description:
+      'Custom cabinetry, countertops, islands, and full kitchen transformations designed around how you live.',
+    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=75',
+    href: '/services/kitchens',
+  },
+  {
+    id: 'bathrooms',
+    title: 'Bathroom Remodeling',
+    description:
+      'Spa-inspired bathrooms with premium tile work, custom vanities, walk-in showers and soaking tubs.',
+    image: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=75',
+    href: '/services/bathrooms',
+  },
+  {
+    id: 'flooring',
+    title: 'Flooring',
+    description:
+      'Hardwood, luxury vinyl, tile, and more — installed with precision for a seamless finish throughout your home.',
+    image: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=800&q=75',
+    href: '/services/flooring',
+  },
+  {
+    id: 'painting',
+    title: 'Interior & Exterior Painting',
+    description:
+      'Clean lines, premium paints, and flawless finishes that protect and transform every surface.',
+    image: 'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=800&q=75',
+    href: '/services/painting',
+  },
+  {
+    id: 'additions',
+    title: 'Additions',
+    description:
+      'Expand your living space with seamlessly integrated room additions, sunrooms, and second-story builds.',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=75',
+    href: '/services/additions',
+  },
+  {
+    id: 'carpentry',
+    title: 'Custom Carpentry',
+    description:
+      'Built-ins, crown molding, trim work, and bespoke woodwork crafted to elevate every detail of your home.',
+    image: 'https://images.unsplash.com/photo-1615873968403-89e068629265?w=800&q=75',
+    href: '/services/carpentry',
+  },
+];
+---
+
+<section id="services" class="py-24 md:py-32" style="background: #0C0C0C;">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- Header -->
+    <div class="mb-16 fade-in">
+      <p class="section-label mb-4">What We Do</p>
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <h2
+          class="text-4xl md:text-5xl font-light leading-tight"
+          style="font-family: 'Playfair Display', serif;"
+        >
+          Our Services
+        </h2>
+        <a href="/services" class="btn-outline self-start md:self-auto text-xs">
+          All Services
+        </a>
+      </div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px" style="background: #2A2A2A;">
+      {services.map((service, i) => (
+        <a
+          href={service.href}
+          class="group relative overflow-hidden block fade-in"
+          style={`background: #0C0C0C; transition-delay: ${i * 0.06}s;`}
+        >
+          <!-- Image -->
+          <div class="relative h-64 overflow-hidden">
+            <img
+              src={service.image}
+              alt={service.title}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div
+              class="absolute inset-0 transition-opacity duration-300"
+              style="background: linear-gradient(to top, rgba(12,12,12,0.85) 0%, rgba(12,12,12,0.1) 100%);"
+            ></div>
+          </div>
+
+          <!-- Content -->
+          <div class="p-6">
+            <h3 class="text-lg font-semibold mb-2 group-hover:text-gold transition-colors">
+              {service.title}
+            </h3>
+            <p class="text-sm leading-relaxed text-muted-custom">
+              {service.description}
+            </p>
+            <div class="mt-4 flex items-center gap-2 text-gold text-xs font-semibold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+              <span>Learn More</span>
+              <span>→</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

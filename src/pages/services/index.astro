@@ -1,0 +1,124 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CTA from '../../components/CTA.astro';
+
+const services = [
+  {
+    title: 'Kitchen Remodeling',
+    description:
+      'From custom cabinetry and countertops to complete layout redesigns, we create kitchens that are both beautiful and highly functional. Whether you want a modern open concept or a classic traditional look, our team delivers.',
+    image: '/images/kitchen-remodeling.png',
+    href: '/services/kitchens',
+    features: ['Custom cabinetry', 'Countertops & islands', 'Backsplash tile', 'Lighting design', 'Plumbing upgrades'],
+  },
+  {
+    title: 'Bathroom Remodeling',
+    description:
+      'Transform your bathroom into a personal retreat. We handle everything from walk-in shower conversions and freestanding tub installations to full gut renovations with custom tile work.',
+    image: '/images/bathroom-remodeling.jpg',
+    href: '/services/bathrooms',
+    features: ['Walk-in showers', 'Custom vanities', 'Soaking tubs', 'Heated floors', 'Full renovations'],
+  },
+  {
+    title: 'Flooring',
+    description:
+      'We install hardwood, luxury vinyl plank, ceramic and porcelain tile, and more. Proper installation ensures your floors last for decades and look stunning from day one.',
+    image: '/images/floor.png',
+    href: '/services/flooring',
+    features: ['Hardwood', 'Luxury vinyl plank', 'Ceramic & porcelain tile', 'Natural stone', 'Subfloor repair'],
+  },
+  {
+    title: 'Interior & Exterior Painting',
+    description:
+      'A fresh coat of paint is one of the most impactful transformations you can make. Our painters deliver clean, crisp lines with premium products that stand up to the Texas climate.',
+    image: '/images/interior-painting.png',
+    href: '/services/painting',
+    features: ['Interior rooms', 'Exterior siding', 'Trim & molding', 'Cabinets', 'Texture & finishes'],
+  },
+  {
+    title: 'Home Additions',
+    description:
+      'Need more space? We design and build seamless room additions, sunrooms, garage conversions, and second-story expansions that match the character of your existing home.',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=75',
+    href: '/services/additions',
+    features: ['Room additions', 'Sunrooms', 'Garage conversions', 'Second-story builds', 'Permits & engineering'],
+  },
+  {
+    title: 'Custom Carpentry',
+    description:
+      'From built-in bookshelves and entertainment centers to crown molding and wainscoting, our carpenters add the finishing touches that elevate your home from ordinary to extraordinary.',
+    image: '/images/carpentry.png',
+    href: '/services/carpentry',
+    features: ['Built-in shelving', 'Crown molding', 'Wainscoting', 'Custom trim', 'Entertainment centers'],
+  },
+];
+---
+
+<Layout
+  title="Services | VanHeight — The Woodlands, TX Remodeling"
+  description="Full-service home remodeling: kitchens, bathrooms, flooring, painting, additions, and custom carpentry in The Woodlands and Greater Houston, TX."
+>
+  <Header />
+
+  <!-- Page Hero -->
+  <section class="pt-40 pb-20" style="background: #0C0C0C;">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="section-label mb-4">What We Offer</p>
+      <h1
+        class="text-5xl md:text-6xl font-light leading-tight max-w-2xl"
+        style="font-family: 'Playfair Display', serif;"
+      >
+        Services Built for<br />
+        <span class="text-gold italic">Your Home</span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- Services List -->
+  <section class="pb-24" style="background: #0C0C0C;">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col gap-0 border-t border-subtle">
+        {services.map((service, i) => (
+          <div
+            class="fade-in grid grid-cols-1 lg:grid-cols-2 gap-0 border-b border-subtle py-16"
+            style={`transition-delay: ${i * 0.08}s;`}
+          >
+            <div class={`flex flex-col justify-center pr-0 lg:pr-16 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+              <p class="text-gold text-xs tracking-widest uppercase font-semibold mb-4">0{i + 1}</p>
+              <h2
+                class="text-3xl md:text-4xl font-light mb-4 leading-tight"
+                style="font-family: 'Playfair Display', serif;"
+              >
+                {service.title}
+              </h2>
+              <p class="text-white/60 text-sm leading-relaxed mb-6">{service.description}</p>
+              <ul class="flex flex-wrap gap-2 mb-8">
+                {service.features.map((f) => (
+                  <li class="text-xs text-muted-custom border border-subtle px-3 py-1">
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <a href="/contact" class="btn-gold self-start text-xs">
+                Get a Quote
+              </a>
+            </div>
+            <div class={`relative overflow-hidden ${i % 2 === 1 ? 'lg:order-1 lg:pr-16' : ''}`}>
+              <img
+                src={service.image}
+                alt={service.title}
+                class="w-full h-64 lg:h-80 object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+  <Footer />
+</Layout>

@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CTA from '../components/CTA.astro';
+
+const projects = [
+  { title: 'Modern Kitchen Design', category: 'Kitchen', image: '/images/1.jpg', location: 'The Woodlands, TX' },
+  { title: 'Premium Kitchen Cabinetry', category: 'Kitchen', image: '/images/Photo15.jpg', location: 'Spring, TX' },
+  { title: 'Spa Master Bathroom', category: 'Bathroom', image: '/images/Photo24.jpg', location: 'The Woodlands, TX' },
+  { title: 'Custom Kitchen Installation', category: 'Kitchen', image: '/images/29-A7408557.jpg', location: 'Conroe, TX' },
+  { title: 'Luxury Bathroom Renovation', category: 'Bathroom', image: '/images/14.jpg', location: 'Spring, TX' },
+  { title: 'Premium Tile Flooring', category: 'Flooring', image: '/images/Photo18.jpg', location: 'The Woodlands, TX' },
+  { title: 'Professional Painting Work', category: 'Painting', image: '/images/Photo5.jpg', location: 'Tomball, TX' },
+  { title: 'Kitchen Island & Counters', category: 'Kitchen', image: '/images/31-A7409430.jpg', location: 'The Woodlands, TX' },
+  { title: 'Bathroom Walk-in Shower', category: 'Bathroom', image: '/images/15.jpg', location: 'Conroe, TX' },
+  { title: 'Custom Carpentry Shelving', category: 'Carpentry', image: '/images/3.jpg', location: 'Spring, TX' },
+  { title: 'Exterior Painting Project', category: 'Painting', image: '/images/03-DJI_0277.jpg', location: 'The Woodlands, TX' },
+  { title: 'Gourmet Kitchen Space', category: 'Kitchen', image: '/images/Photo9.jpg', location: 'Tomball, TX' },
+  { title: 'Master Bath Remodel', category: 'Bathroom', image: '/images/34-A7408591.jpg', location: 'Spring, TX' },
+  { title: 'Elegant Tile Installation', category: 'Flooring', image: '/images/5.jpg', location: 'The Woodlands, TX' },
+  { title: 'Kitchen Renovation Complete', category: 'Kitchen', image: '/images/41-A7409451.jpg', location: 'Conroe, TX' },
+  { title: 'Interior Paint Finish', category: 'Painting', image: '/images/29-A7409425.jpg', location: 'Spring, TX' },
+  { title: 'Bathroom Fixtures Upgrade', category: 'Bathroom', image: '/images/19.jpg', location: 'The Woodlands, TX' },
+  { title: 'Flooring Installation', category: 'Flooring', image: '/images/8.jpg', location: 'Tomball, TX' },
+  { title: 'Hardwood Floor Refinish', category: 'Flooring', image: '/images/48-A7409464.jpg', location: 'Conroe, TX' },
+  { title: 'Built-in Cabinet Design', category: 'Carpentry', image: '/images/Photo35.jpg', location: 'Spring, TX' },
+];
+
+const categories = ['All', 'Kitchen', 'Bathroom', 'Flooring', 'Painting', 'Carpentry'];
+---
+
+<Layout
+  title="Project Gallery | VanHeight — The Woodlands, TX"
+  description="Browse VanHeight's portfolio of completed kitchen, bathroom, flooring, and remodeling projects in The Woodlands and Greater Houston, TX."
+>
+  <Header />
+
+  <!-- Hero -->
+  <section class="pt-40 pb-20" style="background: #0C0C0C;">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="section-label mb-4">Our Portfolio</p>
+      <h1
+        class="text-5xl md:text-6xl font-light leading-tight"
+        style="font-family: 'Playfair Display', serif;"
+      >
+        Our Work
+      </h1>
+    </div>
+  </section>
+
+  <!-- Filter + Grid -->
+  <section class="pb-24" style="background: #0C0C0C;">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <!-- Filter tabs -->
+      <div class="flex flex-wrap gap-2 mb-12" id="filter-tabs">
+        {categories.map((cat) => (
+          <button
+            data-filter={cat}
+            class={`text-xs tracking-widest uppercase font-semibold px-4 py-2 border transition-colors filter-btn ${
+              cat === 'All'
+                ? 'border-gold bg-gold text-black'
+                : 'border-subtle text-muted-custom hover:border-gold hover:text-white'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <!-- Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px" style="background: #2A2A2A;" id="gallery-grid">
+        {projects.map((project) => (
+          <div
+            class="gallery-item group relative overflow-hidden block"
+            data-category={project.category}
+            style="background: #0C0C0C;"
+          >
+            <div class="relative overflow-hidden" style="aspect-ratio: 4/3;">
+              <img
+                src={project.image}
+                alt={project.title}
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div
+                class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5"
+                style="background: linear-gradient(to top, rgba(12,12,12,0.92) 0%, rgba(12,12,12,0.1) 60%);"
+              >
+                <div>
+                  <p class="text-gold text-xs tracking-widest uppercase font-semibold mb-1">{project.category}</p>
+                  <p class="text-white font-medium">{project.title}</p>
+                  <p class="text-white/50 text-xs mt-1">{project.location}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+  <Footer />
+</Layout>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const items = document.querySelectorAll<HTMLElement>('.gallery-item');
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter ?? 'All';
+
+      // Update button styles
+      filterBtns.forEach((b) => {
+        b.classList.remove('border-gold', 'bg-gold', 'text-black');
+        b.classList.add('border-subtle', 'text-muted-custom');
+      });
+      btn.classList.add('border-gold', 'bg-gold', 'text-black');
+      btn.classList.remove('border-subtle', 'text-muted-custom');
+
+      // Filter items
+      items.forEach((item) => {
+        const match = filter === 'All' || item.dataset.category === filter;
+        item.style.display = match ? 'block' : 'none';
+      });
+    });
+  });
+</script>
