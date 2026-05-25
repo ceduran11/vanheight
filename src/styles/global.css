@@ -26,38 +26,6 @@
   .text-muted-custom { color: #8A8A8A; }
   .border-subtle { border-color: #2A2A2A; }
 
-  .btn-gold {
-    background-color: #C9A84C;
-    color: #000;
-    font-weight: 600;
-    padding: 0.75rem 2rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-size: 0.8125rem;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    display: inline-block;
-  }
-  .btn-gold:hover {
-    background-color: #E8C97A;
-    transform: translateY(-1px);
-  }
-
-  .btn-outline {
-    border: 1px solid #C9A84C;
-    color: #C9A84C;
-    font-weight: 600;
-    padding: 0.75rem 2rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-size: 0.8125rem;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    display: inline-block;
-  }
-  .btn-outline:hover {
-    background-color: #C9A84C;
-    color: #000;
-  }
-
   .section-label {
     color: #C9A84C;
     font-size: 0.75rem;
@@ -75,4 +43,65 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Unlayered — higher cascade priority than all Tailwind @layer styles */
+
+.btn-gold {
+  background-color: #C9A84C;
+  color: #000;
+  font-weight: 700;
+  padding: 0.875rem 2.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  display: inline-block;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.5);
+  transition: all 0.25s ease;
+  border-radius: 2px;
+}
+
+.btn-gold:hover {
+  background-color: #D4B460;
+  box-shadow: 0 8px 30px rgba(201,168,76,0.7);
+  transform: translateY(-3px);
+}
+
+.btn-outline {
+  border: 1.5px solid #C9A84C;
+  color: #C9A84C;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  display: inline-block;
+  background: rgba(201,168,76,0.05);
+  backdrop-filter: blur(4px);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.btn-outline:hover {
+  background-color: rgba(201,168,76,0.12) !important;
+  border-color: #C9A84C !important;
+  color: #C9A84C;
+}
+
+input,
+textarea,
+select {
+  color: #F5F5F5;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(245, 245, 245, 0.35);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #C9A84C !important;
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15) !important;
+  background: #161616 !important;
+  outline: none;
 }
