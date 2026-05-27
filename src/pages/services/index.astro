@@ -101,7 +101,7 @@ const services = [
                   </li>
                 ))}
               </ul>
-              <a href="/contact" class="btn-gold self-start" style="font-size: 0.75rem;">
+              <a href={`/contact?service=${encodeURIComponent(service.title)}`} class="btn-gold self-start" style="font-size: 0.75rem;">
                 Get a Quote
               </a>
             </div>
