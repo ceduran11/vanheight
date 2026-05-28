@@ -39,7 +39,7 @@ export const translations = {
       titleSpan: 'Your Home',
       subtext: 'Get a free, no-obligation quote from The Woodlands\' premier remodeling team. We respond within 24 hours.',
       button: 'Request a Free Quote',
-      phone: '(832) 276-3331',
+      phone: '(832) 306-9934',
     },
     footer: {
       copyright: '© {year} VanHeight. All rights reserved. The Woodlands, TX.',
@@ -93,7 +93,7 @@ export const translations = {
       titleSpan: 'Tu Hogar',
       subtext: 'Obtén una cotización gratis sin obligación del equipo de remodelación premier de The Woodlands. Respondemos dentro de 24 horas.',
       button: 'Solicitar Cotización Gratis',
-      phone: '(832) 276-3331',
+      phone: '(832) 306-9934',
     },
     footer: {
       copyright: '© {year} VanHeight. Todos los derechos reservados. The Woodlands, TX.',
