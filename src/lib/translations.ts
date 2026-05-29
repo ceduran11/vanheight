@@ -109,4 +109,60 @@ export const translations = {
   },
 };
 
-export type Language = 'en' | 'es';
+  pt: {
+    nav: {
+      home: 'Início',
+      services: 'Serviços',
+      gallery: 'Galeria',
+      about: 'Sobre',
+    },
+    hero: {
+      label: 'The Woodlands, Texas',
+      headline1: 'Casas Construídas',
+      headline2: 'Com Propósito.',
+      subtext: 'Remodelação premium em cozinhas, banheiros, pisos, pintura, ampliações e marcenaria personalizada — construído para durar uma vida.',
+      cta1: 'Solicitar Orçamento Grátis',
+      cta2: 'Ver Nossos Trabalhos',
+      stat1: 'Anos de Experiência',
+      stat2: 'Projetos Concluídos',
+      stat3: 'Satisfação',
+    },
+    services: {
+      label: 'O Que Fazemos',
+      title: 'Nossos Serviços',
+      allServices: 'Todos os Serviços',
+    },
+    gallery: {
+      label: 'Nossos Trabalhos',
+      title: 'Projetos em Destaque',
+      fullGallery: 'Galeria Completa',
+    },
+    whyUs: {
+      label: 'Por Que Nos Escolher',
+      title: 'A Diferença',
+      titleSpan: 'VanHeight',
+      ourStory: 'Nossa História',
+    },
+    cta: {
+      label: 'Pronto para Começar?',
+      title: 'Vamos Transformar',
+      titleSpan: 'Sua Casa',
+      subtext: 'Obtenha um orçamento grátis sem compromisso da equipe premier de remodelação de The Woodlands. Respondemos em 24 horas.',
+      button: 'Solicitar Orçamento Grátis',
+      phone: '(832) 306-9934',
+    },
+    footer: {
+      copyright: '© {year} VanHeight. Todos os direitos reservados. The Woodlands, TX.',
+      services: 'Serviços',
+      company: 'Empresa',
+      contact: 'Contato',
+      phone: 'Telefone',
+      email: 'E-mail',
+      area: 'Área de Atendimento',
+      privacy: 'Política de Privacidade',
+      terms: 'Termos de Serviço',
+    },
+  },
+};
+
+export type Language = 'en' | 'es' | 'pt';

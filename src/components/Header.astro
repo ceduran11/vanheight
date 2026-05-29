@@ -138,14 +138,17 @@ const currentPath = Astro.url.pathname;
   const langText = document.getElementById('lang-text');
 
   // Get current language from localStorage
-  let currentLang = (localStorage.getItem('language') || 'en') as 'en' | 'es';
-  if (langText) langText.textContent = currentLang === 'en' ? 'ES' : 'EN';
+  const langCycle = ['en', 'es', 'pt'] as const;
+  const langLabels: Record<string, string> = { en: 'ES', es: 'PT', pt: 'EN' };
+  let currentLang = (localStorage.getItem('language') || 'en') as 'en' | 'es' | 'pt';
+  if (langText) langText.textContent = langLabels[currentLang];
 
-  // Language toggle
+  // Language toggle — cycles EN → ES → PT → EN
   langToggle?.addEventListener('click', () => {
-    currentLang = currentLang === 'en' ? 'es' : 'en';
+    const idx = langCycle.indexOf(currentLang);
+    currentLang = langCycle[(idx + 1) % langCycle.length];
     localStorage.setItem('language', currentLang);
-    if (langText) langText.textContent = currentLang === 'en' ? 'ES' : 'EN';
+    if (langText) langText.textContent = langLabels[currentLang];
     window.dispatchEvent(new CustomEvent('languageChange', { detail: { lang: currentLang } }));
   });
 
