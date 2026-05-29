@@ -27,15 +27,15 @@ const services = [
 
         <!-- Left: Info -->
         <div class="fade-in">
-          <p class="section-label mb-4">Let's Talk</p>
+          <p class="section-label mb-4" data-i18n="contact.label">Let's Talk</p>
           <h1
             class="text-5xl md:text-6xl font-light leading-tight mb-6"
             style="font-family: 'Playfair Display', serif;"
           >
-            Get Your<br />
-            <span class="text-gold italic">Free Quote</span>
+            <span data-i18n="contact.headline1">Get Your</span><br />
+            <span class="text-gold italic" data-i18n="contact.headline2">Free Quote</span>
           </h1>
-          <p class="text-white/60 text-lg leading-relaxed mb-12">
+          <p class="text-white/60 text-lg leading-relaxed mb-12" data-i18n="contact.subtext">
             Tell us about your project and we'll get back to you within 24 hours
             with a free, no-obligation estimate.
           </p>
@@ -48,7 +48,7 @@ const services = [
                 </svg>
               </div>
               <div>
-                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1">Phone</p>
+                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1" data-i18n="contact.phoneLabel">Phone</p>
                 <a href="tel:+18323069934" class="text-white hover:text-gold transition-colors">(832) 306-9934</a>
               </div>
             </div>
@@ -60,7 +60,7 @@ const services = [
                 </svg>
               </div>
               <div>
-                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1">Email</p>
+                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1" data-i18n="contact.emailLabel">Email</p>
                 <a href="mailto:info@vanheight.com" class="text-white hover:text-gold transition-colors">info@vanheight.com</a>
               </div>
             </div>
@@ -73,8 +73,8 @@ const services = [
                 </svg>
               </div>
               <div>
-                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1">Service Area</p>
-                <p class="text-white">The Woodlands, Spring, Conroe,<br />Tomball & Greater Houston, TX</p>
+                <p class="text-xs text-muted-custom uppercase tracking-widest mb-1" data-i18n="contact.areaLabel">Service Area</p>
+                <p class="text-white" data-i18n="contact.areaText">The Woodlands, Spring, Conroe, Tomball & Greater Houston, TX</p>
               </div>
             </div>
           </div>
@@ -96,7 +96,7 @@ const services = [
             <input type="checkbox" name="botcheck" style="display:none;" />
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="firstName">
+                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="firstName" data-i18n="contact.firstName">
                   First Name *
                 </label>
                 <input
@@ -109,7 +109,7 @@ const services = [
                 />
               </div>
               <div>
-                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="lastName">
+                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="lastName" data-i18n="contact.lastName">
                   Last Name *
                 </label>
                 <input
@@ -124,7 +124,7 @@ const services = [
             </div>
 
             <div>
-              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="email">
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="email" data-i18n="contact.email">
                 Email
               </label>
               <input
@@ -137,7 +137,7 @@ const services = [
             </div>
 
             <div>
-              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="phone">
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="phone" data-i18n="contact.phone">
                 Phone
               </label>
               <input
@@ -150,7 +150,7 @@ const services = [
             </div>
 
             <div>
-              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="service">
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="service" data-i18n="contact.serviceLabel">
                 Service Interested In *
               </label>
               <select
@@ -160,7 +160,7 @@ const services = [
                 class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors"
                 style="background: #0C0C0C;"
               >
-                <option value="" disabled selected>Select a service</option>
+                <option value="" disabled selected data-i18n="contact.selectService">Select a service</option>
                 {services.map((s) => (
                   <option value={s} style="background: #141414;">{s}</option>
                 ))}
@@ -168,7 +168,7 @@ const services = [
             </div>
 
             <div>
-              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="message">
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="message" data-i18n="contact.projectLabel">
                 Tell Us About Your Project
               </label>
               <textarea
@@ -181,12 +181,12 @@ const services = [
             </div>
 
             <div>
-              <button type="submit" class="btn-gold" style="padding: 0.875rem 2.5rem;">
+              <button type="submit" class="btn-gold" style="padding: 0.875rem 2.5rem;" data-i18n="contact.submit">
                 Send My Request
               </button>
             </div>
 
-            <p class="text-xs text-muted-custom text-center">
+            <p class="text-xs text-muted-custom text-center" data-i18n="contact.note">
               We respond within 24 hours. Your information is never shared.
             </p>
           </form>
@@ -198,11 +198,11 @@ const services = [
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/>
               </svg>
             </div>
-            <h3 class="text-2xl font-light mb-2" style="font-family: 'Playfair Display', serif;">
-              Message Sent!
+            <h3 class="text-2xl font-light mb-2" style="font-family: 'Playfair Display', serif;" data-i18n="contact.successTitle">
+              Request Received!
             </h3>
-            <p class="text-muted-custom text-sm">
-              We'll be in touch within 24 hours. Thank you for choosing VanHeight.
+            <p class="text-muted-custom text-sm" data-i18n="contact.successText">
+              Thank you! We'll be in touch within 24 hours to discuss your project.
             </p>
           </div>
         </div>
