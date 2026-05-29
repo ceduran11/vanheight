@@ -4,13 +4,13 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 const services = [
-  'Kitchen Remodeling',
-  'Bathroom Remodeling',
-  'Flooring',
-  'Interior & Exterior Painting',
-  'Home Additions',
-  'Custom Carpentry',
-  'Other',
+  { label: 'Kitchen Remodeling',          key: 'services.kitchen.title' },
+  { label: 'Bathroom Remodeling',         key: 'services.bathroom.title' },
+  { label: 'Flooring',                    key: 'services.flooring.title' },
+  { label: 'Interior & Exterior Painting',key: 'services.painting.title' },
+  { label: 'Home Additions',              key: 'contact.optAdditions' },
+  { label: 'Custom Carpentry',            key: 'services.carpentry.title' },
+  { label: 'Other',                       key: 'contact.optOther' },
 ];
 ---
 
@@ -162,7 +162,7 @@ const services = [
               >
                 <option value="" disabled selected data-i18n="contact.selectService">Select a service</option>
                 {services.map((s) => (
-                  <option value={s} style="background: #141414;">{s}</option>
+                  <option value={s.label} data-i18n={s.key} style="background: #141414;">{s.label}</option>
                 ))}
               </select>
             </div>
