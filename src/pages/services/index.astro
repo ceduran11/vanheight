@@ -6,49 +6,49 @@ import CTA from '../../components/CTA.astro';
 
 const services = [
   {
+    id: 'kitchen',
     title: 'Kitchen Remodeling',
-    description:
-      'From custom cabinetry and countertops to complete layout redesigns, we create kitchens that are both beautiful and highly functional. Whether you want a modern open concept or a classic traditional look, our team delivers.',
+    description: 'From custom cabinetry and countertops to complete layout redesigns, we create kitchens that are both beautiful and highly functional. Whether you want a modern open concept or a classic traditional look, our team delivers.',
     image: '/images/kitchen-remodeling.png',
     href: '/services/kitchens',
     features: ['Custom cabinetry', 'Countertops & islands', 'Backsplash tile', 'Lighting design', 'Plumbing upgrades'],
   },
   {
+    id: 'bathroom',
     title: 'Bathroom Remodeling',
-    description:
-      'Transform your bathroom into a personal retreat. We handle everything from walk-in shower conversions and freestanding tub installations to full gut renovations with custom tile work.',
+    description: 'Transform your bathroom into a personal retreat. We handle everything from walk-in shower conversions and freestanding tub installations to full gut renovations with custom tile work.',
     image: '/images/bathroom-remodeling.jpg',
     href: '/services/bathrooms',
     features: ['Walk-in showers', 'Custom vanities', 'Soaking tubs', 'Heated floors', 'Full renovations'],
   },
   {
+    id: 'flooring',
     title: 'Flooring',
-    description:
-      'We install hardwood, luxury vinyl plank, ceramic and porcelain tile, and more. Proper installation ensures your floors last for decades and look stunning from day one.',
+    description: 'We install hardwood, luxury vinyl plank, ceramic and porcelain tile, and more. Proper installation ensures your floors last for decades and look stunning from day one.',
     image: '/images/floor.png',
     href: '/services/flooring',
     features: ['Hardwood', 'Luxury vinyl plank', 'Ceramic & porcelain tile', 'Natural stone', 'Subfloor repair'],
   },
   {
+    id: 'painting',
     title: 'Interior & Exterior Painting',
-    description:
-      'A fresh coat of paint is one of the most impactful transformations you can make. Our painters deliver clean, crisp lines with premium products that stand up to the Texas climate.',
+    description: 'A fresh coat of paint is one of the most impactful transformations you can make. Our painters deliver clean, crisp lines with premium products that stand up to the Texas climate.',
     image: '/images/interior-painting.png',
     href: '/services/painting',
     features: ['Interior rooms', 'Exterior siding', 'Trim & molding', 'Cabinets', 'Texture & finishes'],
   },
   {
+    id: 'additions',
     title: 'Home Additions',
-    description:
-      'Need more space? We design and build seamless room additions, sunrooms, garage conversions, and second-story expansions that match the character of your existing home.',
+    description: 'Need more space? We design and build seamless room additions, sunrooms, garage conversions, and second-story expansions that match the character of your existing home.',
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=75',
     href: '/services/additions',
     features: ['Room additions', 'Sunrooms', 'Garage conversions', 'Second-story builds', 'Permits & engineering'],
   },
   {
+    id: 'carpentry',
     title: 'Custom Carpentry',
-    description:
-      'From built-in bookshelves and entertainment centers to crown molding and wainscoting, our carpenters add the finishing touches that elevate your home from ordinary to extraordinary.',
+    description: 'From built-in bookshelves and entertainment centers to crown molding and wainscoting, our carpenters add the finishing touches that elevate your home from ordinary to extraordinary.',
     image: '/images/carpentry.png',
     href: '/services/carpentry',
     features: ['Built-in shelving', 'Crown molding', 'Wainscoting', 'Custom trim', 'Entertainment centers'],
@@ -65,13 +65,13 @@ const services = [
   <!-- Page Hero -->
   <section class="pt-32 pb-20" style="background: #0C0C0C;">
     <div class="max-w-7xl mx-auto px-6">
-      <p class="section-label mb-4">What We Offer</p>
+      <p class="section-label mb-4" data-i18n="servicesPage.label">What We Offer</p>
       <h1
         class="text-5xl md:text-6xl font-light leading-tight max-w-2xl"
         style="font-family: 'Playfair Display', serif;"
       >
-        Services Built for<br />
-        <span class="text-gold italic">Your Home</span>
+        <span data-i18n="servicesPage.title">Services Built for</span><br />
+        <span class="text-gold italic" data-i18n="servicesPage.titleSpan">Your Home</span>
       </h1>
     </div>
   </section>
@@ -90,10 +90,11 @@ const services = [
               <h2
                 class="text-3xl md:text-4xl font-light mb-4 leading-tight"
                 style="font-family: 'Playfair Display', serif;"
+                data-i18n={`servicesPage.${service.id}.title`}
               >
                 {service.title}
               </h2>
-              <p class="text-white/60 text-sm leading-relaxed mb-6">{service.description}</p>
+              <p class="text-white/60 text-sm leading-relaxed mb-6" data-i18n={`servicesPage.${service.id}.desc`}>{service.description}</p>
               <ul class="flex flex-wrap gap-2 mb-8">
                 {service.features.map((f) => (
                   <li class="text-xs text-muted-custom border border-subtle px-3 py-1">
@@ -101,7 +102,7 @@ const services = [
                   </li>
                 ))}
               </ul>
-              <a href={`/contact?service=${encodeURIComponent(service.title)}`} class="btn-gold self-start" style="font-size: 0.75rem;">
+              <a href={`/contact?service=${encodeURIComponent(service.title)}`} class="btn-gold self-start" style="font-size: 0.75rem;" data-i18n="servicesPage.getQuote">
                 Get a Quote
               </a>
             </div>
