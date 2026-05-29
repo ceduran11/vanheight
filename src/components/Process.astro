@@ -40,13 +40,13 @@ const steps = [
 
     <!-- Header -->
     <div class="fade-in mb-20 text-center max-w-2xl mx-auto">
-      <p class="section-label mb-4">How We Work</p>
+      <p class="section-label mb-4" data-i18n="process.label">How We Work</p>
       <h2
         class="text-4xl md:text-5xl font-light leading-tight"
         style="font-family: 'Playfair Display', serif;"
       >
-        A Process Built on<br />
-        <span class="text-gold italic">Clarity & Trust</span>
+        <span data-i18n="process.title">A Process Built on</span><br />
+        <span class="text-gold italic" data-i18n="process.titleSpan">Clarity & Trust</span>
       </h2>
     </div>
 
@@ -91,10 +91,11 @@ const steps = [
             <h3
               class="text-xl font-semibold mb-3 leading-tight"
               style="font-family: 'Playfair Display', serif;"
+              data-i18n={`process.step${i + 1}.title`}
             >
               {step.title}
             </h3>
-            <p class="text-white/50 text-sm leading-relaxed">
+            <p class="text-white/50 text-sm leading-relaxed" data-i18n={`process.step${i + 1}.desc`}>
               {step.description}
             </p>
 
