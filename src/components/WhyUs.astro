@@ -51,8 +51,8 @@ const reasons = [
             style="background: #141414; border-left: 2px solid #C9A84C;"
           >
             <p class="text-white/80 text-sm leading-relaxed italic">
-              "We don't just remodel homes — we transform the way our clients
-              experience their most important spaces."
+              <span data-i18n="whyUs.quote">We don't just remodel homes — we transform the way our clients
+              experience their most important spaces.</span>
             </p>
             <p class="text-gold text-xs font-semibold mt-3 tracking-widest uppercase">
               — VanHeight Team
@@ -64,13 +64,13 @@ const reasons = [
       <!-- Right: Reasons list -->
       <div>
         <div class="fade-in mb-12">
-          <p class="section-label mb-4">Why Choose Us</p>
+          <p class="section-label mb-4" data-i18n="whyUs.label">Why Choose Us</p>
           <h2
             class="text-4xl md:text-5xl font-light leading-tight"
             style="font-family: 'Playfair Display', serif;"
           >
-            The VanHeight<br />
-            <span class="text-gold italic">Difference</span>
+            <span data-i18n="whyUs.title">The VanHeight</span><br />
+            <span class="text-gold italic" data-i18n="whyUs.titleSpan">Difference</span>
           </h2>
         </div>
 
@@ -84,17 +84,17 @@ const reasons = [
                 {reason.number}
               </span>
               <div>
-                <h3 class="text-lg font-semibold mb-2 group-hover:text-gold transition-colors">
+                <h3 class="text-lg font-semibold mb-2 group-hover:text-gold transition-colors" data-i18n={`whyUs.reason${reason.number}.title`}>
                   {reason.title}
                 </h3>
-                <p class="text-sm text-muted-custom leading-relaxed">
+                <p class="text-sm text-muted-custom leading-relaxed" data-i18n={`whyUs.reason${reason.number}.desc`}>
                   {reason.description}
                 </p>
               </div>
             </div>
           ))}
           <div class="pt-8 border-t border-subtle">
-            <a href="/about" class="btn-outline" style="font-size: 0.75rem;">Our Story</a>
+            <a href="/about" class="btn-outline" style="font-size: 0.75rem;" data-i18n="whyUs.ourStory">Our Story</a>
           </div>
         </div>
       </div>
