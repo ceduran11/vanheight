@@ -48,49 +48,43 @@ import Layout from '../../layouts/Layout.astro';
       </div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-6 py-16">
+    <!-- Hero Section with Houston Background -->
+    <div class="relative overflow-hidden flex flex-col justify-end" style="min-height: 600px;">
+      <img
+        src="https://images.unsplash.com/photo-1530089711124-9ca31fb9e863?w=1800&q=80"
+        alt="Houston Downtown Skyline"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(12,12,12,0.97) 0%, rgba(12,12,12,0.6) 50%, rgba(12,12,12,0.25) 100%);"></div>
 
-      <!-- Page Title -->
-      <div class="mb-16">
+      <div class="relative z-10 max-w-6xl mx-auto px-6 pb-16 pt-24 w-full">
         <p class="section-label mb-3">Market Intelligence</p>
-        <h2 class="text-5xl md:text-6xl font-light leading-tight" style="font-family: 'Playfair Display', serif;">
+        <h2 class="text-5xl md:text-6xl font-light leading-tight mb-4" style="font-family: 'Playfair Display', serif;">
           Investing in Houston<br />
           <span class="text-gold italic">Real Estate</span>
         </h2>
-        <p class="text-white/50 text-lg mt-4 max-w-2xl">
+        <p class="text-white/60 text-lg max-w-2xl mb-12">
           A strategic overview of the financial, economic, and tax advantages of Houston real estate investment — and how FlipperTX supports your operation.
         </p>
-      </div>
 
-      <!-- Key Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-px mb-16" style="background: #2A2A2A;">
-        {[
-          { number: '#4', label: 'Largest US City' },
-          { number: '0%', label: 'State Income Tax' },
-          { number: '7M+', label: 'Metro Population' },
-          { number: '~6%', label: 'Avg. Cap Rate' },
-        ].map(s => (
-          <div class="p-8 text-center" style="background: #141414;">
-            <p class="text-3xl font-light text-gold mb-2" style="font-family: 'Playfair Display', serif;">{s.number}</p>
-            <p class="text-xs text-muted-custom uppercase tracking-widest">{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      <!-- Houston Downtown Photo -->
-      <div class="relative overflow-hidden mb-16" style="height: 420px;">
-        <img
-          src="https://images.unsplash.com/photo-1530089711124-9ca31fb9e863?w=1800&q=80"
-          alt="Houston Downtown Skyline"
-          class="w-full h-full object-cover"
-        />
-        <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(12,12,12,0.85) 0%, rgba(12,12,12,0.2) 60%, rgba(12,12,12,0.3) 100%);"></div>
-        <div class="absolute bottom-0 left-0 p-10">
-          <p class="text-gold text-xs tracking-widest uppercase mb-2">Houston, Texas</p>
-          <p class="text-white text-3xl font-light" style="font-family: 'Playfair Display', serif;">The Energy Capital<br /><span class="text-gold italic">of the World</span></p>
+        <!-- Key Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px" style="background: rgba(42,42,42,0.6); max-width: 640px;">
+          {[
+            { number: '#4', label: 'Largest US City' },
+            { number: '0%', label: 'State Income Tax' },
+            { number: '7M+', label: 'Metro Population' },
+            { number: '~6%', label: 'Avg. Cap Rate' },
+          ].map(s => (
+            <div class="p-6 text-center" style="background: rgba(20,20,20,0.7); backdrop-filter: blur(8px);">
+              <p class="text-2xl font-light text-gold mb-1" style="font-family: 'Playfair Display', serif;">{s.number}</p>
+              <p class="text-xs text-muted-custom uppercase tracking-widest">{s.label}</p>
+            </div>
+          ))}
         </div>
       </div>
+    </div>
 
+    <div class="max-w-6xl mx-auto px-6 py-16">
       <!-- Sections -->
       <div class="flex flex-col gap-12">
 
