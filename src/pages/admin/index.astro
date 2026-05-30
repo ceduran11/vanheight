@@ -1,0 +1,219 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Admin | VanHeight"
+  description=""
+>
+  <!-- Password Gate -->
+  <div id="gate" class="min-h-screen flex items-center justify-center" style="background: #0C0C0C;">
+    <div class="w-full max-w-sm px-8 py-12 border border-subtle" style="background: #141414;">
+      <div class="text-center mb-8">
+        <p class="text-gold text-xs tracking-widest uppercase mb-3">Admin Access</p>
+        <h1 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">VanHeight</h1>
+      </div>
+      <div class="flex flex-col gap-4">
+        <input
+          id="pwd-input"
+          type="password"
+          placeholder="Enter password"
+          class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors text-center tracking-widest"
+        />
+        <p id="pwd-error" class="text-red-400 text-xs text-center hidden">Incorrect password</p>
+        <button
+          id="pwd-btn"
+          class="btn-gold w-full"
+          style="justify-content: center;"
+        >
+          Enter
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Content (hidden until unlocked) -->
+  <div id="content" class="hidden" style="background: #0C0C0C; min-height: 100vh;">
+
+    <!-- Header -->
+    <div class="border-b border-subtle" style="background: #141414;">
+      <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+        <div>
+          <p class="text-gold text-xs tracking-widest uppercase">Admin</p>
+          <h1 class="text-lg font-semibold" style="font-family: 'Playfair Display', serif;">VanHeight Intelligence</h1>
+        </div>
+        <button id="logout-btn" class="text-xs text-muted-custom hover:text-white transition-colors tracking-widest uppercase">
+          Log Out
+        </button>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 py-16">
+
+      <!-- Page Title -->
+      <div class="mb-16">
+        <p class="section-label mb-3">Market Intelligence</p>
+        <h2 class="text-5xl md:text-6xl font-light leading-tight" style="font-family: 'Playfair Display', serif;">
+          Investing in Houston<br />
+          <span class="text-gold italic">Real Estate</span>
+        </h2>
+        <p class="text-white/50 text-lg mt-4 max-w-2xl">
+          A strategic overview of the financial, economic, and tax advantages of Houston real estate investment — and how FlipperTX supports your operation.
+        </p>
+      </div>
+
+      <!-- Key Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-px mb-16" style="background: #2A2A2A;">
+        {[
+          { number: '#4', label: 'Largest US City' },
+          { number: '0%', label: 'State Income Tax' },
+          { number: '7M+', label: 'Metro Population' },
+          { number: '~6%', label: 'Avg. Cap Rate' },
+        ].map(s => (
+          <div class="p-8 text-center" style="background: #141414;">
+            <p class="text-3xl font-light text-gold mb-2" style="font-family: 'Playfair Display', serif;">{s.number}</p>
+            <p class="text-xs text-muted-custom uppercase tracking-widest">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Sections -->
+      <div class="flex flex-col gap-12">
+
+        <!-- Economic -->
+        <div class="border border-subtle p-10" style="background: #141414;">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">01</div>
+            <h3 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">Economic Fundamentals</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              { title: 'Diversified Economy', text: 'Houston\'s economy extends well beyond oil & gas. Healthcare (Texas Medical Center — largest in the world), aerospace, logistics, manufacturing, and tech create a resilient economic base resistant to sector-specific downturns.' },
+              { title: 'Population Growth', text: 'Houston is one of the fastest-growing metros in the US, adding 100,000+ residents annually. Population growth directly drives housing demand, keeping vacancy rates low and rents rising.' },
+              { title: 'Job Market Depth', text: 'Home to 26 Fortune 500 companies, Houston offers consistent employment across multiple industries. Low unemployment supports tenant stability and reduces default risk for landlords.' },
+              { title: 'Affordable Entry Point', text: 'Compared to coastal markets, Houston offers significantly lower price-per-door entry points, allowing investors to build larger portfolios with the same capital — and achieve higher cash-on-cash returns.' },
+            ].map(item => (
+              <div class="border-l-2 border-gold pl-6">
+                <h4 class="text-white font-semibold mb-2">{item.title}</h4>
+                <p class="text-white/60 text-sm leading-relaxed">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Financial -->
+        <div class="border border-subtle p-10" style="background: #141414;">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">02</div>
+            <h3 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">Financial Advantages</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              { title: 'Strong Cash Flow Potential', text: 'Houston\'s price-to-rent ratios are favorable compared to national averages. Investors regularly achieve 5–8% cap rates and 8–12% cash-on-cash returns, particularly in value-add and BRRRR strategies.' },
+              { title: 'Appreciation + Cash Flow', text: 'Unlike many cash flow markets that sacrifice appreciation, Houston delivers both. Median home prices have grown steadily over the past decade while maintaining strong rental yields.' },
+              { title: 'Value-Add Opportunities', text: 'Older housing stock in inner-loop neighborhoods (Montrose, Heights, East End, Acres Homes) offers significant value-add potential through renovation — VanHeight\'s core business aligns perfectly here.' },
+              { title: 'Short-Term Rental Market', text: 'The Texas Medical Center, NRG Stadium, and downtown business corridor create consistent short-term rental demand. Airbnb yields in key zip codes can reach 10–15% gross yield.' },
+            ].map(item => (
+              <div class="border-l-2 border-gold pl-6">
+                <h4 class="text-white font-semibold mb-2">{item.title}</h4>
+                <p class="text-white/60 text-sm leading-relaxed">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Tax -->
+        <div class="border border-subtle p-10" style="background: #141414;">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">03</div>
+            <h3 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">Tax Advantages</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              { title: 'No State Income Tax', text: 'Texas has zero state income tax. All rental income, capital gains from flips, and business profits are taxed only at the federal level — a significant advantage over California, New York, or Illinois investors.' },
+              { title: 'Depreciation Shield', text: 'Residential rental properties are depreciated over 27.5 years. On a $200K property, that\'s ~$7,272/year in paper losses that offset rental income — often making cash-flowing properties show a tax loss on paper.' },
+              { title: 'Cost Segregation', text: 'Investors in larger properties can accelerate depreciation through cost segregation studies, front-loading deductions in early years and dramatically reducing taxable income in the short term.' },
+              { title: '1031 Exchange', text: 'When selling investment properties, a 1031 exchange allows deferral of all capital gains taxes by rolling proceeds into a like-kind property. Investors can build wealth for decades without triggering a tax event.' },
+              { title: 'Homestead Exemption', text: 'Primary residence owners benefit from the Texas Homestead Exemption, capping annual property tax increases at 10% and reducing the assessed taxable value of the home.' },
+              { title: 'Business Deductions', text: 'Renovation costs, property management fees, insurance, mortgage interest, and mileage are all deductible. VanHeight renovation work on rental properties is fully deductible as a business expense.' },
+            ].map(item => (
+              <div class="border-l-2 border-gold pl-6">
+                <h4 class="text-white font-semibold mb-2">{item.title}</h4>
+                <p class="text-white/60 text-sm leading-relaxed">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- FlipperTX -->
+        <div class="border-2 border-gold p-10" style="background: #141414;">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-10 h-10 bg-gold flex items-center justify-center text-black text-sm font-bold">TX</div>
+            <h3 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">FlipperTX — Your Operational Edge</h3>
+          </div>
+          <p class="text-white/60 text-sm leading-relaxed mb-8 max-w-3xl">
+            FlipperTX is the operational platform built to support Houston-area real estate investors at every stage — from deal analysis to renovation management. It complements the renovation expertise of VanHeight, creating a full-stack investment operation.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { title: 'Deal Analysis', text: 'Run ARV calculations, repair cost estimates, and ROI projections on potential acquisitions in seconds.' },
+              { title: 'Renovation Tracking', text: 'Manage contractor scopes, timelines, and budgets in one place — integrates directly with VanHeight\'s workflow.' },
+              { title: 'Portfolio Dashboard', text: 'Track all your Houston properties, cash flow performance, and equity positions from a single dashboard.' },
+            ].map(item => (
+              <div class="p-6 border border-subtle" style="background: #0C0C0C;">
+                <div class="w-8 h-1 bg-gold mb-4"></div>
+                <h4 class="text-white font-semibold mb-2">{item.title}</h4>
+                <p class="text-white/50 text-sm leading-relaxed">{item.text}</p>
+              </div>
+            ))}
+          </div>
+          <div class="mt-8 pt-8 border-t border-subtle">
+            <p class="text-white/50 text-sm">
+              <span class="text-gold font-semibold">VanHeight + FlipperTX</span> — renovation expertise meets investment intelligence. The complete Houston real estate stack.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const PASS = '363636';
+  const KEY = 'vh_admin';
+
+  const gate = document.getElementById('gate');
+  const content = document.getElementById('content');
+  const input = document.getElementById('pwd-input') as HTMLInputElement;
+  const btn = document.getElementById('pwd-btn');
+  const error = document.getElementById('pwd-error');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  function unlock() {
+    gate?.classList.add('hidden');
+    content?.classList.remove('hidden');
+  }
+
+  if (localStorage.getItem(KEY) === 'true') unlock();
+
+  btn?.addEventListener('click', () => {
+    if (input.value === PASS) {
+      localStorage.setItem(KEY, 'true');
+      unlock();
+    } else {
+      error?.classList.remove('hidden');
+      input.value = '';
+      input.focus();
+    }
+  });
+
+  input?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') btn?.click();
+  });
+
+  logoutBtn?.addEventListener('click', () => {
+    localStorage.removeItem(KEY);
+    window.location.reload();
+  });
+</script>
