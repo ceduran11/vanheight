@@ -22,26 +22,26 @@ import CTA from '../components/CTA.astro';
     <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(12,12,12,0.97) 0%, rgba(12,12,12,0.6) 50%, rgba(12,12,12,0.25) 100%);"></div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-6 pb-20 pt-40 w-full">
-      <p class="section-label mb-3">Market Intelligence</p>
+      <p class="section-label mb-3" data-i18n="realEstate.label">Market Intelligence</p>
       <h1 class="text-5xl md:text-7xl font-light leading-tight mb-4" style="font-family: 'Playfair Display', serif;">
-        Investing in Houston<br />
-        <span class="text-gold italic">Real Estate</span>
+        <span data-i18n="realEstate.title">Investing in Houston</span><br />
+        <span class="text-gold italic" data-i18n="realEstate.titleSpan">Real Estate</span>
       </h1>
-      <p class="text-white/60 text-lg max-w-2xl mb-12">
+      <p class="text-white/60 text-lg max-w-2xl mb-12" data-i18n="realEstate.subtext">
         A strategic overview of the financial, economic, and tax advantages of Houston real estate investment — and how <a href="#flippertx" class="transition-colors" style="color: #C9A84C; text-shadow: 0 0 12px rgba(201,168,76,0.6); text-decoration: underline; text-underline-offset: 4px;">FlipperTX</a> supports your operation.
       </p>
 
       <!-- Key Stats -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-px" style="background: rgba(42,42,42,0.6); max-width: 640px;">
         {[
-          { number: '#4', label: 'Largest US City' },
-          { number: '0%', label: 'State Income Tax' },
-          { number: '7M+', label: 'Metro Population' },
-          { number: '~6%', label: 'Avg. Cap Rate' },
+          { number: '#4', label: 'Largest US City', key: 'realEstate.stat1' },
+          { number: '0%', label: 'State Income Tax', key: 'realEstate.stat2' },
+          { number: '7M+', label: 'Metro Population', key: 'realEstate.stat3' },
+          { number: '~6%', label: 'Avg. Cap Rate', key: 'realEstate.stat4' },
         ].map(s => (
           <div class="p-6 text-center" style="background: rgba(20,20,20,0.7); backdrop-filter: blur(8px);">
             <p class="text-2xl font-light text-gold mb-1" style="font-family: 'Playfair Display', serif;">{s.number}</p>
-            <p class="text-xs text-muted-custom uppercase tracking-widest">{s.label}</p>
+            <p class="text-xs text-muted-custom uppercase tracking-widest" data-i18n={s.key}>{s.label}</p>
           </div>
         ))}
       </div>
@@ -55,18 +55,18 @@ import CTA from '../components/CTA.astro';
       <div class="fade-in border border-subtle p-10" style="background: #141414;">
         <div class="flex items-center gap-4 mb-8">
           <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">01</div>
-          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">Economic Fundamentals</h2>
+          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.ecoTitle">Economic Fundamentals</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           {[
-            { title: 'Diversified Economy', text: 'Houston\'s economy extends well beyond oil & gas. Healthcare (Texas Medical Center — largest in the world), aerospace, logistics, manufacturing, and tech create a resilient economic base resistant to sector-specific downturns.' },
-            { title: 'Population Growth', text: 'Houston is one of the fastest-growing metros in the US, adding 100,000+ residents annually. Population growth directly drives housing demand, keeping vacancy rates low and rents rising.' },
-            { title: 'Job Market Depth', text: 'Home to 26 Fortune 500 companies, Houston offers consistent employment across multiple industries. Low unemployment supports tenant stability and reduces default risk for landlords.' },
-            { title: 'Affordable Entry Point', text: 'Compared to coastal markets, Houston offers significantly lower price-per-door entry points, allowing investors to build larger portfolios with the same capital — and achieve higher cash-on-cash returns.' },
+            { title: 'Diversified Economy', text: 'Houston\'s economy extends well beyond oil & gas.', tk: 'realEstate.eco1t', dk: 'realEstate.eco1d' },
+            { title: 'Population Growth', text: 'Houston is one of the fastest-growing metros in the US.', tk: 'realEstate.eco2t', dk: 'realEstate.eco2d' },
+            { title: 'Job Market Depth', text: 'Home to 26 Fortune 500 companies, Houston offers consistent employment.', tk: 'realEstate.eco3t', dk: 'realEstate.eco3d' },
+            { title: 'Affordable Entry Point', text: 'Compared to coastal markets, Houston offers lower price-per-door entry points.', tk: 'realEstate.eco4t', dk: 'realEstate.eco4d' },
           ].map(item => (
             <div class="border-l-2 border-gold pl-6">
-              <h3 class="text-white font-semibold mb-2">{item.title}</h3>
-              <p class="text-white/60 text-sm leading-relaxed">{item.text}</p>
+              <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
+              <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
             </div>
           ))}
         </div>
@@ -76,18 +76,18 @@ import CTA from '../components/CTA.astro';
       <div class="fade-in border border-subtle p-10" style="background: #141414;">
         <div class="flex items-center gap-4 mb-8">
           <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">02</div>
-          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">Financial Advantages</h2>
+          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.finTitle">Financial Advantages</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           {[
-            { title: 'Strong Cash Flow Potential', text: 'Houston\'s price-to-rent ratios are favorable compared to national averages. Investors regularly achieve 5–8% cap rates and 8–12% cash-on-cash returns, particularly in value-add and BRRRR strategies.' },
-            { title: 'Appreciation + Cash Flow', text: 'Unlike many cash flow markets that sacrifice appreciation, Houston delivers both. Median home prices have grown steadily over the past decade while maintaining strong rental yields.' },
-            { title: 'Value-Add Opportunities', text: 'Older housing stock in inner-loop neighborhoods (Montrose, Heights, East End, Acres Homes) offers significant value-add potential through renovation — VanHeight\'s core business aligns perfectly here.' },
-            { title: 'Short-Term Rental Market', text: 'The Texas Medical Center, NRG Stadium, and downtown business corridor create consistent short-term rental demand. Airbnb yields in key zip codes can reach 10–15% gross yield.' },
+            { title: 'Strong Cash Flow Potential', text: 'Favorable price-to-rent ratios.', tk: 'realEstate.fin1t', dk: 'realEstate.fin1d' },
+            { title: 'Appreciation + Cash Flow', text: 'Houston delivers both appreciation and cash flow.', tk: 'realEstate.fin2t', dk: 'realEstate.fin2d' },
+            { title: 'Value-Add Opportunities', text: 'Inner-loop neighborhoods offer value-add potential.', tk: 'realEstate.fin3t', dk: 'realEstate.fin3d' },
+            { title: 'Short-Term Rental Market', text: 'Consistent short-term rental demand.', tk: 'realEstate.fin4t', dk: 'realEstate.fin4d' },
           ].map(item => (
             <div class="border-l-2 border-gold pl-6">
-              <h3 class="text-white font-semibold mb-2">{item.title}</h3>
-              <p class="text-white/60 text-sm leading-relaxed">{item.text}</p>
+              <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
+              <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
             </div>
           ))}
         </div>
@@ -97,20 +97,20 @@ import CTA from '../components/CTA.astro';
       <div class="fade-in border border-subtle p-10" style="background: #141414;">
         <div class="flex items-center gap-4 mb-8">
           <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">03</div>
-          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">Tax Advantages</h2>
+          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.taxTitle">Tax Advantages</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           {[
-            { title: 'No State Income Tax', text: 'Texas has zero state income tax. All rental income, capital gains from flips, and business profits are taxed only at the federal level — a significant advantage over California, New York, or Illinois investors.' },
-            { title: 'Depreciation Shield', text: 'Residential rental properties are depreciated over 27.5 years. On a $200K property, that\'s ~$7,272/year in paper losses that offset rental income — often making cash-flowing properties show a tax loss on paper.' },
-            { title: 'Cost Segregation', text: 'Investors in larger properties can accelerate depreciation through cost segregation studies, front-loading deductions in early years and dramatically reducing taxable income in the short term.' },
-            { title: '1031 Exchange', text: 'When selling investment properties, a 1031 exchange allows deferral of all capital gains taxes by rolling proceeds into a like-kind property. Investors can build wealth for decades without triggering a tax event.' },
-            { title: 'Homestead Exemption', text: 'Primary residence owners benefit from the Texas Homestead Exemption, capping annual property tax increases at 10% and reducing the assessed taxable value of the home.' },
-            { title: 'Business Deductions', text: 'Renovation costs, property management fees, insurance, mortgage interest, and mileage are all deductible. VanHeight renovation work on rental properties is fully deductible as a business expense.' },
+            { title: 'No State Income Tax', text: 'Zero state income tax in Texas.', tk: 'realEstate.tax1t', dk: 'realEstate.tax1d' },
+            { title: 'Depreciation Shield', text: 'Depreciate over 27.5 years.', tk: 'realEstate.tax2t', dk: 'realEstate.tax2d' },
+            { title: 'Cost Segregation', text: 'Accelerate depreciation in early years.', tk: 'realEstate.tax3t', dk: 'realEstate.tax3d' },
+            { title: '1031 Exchange', text: 'Defer capital gains taxes.', tk: 'realEstate.tax4t', dk: 'realEstate.tax4d' },
+            { title: 'Homestead Exemption', text: 'Cap property tax increases at 10%.', tk: 'realEstate.tax5t', dk: 'realEstate.tax5d' },
+            { title: 'Business Deductions', text: 'Renovation costs are fully deductible.', tk: 'realEstate.tax6t', dk: 'realEstate.tax6d' },
           ].map(item => (
             <div class="border-l-2 border-gold pl-6">
-              <h3 class="text-white font-semibold mb-2">{item.title}</h3>
-              <p class="text-white/60 text-sm leading-relaxed">{item.text}</p>
+              <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
+              <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
             </div>
           ))}
         </div>
@@ -120,27 +120,27 @@ import CTA from '../components/CTA.astro';
       <div id="flippertx" class="fade-in border-2 border-gold p-10" style="background: #141414;">
         <div class="flex items-center gap-4 mb-8">
           <div class="w-10 h-10 bg-gold flex items-center justify-center text-black text-sm font-bold">TX</div>
-          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;">FlipperTX — Your Operational Edge</h2>
+          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.ftxTitle">FlipperTX — Your Operational Edge</h2>
         </div>
-        <p class="text-white/60 text-sm leading-relaxed mb-8 max-w-3xl">
-          FlipperTX is the operational platform built to support Houston-area real estate investors at every stage — from deal analysis to renovation management. It complements the renovation expertise of VanHeight, creating a full-stack investment operation.
+        <p class="text-white/60 text-sm leading-relaxed mb-8 max-w-3xl" data-i18n="realEstate.ftxDesc">
+          FlipperTX is the operational platform built to support Houston-area real estate investors at every stage — from deal analysis to renovation management.
         </p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: 'Deal Analysis', text: 'Run ARV calculations, repair cost estimates, and ROI projections on potential acquisitions in seconds.' },
-            { title: 'Renovation Tracking', text: 'Manage contractor scopes, timelines, and budgets in one place — integrates directly with VanHeight\'s workflow.' },
-            { title: 'Portfolio Dashboard', text: 'Track all your Houston properties, cash flow performance, and equity positions from a single dashboard.' },
+            { title: 'Deal Analysis', text: 'Run ARV calculations, repair cost estimates, and ROI projections.', tk: 'realEstate.ftx1t', dk: 'realEstate.ftx1d' },
+            { title: 'Renovation Tracking', text: 'Manage contractor scopes, timelines, and budgets in one place.', tk: 'realEstate.ftx2t', dk: 'realEstate.ftx2d' },
+            { title: 'Portfolio Dashboard', text: 'Track all your Houston properties from a single dashboard.', tk: 'realEstate.ftx3t', dk: 'realEstate.ftx3d' },
           ].map(item => (
             <div class="p-6 border border-subtle" style="background: #0C0C0C;">
               <div class="w-8 h-1 bg-gold mb-4"></div>
-              <h3 class="text-white font-semibold mb-2">{item.title}</h3>
-              <p class="text-white/50 text-sm leading-relaxed">{item.text}</p>
+              <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
+              <p class="text-white/50 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
             </div>
           ))}
         </div>
         <div class="mt-8 pt-8 border-t border-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <p class="text-white/50 text-sm">
-            <span class="text-gold font-semibold">VanHeight + FlipperTX</span> — renovation expertise meets investment intelligence. The complete Houston real estate stack.
+          <p class="text-white/50 text-sm" data-i18n="realEstate.ftxTagline">
+            VanHeight + FlipperTX — renovation expertise meets investment intelligence.
           </p>
           <a
             href="https://flipper-tx.vercel.app/"
@@ -148,6 +148,7 @@ import CTA from '../components/CTA.astro';
             rel="noopener noreferrer"
             class="btn-gold shrink-0"
             style="font-size: 0.75rem; padding: 0.75rem 1.75rem;"
+            data-i18n="realEstate.ftxBtn"
           >
             Launch FlipperTX →
           </a>
@@ -163,18 +164,18 @@ import CTA from '../components/CTA.astro';
             </svg>
           </div>
           <div>
-            <p class="text-gold/80 text-xs font-semibold tracking-widest uppercase mb-3">Legal Disclosure & Disclaimer</p>
-            <p class="text-white/40 text-xs leading-relaxed mb-3">
-              The information contained on this page, including all market data, financial projections, tax information, and references to FlipperTX, is provided strictly for <strong class="text-white/60">informational purposes only</strong>. It does not constitute financial advice, investment advice, tax advice, legal advice, or any other professional advice of any kind.
+            <p class="text-gold/80 text-xs font-semibold tracking-widest uppercase mb-3" data-i18n="realEstate.discTitle">Legal Disclosure & Disclaimer</p>
+            <p class="text-white/40 text-xs leading-relaxed mb-3" data-i18n="realEstate.disc1">
+              The information on this page is provided strictly for informational purposes only. It does not constitute financial, investment, tax, or legal advice of any kind.
             </p>
-            <p class="text-white/40 text-xs leading-relaxed mb-3">
-              FlipperTX is referenced as an operational support tool. No representation is made that FlipperTX guarantees any specific investment outcome, return, or financial result. Past performance of Houston real estate markets does not guarantee future results. All real estate investments involve risk, including the possible loss of principal.
+            <p class="text-white/40 text-xs leading-relaxed mb-3" data-i18n="realEstate.disc2">
+              FlipperTX is referenced as an operational support tool. No representation is made that FlipperTX guarantees any specific investment outcome. All real estate investments involve risk, including possible loss of principal.
             </p>
-            <p class="text-white/40 text-xs leading-relaxed mb-3">
-              Cap rates, yield projections, tax treatment, and market statistics are general estimates based on publicly available data and are subject to change. Individual outcomes will vary based on specific property, financing, market conditions, and personal circumstances.
+            <p class="text-white/40 text-xs leading-relaxed mb-3" data-i18n="realEstate.disc3">
+              Cap rates, yield projections, and market statistics are general estimates based on publicly available data and are subject to change.
             </p>
-            <p class="text-white/40 text-xs leading-relaxed">
-              Tax information provided is for general informational purposes only. Always consult a <strong class="text-white/60">qualified CPA, tax attorney, or financial advisor</strong> before making any investment or tax decision. VanHeight Remodeling LLC and FlipperTX expressly disclaim any liability arising from the use of or reliance on any information presented on this page.
+            <p class="text-white/40 text-xs leading-relaxed" data-i18n="realEstate.disc4">
+              Tax information is for general informational purposes only. Always consult a qualified CPA, tax attorney, or financial advisor before making any investment or tax decision. VanHeight and FlipperTX disclaim any liability arising from reliance on information presented on this page.
             </p>
           </div>
         </div>
