@@ -226,7 +226,7 @@ import Footer from '../components/Footer.astro';
           <p class="text-gold text-xs tracking-widest uppercase mb-1" data-i18n="appt.label">Real Estate Consultation</p>
           <h3 class="text-xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="appt.title">Request an Appointment</h3>
         </div>
-        <button id="close-appt-modal" class="text-white/40 hover:text-white transition-colors text-2xl leading-none">✕</button>
+        <button id="close-appt-modal" type="button" class="text-white/40 hover:text-white transition-colors text-2xl leading-none">✕</button>
       </div>
 
       <!-- Form -->
@@ -369,9 +369,12 @@ import Footer from '../components/Footer.astro';
     document.body.style.overflow = '';
   }
 
-  openBtn?.addEventListener('click', openModal);
-  closeBtn?.addEventListener('click', closeModal);
-  modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  openBtn?.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+  closeBtn?.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) { e.preventDefault(); e.stopPropagation(); closeModal(); }
+  });
+  document.querySelector('#appt-modal > div')?.addEventListener('click', (e) => e.stopPropagation());
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
   form?.addEventListener('submit', async (e) => {
