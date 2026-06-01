@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import CTA from '../components/CTA.astro';
 ---
 
 <Layout
@@ -184,6 +183,36 @@ import CTA from '../components/CTA.astro';
     </div>
   </div>
 
-  <CTA />
+  <!-- Custom Real Estate CTA -->
+  <section class="py-24 md:py-32 relative overflow-hidden" style="background: #0C0C0C;">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gold opacity-40"></div>
+
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <div class="fade-in">
+        <p class="section-label mb-6" data-i18n="reCta.label">Ready to Invest?</p>
+        <h2
+          class="text-4xl md:text-6xl font-light leading-tight mb-6"
+          style="font-family: 'Playfair Display', serif;"
+        >
+          <span data-i18n="reCta.title">Ready to Invest in</span><br />
+          <span class="text-gold italic" data-i18n="reCta.titleSpan">Real Estate?</span>
+        </h2>
+        <p class="text-white/60 text-lg mb-10 leading-relaxed" data-i18n="reCta.subtext">
+          Whether you're looking for your next investment property or your primary residence, our team of licensed realtors and active investors is here to guide you every step of the way — from deal analysis to closing day.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="tel:+13467172406" class="btn-gold" style="padding: 1rem 2.5rem;" data-i18n="reCta.button">
+            Request an Appointment
+          </a>
+          <a href="tel:+13467172406" class="btn-outline" style="padding: 1rem 2.5rem;">
+            (346) 717-2406
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gold opacity-40"></div>
+  </section>
+
   <Footer />
 </Layout>
