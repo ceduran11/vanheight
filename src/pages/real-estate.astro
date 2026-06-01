@@ -254,8 +254,8 @@ import Footer from '../components/Footer.astro';
           <!-- Contact row -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.phone">Phone *</label>
-              <input type="tel" name="phone" required placeholder="(832) 000-0000"
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.phone">Phone</label>
+              <input type="tel" name="phone" placeholder="(832) 000-0000"
                 class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
             </div>
             <div>
@@ -264,6 +264,8 @@ import Footer from '../components/Footer.astro';
                 class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
             </div>
           </div>
+
+          <p class="text-xs text-muted-custom -mt-2">* At least phone or email is required.</p>
 
           <!-- Interest type -->
           <div>
@@ -387,6 +389,17 @@ import Footer from '../components/Footer.astro';
       f.style.borderColor = '';
       if (!f.value.trim()) { f.style.borderColor = '#E53E3E'; valid = false; }
     });
+
+    // Phone OR Email — at least one required
+    const phoneField = form.querySelector('[name="phone"]') as HTMLInputElement;
+    const emailField = form.querySelector('[name="email"]') as HTMLInputElement;
+    phoneField.style.borderColor = '';
+    emailField.style.borderColor = '';
+    if (!phoneField.value.trim() && !emailField.value.trim()) {
+      phoneField.style.borderColor = '#E53E3E';
+      emailField.style.borderColor = '#E53E3E';
+      valid = false;
+    }
 
     if (!valid) { errorMsg?.classList.remove('hidden'); return; }
 
