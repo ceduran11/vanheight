@@ -237,18 +237,11 @@ import Footer from '../components/Footer.astro';
           <input type="hidden" name="from_name" value="VanHeight Real Estate" />
           <input type="checkbox" name="botcheck" style="display:none;" />
 
-          <!-- Name row -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.firstName">First Name *</label>
-              <input type="text" name="firstName" required placeholder="John"
-                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
-            </div>
-            <div>
-              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.lastName">Last Name *</label>
-              <input type="text" name="lastName" required placeholder="Smith"
-                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
-            </div>
+          <!-- Name -->
+          <div>
+            <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.fullName">Full Name *</label>
+            <input type="text" name="fullName" required placeholder="John Smith"
+              class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
           </div>
 
           <!-- Contact row -->
