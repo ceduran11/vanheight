@@ -47,6 +47,13 @@ const currentPath = Astro.url.pathname;
           {link.label}
         </a>
       ))}
+      <a
+        href="/real-estate"
+        class="real-estate-link text-xs tracking-widest uppercase font-semibold px-4 py-1.5 transition-all duration-300"
+        style={`border: 1px solid #C9A84C; color: #C9A84C; ${currentPath === '/real-estate' ? 'background: #C9A84C; color: #000;' : ''}`}
+      >
+        Real Estate
+      </a>
     </nav>
 
     <!-- CTA + Language Toggle (right) -->
@@ -102,6 +109,9 @@ const currentPath = Astro.url.pathname;
         {link.label}
       </a>
     ))}
+    <a href="/real-estate" class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-semibold border-b border-subtle" style="color: #C9A84C;">
+      Real Estate
+    </a>
     <div class="px-6 py-5 flex flex-col gap-3">
       <a href="tel:+18323069934" class="text-sm text-muted-custom">
         (832) 306-9934
@@ -132,6 +142,11 @@ const currentPath = Astro.url.pathname;
       margin-left: -28px;
       margin-top: 0;
     }
+  }
+
+  .real-estate-link:hover {
+    background: #C9A84C !important;
+    color: #000 !important;
   }
 
   .nav-link {
