@@ -201,9 +201,9 @@ import Footer from '../components/Footer.astro';
           Whether you're looking for your next investment property or your primary residence, our team of licensed realtors and active investors is here to guide you every step of the way — from deal analysis to closing day.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a href="tel:+13467172406" class="btn-gold" style="padding: 1rem 2.5rem;" data-i18n="reCta.button">
+          <button id="open-appt-modal" class="btn-gold" style="padding: 1rem 2.5rem;" data-i18n="reCta.button">
             Request an Appointment
-          </a>
+          </button>
           <a href="tel:+13467172406" class="btn-outline" style="padding: 1rem 2.5rem;">
             (346) 717-2406
           </a>
@@ -215,4 +215,191 @@ import Footer from '../components/Footer.astro';
   </section>
 
   <Footer />
+
+  <!-- Appointment Modal -->
+  <div id="appt-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4" style="background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);">
+    <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-subtle" style="background: #141414;">
+
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-8 py-6 border-b border-subtle">
+        <div>
+          <p class="text-gold text-xs tracking-widest uppercase mb-1" data-i18n="appt.label">Real Estate Consultation</p>
+          <h3 class="text-xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="appt.title">Request an Appointment</h3>
+        </div>
+        <button id="close-appt-modal" class="text-white/40 hover:text-white transition-colors text-2xl leading-none">✕</button>
+      </div>
+
+      <!-- Form -->
+      <div class="px-8 py-8">
+        <form id="appt-form" class="flex flex-col gap-5" novalidate>
+          <input type="hidden" name="access_key" value="fe79e33d-fcc7-4eb7-964c-321ff285446a" />
+          <input type="hidden" name="subject" value="Nueva Cita Real Estate - VanHeight" />
+          <input type="hidden" name="from_name" value="VanHeight Real Estate" />
+          <input type="checkbox" name="botcheck" style="display:none;" />
+
+          <!-- Name row -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.firstName">First Name *</label>
+              <input type="text" name="firstName" required placeholder="John"
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
+            </div>
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.lastName">Last Name *</label>
+              <input type="text" name="lastName" required placeholder="Smith"
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
+            </div>
+          </div>
+
+          <!-- Contact row -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.phone">Phone *</label>
+              <input type="tel" name="phone" required placeholder="(832) 000-0000"
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
+            </div>
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.email">Email</label>
+              <input type="email" name="email" placeholder="john@example.com"
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
+            </div>
+          </div>
+
+          <!-- Interest type -->
+          <div>
+            <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.interestLabel">Type of Interest *</label>
+            <select name="interest" required
+              class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors"
+              style="background: #141414;">
+              <option value="" disabled selected data-i18n="appt.selectInterest">Select an option</option>
+              <option value="Investment Property" data-i18n="appt.optInvestment">Investment Property</option>
+              <option value="Primary Residence" data-i18n="appt.optPrimary">Primary Residence</option>
+              <option value="Both" data-i18n="appt.optBoth">Both</option>
+            </select>
+          </div>
+
+          <!-- Budget & Timeline -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.budgetLabel">Budget Range *</label>
+              <select name="budget" required
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors"
+                style="background: #141414;">
+                <option value="" disabled selected data-i18n="appt.selectBudget">Select range</option>
+                <option value="Under $200K">Under $200K</option>
+                <option value="$200K–$400K">$200K – $400K</option>
+                <option value="$400K–$600K">$400K – $600K</option>
+                <option value="$600K–$1M">$600K – $1M</option>
+                <option value="$1M+">$1M+</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.timelineLabel">Purchase Timeline *</label>
+              <select name="timeline" required
+                class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors"
+                style="background: #141414;">
+                <option value="" disabled selected data-i18n="appt.selectTimeline">Select timeline</option>
+                <option value="ASAP" data-i18n="appt.timelineAsap">ASAP</option>
+                <option value="1–3 months" data-i18n="appt.timeline1to3">1–3 months</option>
+                <option value="3–6 months" data-i18n="appt.timeline3to6">3–6 months</option>
+                <option value="6+ months" data-i18n="appt.timeline6plus">6+ months</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Areas -->
+          <div>
+            <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.areasLabel">Preferred Areas / Zip Codes</label>
+            <input type="text" name="areas" placeholder="e.g. The Woodlands, Katy, Heights, 77008"
+              class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom" />
+          </div>
+
+          <!-- Notes -->
+          <div>
+            <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" data-i18n="appt.notesLabel">Additional Notes</label>
+            <textarea name="notes" rows="3"
+              class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors resize-none placeholder-muted-custom"
+              placeholder="Any additional details about what you're looking for..."
+              data-i18n-placeholder="appt.notesPlaceholder"></textarea>
+          </div>
+
+          <p id="appt-error" class="text-red-400 text-xs hidden" data-i18n="appt.errorMsg">Please fill in all required fields.</p>
+
+          <div class="flex items-center justify-between pt-2">
+            <p class="text-xs text-muted-custom" data-i18n="appt.note">We'll contact you within 24 hours to confirm.</p>
+            <button type="submit" id="appt-submit" class="btn-gold" style="padding: 0.875rem 2rem;" data-i18n="appt.submit">
+              Send Request
+            </button>
+          </div>
+        </form>
+
+        <!-- Success -->
+        <div id="appt-success" class="hidden text-center py-10">
+          <div class="w-14 h-14 border border-gold flex items-center justify-center mx-auto mb-5">
+            <svg class="w-7 h-7 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h4 class="text-xl font-light mb-2" style="font-family: 'Playfair Display', serif;" data-i18n="appt.successTitle">Appointment Requested!</h4>
+          <p class="text-muted-custom text-sm" data-i18n="appt.successText">Our team will reach out within 24 hours to confirm your consultation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </Layout>
+
+<script>
+  const modal = document.getElementById('appt-modal');
+  const openBtn = document.getElementById('open-appt-modal');
+  const closeBtn = document.getElementById('close-appt-modal');
+  const form = document.getElementById('appt-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('appt-submit') as HTMLButtonElement;
+  const successDiv = document.getElementById('appt-success');
+  const errorMsg = document.getElementById('appt-error');
+
+  function openModal() {
+    modal?.classList.remove('hidden');
+    modal?.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+    modal?.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  openBtn?.addEventListener('click', openModal);
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg?.classList.add('hidden');
+
+    const required = form.querySelectorAll('[required]') as NodeListOf<HTMLInputElement | HTMLSelectElement>;
+    let valid = true;
+    required.forEach(f => {
+      f.style.borderColor = '';
+      if (!f.value.trim()) { f.style.borderColor = '#E53E3E'; valid = false; }
+    });
+
+    if (!valid) { errorMsg?.classList.remove('hidden'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '...';
+
+    const data = new FormData(form);
+    const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data });
+
+    if (res.ok) {
+      form.style.display = 'none';
+      successDiv?.classList.remove('hidden');
+    } else {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Request';
+      errorMsg?.classList.remove('hidden');
+    }
+  });
+</script>
