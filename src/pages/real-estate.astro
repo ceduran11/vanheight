@@ -372,11 +372,8 @@ import Footer from '../components/Footer.astro';
   }
 
   openBtn?.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-  closeBtn?.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) { e.preventDefault(); e.stopPropagation(); closeModal(); }
-  });
-  document.querySelector('#appt-modal > div')?.addEventListener('click', (e) => e.stopPropagation());
+  closeBtn?.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); closeModal(); });
+  modal?.addEventListener('click', (e) => { e.stopPropagation(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
   form?.addEventListener('submit', async (e) => {
