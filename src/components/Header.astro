@@ -50,7 +50,7 @@ const currentPath = Astro.url.pathname;
       <a
         href="/real-estate"
         class="real-estate-link text-xs tracking-widest uppercase font-semibold px-4 py-1.5 transition-all duration-300"
-        style={`border: 1px solid #C9A84C; color: #C9A84C; ${currentPath === '/real-estate' ? 'background: #C9A84C; color: #000;' : ''}`}
+        style={`border: 1px solid #39FF14; color: #39FF14; text-shadow: 0 0 8px rgba(57,255,20,0.6); ${currentPath === '/real-estate' ? 'background: #39FF14; color: #000; text-shadow: none;' : ''}`}
       >
         Real Estate
       </a>
@@ -109,7 +109,7 @@ const currentPath = Astro.url.pathname;
         {link.label}
       </a>
     ))}
-    <a href="/real-estate" class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-semibold border-b border-subtle" style="color: #C9A84C;">
+    <a href="/real-estate" class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-semibold border-b border-subtle" style="color: #39FF14; text-shadow: 0 0 8px rgba(57,255,20,0.6);">
       Real Estate
     </a>
     <div class="px-6 py-5 flex flex-col gap-3">
@@ -145,8 +145,10 @@ const currentPath = Astro.url.pathname;
   }
 
   .real-estate-link:hover {
-    background: #C9A84C !important;
+    background: #39FF14 !important;
     color: #000 !important;
+    text-shadow: none !important;
+    box-shadow: 0 0 16px rgba(57,255,20,0.5);
   }
 
   .nav-link {
