@@ -4,12 +4,66 @@ import '../styles/global.css';
 export interface Props {
   title: string;
   description?: string;
+  image?: string;
 }
 
 const {
   title,
   description = 'VanHeight – Premium home remodeling in The Woodlands, TX. Kitchens, bathrooms, flooring, painting, additions & carpentry.',
+  image = '/images/kitchen-remodeling.png',
 } = Astro.props;
+
+const canonicalURL = Astro.url.href;
+const ogImage = new URL(image, Astro.url.origin).href;
+
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'VanHeight',
+  description: 'Premium home remodeling in The Woodlands, TX. Kitchens, bathrooms, flooring, painting, additions & custom carpentry.',
+  url: 'https://vanheight.com',
+  telephone: '+18323069934',
+  email: 'info@vanheight.com',
+  logo: new URL('/images/logo.png', Astro.url.origin).href,
+  image: ogImage,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'The Woodlands',
+    addressRegion: 'TX',
+    addressCountry: 'US',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 30.1658,
+    longitude: -95.4613,
+  },
+  areaServed: [
+    { '@type': 'City', name: 'The Woodlands', containedInPlace: { '@type': 'State', name: 'Texas' } },
+    { '@type': 'City', name: 'Spring', containedInPlace: { '@type': 'State', name: 'Texas' } },
+    { '@type': 'City', name: 'Conroe', containedInPlace: { '@type': 'State', name: 'Texas' } },
+    { '@type': 'City', name: 'Tomball', containedInPlace: { '@type': 'State', name: 'Texas' } },
+    { '@type': 'City', name: 'Houston', containedInPlace: { '@type': 'State', name: 'Texas' } },
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Home Remodeling Services',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Kitchen Remodeling' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Bathroom Remodeling' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Flooring Installation' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Interior & Exterior Painting' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Home Additions' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Custom Carpentry' } },
+    ],
+  },
+  priceRange: '$$',
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '18:00',
+  },
+};
 ---
 
 <!doctype html>
@@ -19,6 +73,7 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,8 +87,24 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="VanHeight — Premium Home Remodeling in The Woodlands, TX" />
+    <meta property="og:site_name" content="VanHeight" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="VanHeight — Premium Home Remodeling in The Woodlands, TX" />
 
     <title>{title}</title>
+
+    <!-- LocalBusiness Structured Data -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
 
     <!-- Meta Pixel Code -->
     <script>
