@@ -6,7 +6,15 @@ const navLinks = [
   { href: '/about', label: 'About' },
 ];
 
+const reNavLinks = [
+  { href: '/real-estate', label: 'Home' },
+  { href: '/real-estate/services', label: 'Services' },
+  { href: '/real-estate/gallery', label: 'Gallery' },
+  { href: '/real-estate/about', label: 'About' },
+];
+
 const currentPath = Astro.url.pathname;
+const isRealEstate = currentPath.startsWith('/real-estate');
 ---
 
 <header
@@ -17,7 +25,7 @@ const currentPath = Astro.url.pathname;
   <div class="max-w-7xl mx-auto px-6 py-3" style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;">
 
     <!-- Logo (left) -->
-    <a href="/" class="logo-link flex items-center" style="gap: 0px;">
+    <a href={isRealEstate ? '/real-estate' : '/'} class="logo-link flex items-center" style="gap: 0px;">
       <img
         src="/images/logo.png"
         alt="VanHeight"
@@ -35,26 +43,52 @@ const currentPath = Astro.url.pathname;
 
     <!-- Desktop Nav (center) -->
     <nav class="hidden md:flex items-center gap-8">
-      {navLinks.map((link) => (
-        <a
-          href={link.href}
-          class={`nav-link text-sm tracking-widest uppercase transition-colors ${
-            currentPath === link.href
-              ? 'text-gold nav-link--active'
-              : 'text-white/70 hover:text-white'
-          }`}
-        >
-          {link.label}
-        </a>
-      ))}
-      <a
-        href="/real-estate"
-        class="real-estate-link text-xs tracking-widest uppercase font-semibold px-4 py-1.5 transition-all duration-300"
-        style={`border: 1px solid #4ade80; color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6); ${currentPath === '/real-estate' ? 'background: #4ade80; color: #000; text-shadow: none;' : ''}`}
-        data-i18n="nav.realEstate"
-      >
-        Real Estate
-      </a>
+      {isRealEstate ? (
+        <>
+          {reNavLinks.map((link) => (
+            <a
+              href={link.href}
+              class={`nav-link text-sm tracking-widest uppercase transition-colors ${
+                currentPath === link.href
+                  ? 'text-gold nav-link--active'
+                  : 'text-white/70 hover:text-white'
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="/"
+            class="remodeling-link text-xs tracking-widest uppercase font-semibold px-4 py-1.5 transition-all duration-300"
+            style="border: 1px solid #C9A84C; color: #C9A84C;"
+          >
+            Remodeling
+          </a>
+        </>
+      ) : (
+        <>
+          {navLinks.map((link) => (
+            <a
+              href={link.href}
+              class={`nav-link text-sm tracking-widest uppercase transition-colors ${
+                currentPath === link.href
+                  ? 'text-gold nav-link--active'
+                  : 'text-white/70 hover:text-white'
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="/real-estate"
+            class="real-estate-link text-xs tracking-widest uppercase font-semibold px-4 py-1.5 transition-all duration-300"
+            style="border: 1px solid #4ade80; color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6);"
+            data-i18n="nav.realEstate"
+          >
+            Real Estate
+          </a>
+        </>
+      )}
     </nav>
 
     <!-- CTA + Language Toggle (right) -->
@@ -108,24 +142,44 @@ const currentPath = Astro.url.pathname;
     class="md:hidden hidden flex-col gap-0 border-t border-subtle"
     style="background: #0C0C0C;"
   >
-    {navLinks.map((link) => (
-      <a
-        href={link.href}
-        class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-medium text-white/70 border-b border-subtle"
-      >
-        {link.label}
-      </a>
-    ))}
-    <a href="/real-estate" class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-semibold border-b border-subtle" style="color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6);" data-i18n="nav.realEstate">
-      Real Estate
-    </a>
+    {isRealEstate ? (
+      <>
+        {reNavLinks.map((link) => (
+          <a
+            href={link.href}
+            class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-medium text-white/70 border-b border-subtle"
+          >
+            {link.label}
+          </a>
+        ))}
+        <a href="/" class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-semibold border-b border-subtle" style="color: #C9A84C;">
+          Remodeling
+        </a>
+      </>
+    ) : (
+      <>
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-medium text-white/70 border-b border-subtle"
+          >
+            {link.label}
+          </a>
+        ))}
+        <a href="/real-estate" class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-semibold border-b border-subtle" style="color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6);" data-i18n="nav.realEstate">
+          Real Estate
+        </a>
+      </>
+    )}
     <div class="px-6 py-5 flex flex-col gap-3">
       <a href="tel:+18323069934" class="text-sm text-muted-custom">
         (832) 306-9934
       </a>
-      <a href="/contact" class="btn-gold" style="font-size: 0.75rem; padding: 0.75rem 1.5rem; text-align: center;">
-        Free Quote
-      </a>
+      {!isRealEstate && (
+        <a href="/contact" class="btn-gold" style="font-size: 0.75rem; padding: 0.75rem 1.5rem; text-align: center;">
+          Free Quote
+        </a>
+      )}
     </div>
   </div>
 </header>
@@ -152,10 +206,17 @@ const currentPath = Astro.url.pathname;
   }
 
   .real-estate-link:hover {
-    background: #39FF14 !important;
+    background: #4ade80 !important;
     color: #000 !important;
     text-shadow: none !important;
-    box-shadow: 0 0 16px rgba(57,255,20,0.5);
+    box-shadow: 0 0 16px rgba(74,222,128,0.5);
+  }
+
+  .remodeling-link:hover {
+    background: #C9A84C !important;
+    color: #000 !important;
+    text-shadow: none !important;
+    box-shadow: 0 0 16px rgba(201,168,76,0.4);
   }
 
   .nav-link {
