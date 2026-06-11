@@ -9,6 +9,7 @@ import Footer from '../../components/Footer.astro';
   description="A strategic overview of the financial, economic, and tax advantages of investing in Houston real estate — backed by VanHeight's renovation expertise."
 >
   <Header />
+  <div class="re-page">
 
   <!-- Hero Section with Houston Background -->
   <div class="relative overflow-hidden flex flex-col justify-end" style="min-height: 680px;">
@@ -27,7 +28,7 @@ import Footer from '../../components/Footer.astro';
         <span class="text-gold italic" data-i18n="realEstate.titleSpan">Real Estate</span>
       </h1>
       <p class="text-white/60 text-lg max-w-2xl mb-12" data-i18n="realEstate.subtext">
-        A strategic overview of the financial, economic, and tax advantages of Houston real estate investment — and how <a href="#flippertx" class="transition-colors" style="color: #C9A84C; text-shadow: 0 0 12px rgba(201,168,76,0.6); text-decoration: underline; text-underline-offset: 4px;">FlipperTX</a> supports your operation.
+        A strategic overview of the financial, economic, and tax advantages of Houston real estate investment — and how <a href="#flippertx" class="transition-colors" style="color: #4ade80; text-shadow: 0 0 12px rgba(74,222,128,0.6); text-decoration: underline; text-underline-offset: 4px;">FlipperTX</a> supports your operation.
       </p>
 
       <!-- Key Stats -->
@@ -214,6 +215,7 @@ import Footer from '../../components/Footer.astro';
     <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gold opacity-40"></div>
   </section>
 
+  </div>
   <Footer />
 
   <!-- Appointment Modal -->
@@ -343,6 +345,41 @@ import Footer from '../../components/Footer.astro';
     </div>
   </div>
 </Layout>
+
+<style is:global>
+  .re-page .text-gold          { color: #4ade80 !important; }
+  .re-page .bg-gold            { background-color: #4ade80 !important; }
+  .re-page .border-gold        { border-color: #4ade80 !important; }
+  .re-page .text-gold\/60      { color: rgba(74,222,128,0.6) !important; }
+  .re-page .text-gold\/80      { color: rgba(74,222,128,0.8) !important; }
+
+  .re-page .btn-gold {
+    background: #4ade80 !important;
+    color: #000 !important;
+    border: none !important;
+    text-shadow: none !important;
+  }
+  .re-page .btn-gold:hover {
+    background: #6ee7b7 !important;
+  }
+
+  .re-page .btn-outline {
+    border-color: #4ade80 !important;
+    color: #4ade80 !important;
+  }
+  .re-page .btn-outline:hover {
+    background: #4ade80 !important;
+    color: #000 !important;
+  }
+
+  .re-page .focus\:border-gold:focus {
+    border-color: #4ade80 !important;
+  }
+
+  .re-page .section-label {
+    color: #4ade80 !important;
+  }
+</style>
 
 <script>
   const modal = document.getElementById('appt-modal');
