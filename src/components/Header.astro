@@ -48,10 +48,10 @@ const isRealEstate = currentPath.startsWith('/real-estate');
           {reNavLinks.map((link) => (
             <a
               href={link.href}
-              class={`nav-link text-sm tracking-widest uppercase transition-colors ${
+              class={`nav-link re-nav-link text-sm tracking-widest uppercase transition-colors ${
                 currentPath === link.href
-                  ? 'text-gold nav-link--active'
-                  : 'text-white/70 hover:text-white'
+                  ? 're-nav-link--active'
+                  : 'text-white/70'
               }`}
             >
               {link.label}
@@ -147,7 +147,8 @@ const isRealEstate = currentPath.startsWith('/real-estate');
         {reNavLinks.map((link) => (
           <a
             href={link.href}
-            class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-medium text-white/70 border-b border-subtle"
+            class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-medium border-b border-subtle"
+            style={currentPath === link.href ? 'color: #4ade80;' : 'color: rgba(255,255,255,0.7);'}
           >
             {link.label}
           </a>
@@ -231,6 +232,17 @@ const isRealEstate = currentPath.startsWith('/real-estate');
   .nav-link--active {
     font-weight: 600;
     border-bottom-color: #C9A84C;
+  }
+
+  /* Real Estate nav — green active/hover */
+  .re-nav-link:hover {
+    color: #4ade80;
+    border-bottom-color: #4ade80;
+  }
+  .re-nav-link--active {
+    color: #4ade80;
+    font-weight: 600;
+    border-bottom-color: #4ade80;
   }
 
   .mobile-link {
