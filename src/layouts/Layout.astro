@@ -5,12 +5,14 @@ export interface Props {
   title: string;
   description?: string;
   image?: string;
+  sidebarLayout?: boolean;
 }
 
 const {
   title,
   description = 'VanHeight – Premium home remodeling in The Woodlands, TX. Kitchens, bathrooms, flooring, painting, additions & carpentry.',
   image = '/images/kitchen-remodeling.png',
+  sidebarLayout = false,
 } = Astro.props;
 
 const canonicalURL = Astro.url.href;
@@ -124,7 +126,7 @@ const localBusinessSchema = {
     /></noscript>
     <!-- End Meta Pixel Code -->
   </head>
-  <body>
+  <body class={sidebarLayout ? 're-layout' : ''}>
     <slot />
 
     <script>
