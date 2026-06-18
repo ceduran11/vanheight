@@ -1,0 +1,141 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout
+  title="¿Por qué Houston? | Real Estate — VanHeight"
+  description="Fundamentos económicos, ventajas financieras y ventajas fiscales de invertir en real estate en Houston, TX."
+  sidebarLayout={true}
+>
+  <Header />
+  <div class="re-page">
+
+    <!-- Page Header with Houston Background -->
+    <div class="relative overflow-hidden flex flex-col justify-end" style="min-height: 480px;">
+      <img
+        src="https://images.unsplash.com/photo-1530089711124-9ca31fb9e863?w=1800&q=80"
+        alt="Houston Downtown Skyline"
+        class="absolute inset-0 w-full h-full object-cover hero-pan"
+        loading="eager"
+      />
+      <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(12,12,12,0.97) 0%, rgba(12,12,12,0.6) 50%, rgba(12,12,12,0.25) 100%);"></div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6 pb-16 pt-40 w-full">
+        <p class="section-label mb-3" data-i18n="realEstate.label">Fix & Flip Concierge</p>
+        <h1 class="text-5xl md:text-6xl font-light" style="font-family: 'Playfair Display', serif; color: #F5F5F5;" data-i18n="realEstate.whyHoustonTitle">
+          ¿Por qué Houston?
+        </h1>
+        <p class="text-white/60 text-lg max-w-2xl mt-4" data-i18n="realEstate.subtext">
+          Una visión estratégica de las ventajas financieras, económicas e impositivas de invertir en bienes raíces en Houston.
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 pb-24">
+      <div class="flex flex-col gap-12">
+
+        <!-- Fundamentals: Economic + Financial + Tax merged into one card -->
+        <div class="fade-in border border-subtle" style="background: #141414;">
+
+          <!-- Economic -->
+          <div class="p-10">
+            <div class="flex items-center gap-4 mb-8">
+              <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">01</div>
+              <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.ecoTitle">Economic Fundamentals</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[
+                { title: 'Diversified Economy', text: 'Houston\'s economy extends well beyond oil & gas.', tk: 'realEstate.eco1t', dk: 'realEstate.eco1d' },
+                { title: 'Population Growth', text: 'Houston is one of the fastest-growing metros in the US.', tk: 'realEstate.eco2t', dk: 'realEstate.eco2d' },
+                { title: 'Job Market Depth', text: 'Home to 26 Fortune 500 companies, Houston offers consistent employment.', tk: 'realEstate.eco3t', dk: 'realEstate.eco3d' },
+                { title: 'Affordable Entry Point', text: 'Compared to coastal markets, Houston offers lower price-per-door entry points.', tk: 'realEstate.eco4t', dk: 'realEstate.eco4d' },
+              ].map(item => (
+                <div class="border-l-2 border-gold pl-6">
+                  <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
+                  <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="border-t border-subtle"></div>
+
+          <!-- Financial -->
+          <div class="p-10">
+            <div class="flex items-center gap-4 mb-8">
+              <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">02</div>
+              <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.finTitle">Financial Advantages</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[
+                { title: 'Strong Cash Flow Potential', text: 'Favorable price-to-rent ratios.', tk: 'realEstate.fin1t', dk: 'realEstate.fin1d' },
+                { title: 'Appreciation + Cash Flow', text: 'Houston delivers both appreciation and cash flow.', tk: 'realEstate.fin2t', dk: 'realEstate.fin2d' },
+                { title: 'Value-Add Opportunities', text: 'Inner-loop neighborhoods offer value-add potential.', tk: 'realEstate.fin3t', dk: 'realEstate.fin3d' },
+                { title: 'Short-Term Rental Market', text: 'Consistent short-term rental demand.', tk: 'realEstate.fin4t', dk: 'realEstate.fin4d' },
+              ].map(item => (
+                <div class="border-l-2 border-gold pl-6">
+                  <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
+                  <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="border-t border-subtle"></div>
+
+          <!-- Tax -->
+          <div class="p-10">
+            <div class="flex items-center gap-4 mb-8">
+              <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">03</div>
+              <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.taxTitle">Tax Advantages</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[
+                { title: 'No State Income Tax', text: 'Zero state income tax in Texas.', tk: 'realEstate.tax1t', dk: 'realEstate.tax1d' },
+                { title: 'Depreciation Shield', text: 'Depreciate over 27.5 years.', tk: 'realEstate.tax2t', dk: 'realEstate.tax2d' },
+                { title: 'Cost Segregation', text: 'Accelerate depreciation in early years.', tk: 'realEstate.tax3t', dk: 'realEstate.tax3d' },
+                { title: '1031 Exchange', text: 'Defer capital gains taxes.', tk: 'realEstate.tax4t', dk: 'realEstate.tax4d' },
+                { title: 'Homestead Exemption', text: 'Cap property tax increases at 10%.', tk: 'realEstate.tax5t', dk: 'realEstate.tax5d' },
+                { title: 'Business Deductions', text: 'Renovation costs are fully deductible.', tk: 'realEstate.tax6t', dk: 'realEstate.tax6d' },
+              ].map(item => (
+                <div class="border-l-2 border-gold pl-6">
+                  <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
+                  <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <Footer />
+</Layout>
+
+<style is:global>
+  .re-page .text-gold,
+  .re-page .border-gold {
+    color: #4ade80 !important;
+    border-color: #4ade80 !important;
+  }
+  .re-page .bg-gold {
+    background-color: #4ade80 !important;
+  }
+  .re-page .section-label {
+    color: #4ade80 !important;
+  }
+
+  @keyframes heroPan {
+    0%   { transform: scale(1) translate(0, 0); }
+    50%  { transform: scale(1.08) translate(-1.5%, -1%); }
+    100% { transform: scale(1) translate(0, 0); }
+  }
+  .hero-pan {
+    animation: heroPan 30s ease-in-out infinite;
+  }
+</style>

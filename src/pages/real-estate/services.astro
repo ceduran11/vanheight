@@ -5,18 +5,192 @@ import Footer from '../../components/Footer.astro';
 ---
 
 <Layout
-  title="Services | Real Estate — VanHeight"
-  description="Real estate services coming soon."
+  title="Servicios | Real Estate — VanHeight"
+  description="Servicios de Fix & Flip Concierge para inversionistas de real estate en Houston, TX."
   sidebarLayout={true}
 >
   <Header />
-  <main class="min-h-screen flex items-center justify-center" style="background: #0C0C0C; padding-top: 120px;">
-    <div class="text-center">
-      <p class="section-label mb-4">Coming Soon</p>
-      <h1 class="text-5xl md:text-6xl font-light" style="font-family: 'Playfair Display', serif; color: #F5F5F5;">
-        Services
+  <div class="re-page">
+
+    <!-- Page Header -->
+    <div class="max-w-7xl mx-auto px-6 pt-40 pb-10">
+      <p class="section-label mb-3">Fix & Flip Concierge</p>
+      <h1 class="text-5xl md:text-6xl font-light" style="font-family: 'Playfair Display', serif; color: #F5F5F5;" data-i18n="reServices.title">
+        Nuestros Servicios
       </h1>
+      <p class="text-white/60 text-lg max-w-2xl mt-4" data-i18n="reServices.subtitle">
+        Un servicio completo, dividido en módulos claros. Empieza donde lo necesites.
+      </p>
     </div>
-  </main>
+
+    <div class="max-w-7xl mx-auto px-6 pb-8">
+      <div class="flex flex-col gap-8">
+
+        <!-- Module 01: Deal Access -->
+        <div class="fade-in border border-subtle" style="background: #141414;">
+          <div class="p-10">
+            <div class="flex items-center gap-4 mb-3">
+              <div class="w-10 h-10 flex-shrink-0 border border-gold flex items-center justify-center text-gold text-sm font-bold">01</div>
+              <div>
+                <p class="text-xs uppercase tracking-widest text-gold mb-1" data-i18n="reServices.m1Tag">Encontramos</p>
+                <h2 class="text-3xl font-light" style="font-family: 'Playfair Display', serif;">Deal Access</h2>
+              </div>
+            </div>
+            <p class="text-white/60 max-w-2xl mb-8 ml-14" data-i18n="reServices.m1Desc">
+              Acceso directo a propiedades que sí dan los números — analizadas antes de que las veas.
+            </p>
+
+            <div class="flex flex-col gap-px ml-14" style="background: rgba(42,42,42,0.6);">
+              {[
+                { name: 'Lista de propiedades a la venta', price: 'Gratis con suscripción', nameKey: 'reServices.m1Item1Name', priceKey: 'reServices.m1Item1Price' },
+                { name: 'Análisis MAO y ROI', price: 'Gratis con FlipperTX', nameKey: 'reServices.m1Item2Name', priceKey: 'reServices.m1Item2Price' },
+                { name: 'Análisis ARV', price: 'Gratis (caso por caso)', nameKey: 'reServices.m1Item3Name', priceKey: 'reServices.m1Item3Price' },
+                { name: 'Negociación y cierre como tu realtor', price: 'Gratis', nameKey: 'reServices.m1Item4Name', priceKey: 'reServices.m1Item4Price' },
+              ].map(item => (
+                <div class="flex items-center justify-between gap-6 p-5" style="background: #18181a;">
+                  <div class="flex items-center gap-3">
+                    <span class="inline-block w-1 h-4 flex-shrink-0" style="background: #4ade80;"></span>
+                    <p class="text-white/90" data-i18n={item.nameKey}>{item.name}</p>
+                  </div>
+                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #4ade80;" data-i18n={item.priceKey}>{item.price}</p>
+                </div>
+              ))}
+            </div>
+
+            <p class="text-white/40 text-xs max-w-2xl mt-6 ml-14" data-i18n="reServices.m1Footnote">
+              *Si la propiedad es comprada a través de HAR, el inversionista recibe un rebate adicional del 1% sobre el precio ofertado.
+            </p>
+          </div>
+        </div>
+
+        <!-- Module 02: Build Track -->
+        <div class="fade-in border border-subtle" style="background: #141414;">
+          <div class="p-10">
+            <div class="flex items-center gap-4 mb-3">
+              <div class="w-10 h-10 flex-shrink-0 border border-gold flex items-center justify-center text-gold text-sm font-bold">02</div>
+              <div>
+                <p class="text-xs uppercase tracking-widest text-gold mb-1" data-i18n="reServices.m2Tag">Remodelamos</p>
+                <h2 class="text-3xl font-light" style="font-family: 'Playfair Display', serif;">Build Track</h2>
+              </div>
+            </div>
+            <p class="text-white/60 max-w-2xl mb-8 ml-14" data-i18n="reServices.m2Desc">
+              Diseño, cuadrillas y control de gastos — para que la remodelación avance sin que tengas que estar ahí.
+            </p>
+
+            <div class="flex flex-col gap-px ml-14" style="background: rgba(42,42,42,0.6);">
+              {[
+                { name: 'Diseño: te hacemos el diseño de tu cocina o tu baño para que lo puedas visualizar', price: 'Desde $300', nameKey: 'reServices.m2Item1Name', priceKey: 'reServices.m2Item1Price' },
+                { name: 'Cotizaciones con nuestros contratistas', price: 'Margen de obra (caso por caso)', nameKey: 'reServices.m2Item2Name', priceKey: 'reServices.m2Item2Price' },
+                { name: 'Te conseguimos cuadrillas con tarifas diarias', price: 'Margen en la tarifa (caso por caso)', nameKey: 'reServices.m2Item3Name', priceKey: 'reServices.m2Item3Price' },
+                { name: 'Seguimiento de gastos con informes semanales', price: 'Desde $100/semana', nameKey: 'reServices.m2Item4Name', priceKey: 'reServices.m2Item4Price' },
+              ].map(item => (
+                <div class="flex items-center justify-between gap-6 p-5" style="background: #18181a;">
+                  <div class="flex items-center gap-3">
+                    <span class="inline-block w-1 h-4 flex-shrink-0" style="background: #4ade80;"></span>
+                    <p class="text-white/90" data-i18n={item.nameKey}>{item.name}</p>
+                  </div>
+                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #4ade80;" data-i18n={item.priceKey}>{item.price}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 03: Sale Ready -->
+        <div class="fade-in border border-subtle" style="background: #141414;">
+          <div class="p-10">
+            <div class="flex items-center gap-4 mb-3">
+              <div class="w-10 h-10 flex-shrink-0 border border-gold flex items-center justify-center text-gold text-sm font-bold">03</div>
+              <div>
+                <p class="text-xs uppercase tracking-widest text-gold mb-1" data-i18n="reServices.m3Tag">Vendemos</p>
+                <h2 class="text-3xl font-light" style="font-family: 'Playfair Display', serif;">Sale Ready</h2>
+              </div>
+            </div>
+            <p class="text-white/60 max-w-2xl mb-8 ml-14" data-i18n="reServices.m3Desc">
+              Listo para vender, de principio a fin. Todos estos servicios están incluidos si nosotros vendemos la casa.
+            </p>
+
+            <div class="flex flex-col gap-px ml-14" style="background: rgba(42,42,42,0.6);">
+              {[
+                { name: 'Staging: preparamos y ambientamos la propiedad para que se vea lista para vivir desde el primer clic', price: 'Precio a consultar', nameKey: 'reServices.m3Item1Name', priceKey: 'reServices.m3Item1Price' },
+                { name: 'Fotografía: coordinamos tu fotógrafo profesional', price: 'Rebate de hasta $250 al cierre', nameKey: 'reServices.m3Item2Name', priceKey: 'reServices.m3Item2Price' },
+                { name: 'Listing en HAR y otras plataformas', price: 'Incluido', nameKey: 'reServices.m3Item3Name', priceKey: 'reServices.m3Item3Price' },
+                { name: 'Open House', price: 'Incluido', nameKey: 'reServices.m3Item4Name', priceKey: 'reServices.m3Item4Price' },
+                { name: 'Negociación y representación en la venta', price: 'Incluido', nameKey: 'reServices.m3Item5Name', priceKey: 'reServices.m3Item5Price' },
+              ].map(item => (
+                <div class="flex items-center justify-between gap-6 p-5" style="background: #18181a;">
+                  <div class="flex items-center gap-3">
+                    <span class="inline-block w-1 h-4 flex-shrink-0" style="background: #4ade80;"></span>
+                    <p class="text-white/90" data-i18n={item.nameKey}>{item.name}</p>
+                  </div>
+                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #4ade80;" data-i18n={item.priceKey}>{item.price}</p>
+                </div>
+              ))}
+            </div>
+
+            <p class="text-white/40 text-xs max-w-2xl mt-6 ml-14" data-i18n="reServices.m3Footnote">
+              *Comisión preferencial con un descuento de hasta el 30% si se contratan otros servicios del paquete.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Free Consultation CTA -->
+    <section class="pt-4 pb-16 text-center">
+      <div class="max-w-2xl mx-auto px-6">
+        <p class="section-label mb-4" data-i18n="reServices.ctaLabel">Consulta Gratuita</p>
+        <h2 class="text-3xl md:text-4xl font-light mb-5" style="font-family: 'Playfair Display', serif; color: #F5F5F5;" data-i18n="reServices.ctaTitle">
+          ¿Quieres saber más sobre el fix & flip?
+        </h2>
+        <p class="text-white/60 text-lg mb-8 leading-relaxed" data-i18n="reServices.ctaSubtext">
+          Agenda una consulta gratuita con nuestros especialistas y entérate de lo que otros no te cuentan sobre este negocio.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/real-estate/contact" class="btn-gold" style="padding: 1rem 2.5rem;" data-i18n="reServices.ctaButton">
+            Solicitar Consulta Gratis →
+          </a>
+          <a href="tel:+13467172406" class="btn-outline" style="padding: 1rem 2.5rem;">
+            (346) 717-2406
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </div>
   <Footer />
 </Layout>
+
+<style is:global>
+  .re-page .text-gold,
+  .re-page .border-gold {
+    color: #4ade80 !important;
+    border-color: #4ade80 !important;
+  }
+  .re-page .bg-gold {
+    background-color: #4ade80 !important;
+  }
+  .re-page .section-label {
+    color: #4ade80 !important;
+  }
+
+  .re-page .btn-gold {
+    background: #4ade80 !important;
+    color: #000 !important;
+    border: none !important;
+    text-shadow: none !important;
+  }
+  .re-page .btn-gold:hover {
+    background: #6ee7b7 !important;
+  }
+
+  .re-page .btn-outline {
+    border-color: #4ade80 !important;
+    color: #4ade80 !important;
+  }
+  .re-page .btn-outline:hover {
+    background: #4ade80 !important;
+    color: #000 !important;
+  }
+</style>

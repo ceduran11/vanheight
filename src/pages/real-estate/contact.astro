@@ -1,0 +1,326 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const WEB3FORMS_KEY = import.meta.env.WEB3FORMS_KEY ?? 'fe79e33d-fcc7-4eb7-964c-321ff285446a';
+---
+
+<Layout
+  title="Contacto | Real Estate — VanHeight"
+  description="Habla con nuestro equipo de Fix & Flip Concierge en Houston, TX. Cuéntanos tu presupuesto y te corremos el análisis de un deal real, gratis."
+  sidebarLayout={true}
+>
+  <Header />
+  <div class="re-page">
+
+    <section class="pt-40 pb-24">
+      <div class="max-w-7xl mx-auto px-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+
+          <!-- Left: Info -->
+          <div class="fade-in">
+            <p class="section-label mb-4">Fix & Flip Concierge</p>
+            <h1
+              class="text-5xl md:text-6xl font-light leading-tight mb-6"
+              style="font-family: 'Playfair Display', serif;"
+            >
+              <span data-i18n="reContact.title1">Hablemos de</span><br />
+              <span class="text-gold italic" data-i18n="reContact.title2">tu primer deal.</span>
+            </h1>
+            <p class="text-white/60 text-lg leading-relaxed mb-12" data-i18n="reContact.subtext">
+              Cuéntanos tu presupuesto y el tipo de propiedad que buscas. Te respondemos dentro de 24 horas para correr el análisis de un deal real, sin compromiso.
+            </p>
+
+            <div class="flex flex-col gap-8">
+              <div class="flex gap-4 items-start">
+                <div class="w-10 h-10 border border-subtle flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs text-muted-custom uppercase tracking-widest mb-1" data-i18n="reContact.phoneLabel">Teléfono</p>
+                  <a href="tel:+13467172406" class="text-white hover:text-gold transition-colors">(346) 717-2406</a>
+                </div>
+              </div>
+
+              <div class="flex gap-4 items-start">
+                <div class="w-10 h-10 border border-subtle flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs text-muted-custom uppercase tracking-widest mb-1" data-i18n="reContact.emailLabel">Email</p>
+                  <a href="mailto:info@vanheight.com" class="text-white hover:text-gold transition-colors">info@vanheight.com</a>
+                </div>
+              </div>
+
+              <div class="flex gap-4 items-start">
+                <div class="w-10 h-10 border border-subtle flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs text-muted-custom uppercase tracking-widest mb-1" data-i18n="reContact.areaLabel">Área de Cobertura</p>
+                  <p class="text-white" data-i18n="reContact.areaText">Houston y Greater Houston, TX</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Form -->
+          <div class="fade-in" style="transition-delay: 0.15s;">
+            <form
+              id="re-contact-form"
+              class="flex flex-col gap-6"
+              action="https://api.web3forms.com/submit"
+              method="POST"
+              novalidate
+            >
+              <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+              <input type="hidden" name="subject" value="Nuevo Contacto Real Estate - VanHeight" />
+              <input type="hidden" name="from_name" value="VanHeight Real Estate" />
+              <input type="hidden" name="cc" value="benjamineric@hotmail.com" />
+              <input type="checkbox" name="botcheck" style="display:none;" />
+
+              <div>
+                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="fullName" data-i18n="reContact.fullNameLabel">
+                  Nombre Completo *
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                  class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom"
+                  placeholder="John Smith"
+                />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="phone" data-i18n="reContact.phoneLabel">
+                    Teléfono
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom"
+                    placeholder="(832) 000-0000"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="email" data-i18n="reContact.emailLabel">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom"
+                    placeholder="john@example.com"
+                  />
+                </div>
+              </div>
+              <p class="text-xs text-muted-custom -mt-2" data-i18n="reContact.requiredNote">* Se requiere al menos teléfono o email.</p>
+
+              <div>
+                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="interest" data-i18n="reContact.interestLabel">
+                  Tipo de Interés *
+                </label>
+                <select
+                  id="interest"
+                  name="interest"
+                  required
+                  class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors"
+                  style="background: #141414;"
+                >
+                  <option value="" disabled selected data-i18n="reContact.selectInterest">Selecciona una opción</option>
+                  <option value="Deal Access" style="background: #141414;" data-i18n="reContact.optDealAccess">Deal Access (Encontrar propiedad)</option>
+                  <option value="Build Track" style="background: #141414;" data-i18n="reContact.optBuildTrack">Build Track (Remodelación)</option>
+                  <option value="Sale Ready" style="background: #141414;" data-i18n="reContact.optSaleReady">Sale Ready (Vender propiedad)</option>
+                  <option value="Paquete Completo" style="background: #141414;" data-i18n="reContact.optFullPackage">Paquete completo</option>
+                  <option value="Otro" style="background: #141414;" data-i18n="reContact.optOther">Otro</option>
+                </select>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="budget" data-i18n="reContact.budgetLabel">
+                    Rango de Presupuesto
+                  </label>
+                  <select
+                    id="budget"
+                    name="budget"
+                    class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors"
+                    style="background: #141414;"
+                  >
+                    <option value="" disabled selected data-i18n="reContact.selectBudget">Selecciona rango</option>
+                    <option value="Under $200K">Menos de $200K</option>
+                    <option value="$200K–$400K">$200K – $400K</option>
+                    <option value="$400K–$600K">$400K – $600K</option>
+                    <option value="$600K–$1M">$600K – $1M</option>
+                    <option value="$1M+">$1M+</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="timeline" data-i18n="reContact.timelineLabel">
+                    Plazo de Compra
+                  </label>
+                  <select
+                    id="timeline"
+                    name="timeline"
+                    class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors"
+                    style="background: #141414;"
+                  >
+                    <option value="" disabled selected data-i18n="reContact.selectTimeline">Selecciona plazo</option>
+                    <option value="ASAP" data-i18n="reContact.timelineAsap">Lo antes posible</option>
+                    <option value="1–3 months" data-i18n="reContact.timeline1to3">1–3 meses</option>
+                    <option value="3–6 months" data-i18n="reContact.timeline3to6">3–6 meses</option>
+                    <option value="6+ months" data-i18n="reContact.timeline6plus">6+ meses</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="areas" data-i18n="reContact.areasLabel">
+                  Áreas / Códigos Postales de Interés
+                </label>
+                <input
+                  type="text"
+                  id="areas"
+                  name="areas"
+                  class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors placeholder-muted-custom"
+                  placeholder="ej. The Woodlands, Katy, Heights, 77008"
+                />
+              </div>
+
+              <div>
+                <label class="block text-xs text-muted-custom uppercase tracking-widest mb-2" for="message" data-i18n="reContact.messageLabel">
+                  Cuéntanos Más
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
+                  class="w-full bg-transparent border border-subtle px-4 py-3 text-sm text-white focus:border-gold focus:outline-none transition-colors resize-none placeholder-muted-custom"
+                  placeholder="Detalles adicionales sobre lo que buscas..."
+                ></textarea>
+              </div>
+
+              <p id="re-contact-error" class="text-red-400 text-xs hidden" data-i18n="reContact.errorMsg">Por favor completa los campos requeridos (nombre, y teléfono o email).</p>
+
+              <div>
+                <button type="submit" id="re-contact-submit" class="btn-gold" style="padding: 0.875rem 2.5rem;" data-i18n="reContact.submit">
+                  Enviar Solicitud
+                </button>
+              </div>
+
+              <p class="text-xs text-muted-custom text-center" data-i18n="reContact.note">
+                Te contactaremos dentro de 24 horas. Tu información nunca se comparte.
+              </p>
+            </form>
+
+            <!-- Success message -->
+            <div id="re-success-msg" class="hidden text-center py-12">
+              <div class="w-16 h-16 border border-gold flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-light mb-2" style="font-family: 'Playfair Display', serif;" data-i18n="reContact.successTitle">
+                ¡Solicitud Recibida!
+              </h3>
+              <p class="text-muted-custom text-sm" data-i18n="reContact.successText">
+                Nuestro equipo te contactará dentro de 24 horas para confirmar.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <Footer />
+</Layout>
+
+<style is:global>
+  .re-page .text-gold,
+  .re-page .border-gold {
+    color: #4ade80 !important;
+    border-color: #4ade80 !important;
+  }
+  .re-page .bg-gold {
+    background-color: #4ade80 !important;
+  }
+  .re-page .section-label {
+    color: #4ade80 !important;
+  }
+  .re-page .focus\:border-gold:focus {
+    border-color: #4ade80 !important;
+  }
+  .re-page .btn-gold {
+    background: #4ade80 !important;
+    color: #000 !important;
+    border: none !important;
+    text-shadow: none !important;
+  }
+  .re-page .btn-gold:hover {
+    background: #6ee7b7 !important;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('re-contact-form') as HTMLFormElement;
+  const successMsg = document.getElementById('re-success-msg');
+  const errorMsg = document.getElementById('re-contact-error');
+  const submitBtn = document.getElementById('re-contact-submit') as HTMLButtonElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg?.classList.add('hidden');
+
+    const required = form.querySelectorAll('[required]') as NodeListOf<HTMLInputElement | HTMLSelectElement>;
+    let valid = true;
+    required.forEach((f) => {
+      f.style.borderColor = '';
+      if (!f.value.trim()) { f.style.borderColor = '#E53E3E'; valid = false; }
+    });
+
+    const phoneField = form.querySelector('[name="phone"]') as HTMLInputElement;
+    const emailField = form.querySelector('[name="email"]') as HTMLInputElement;
+    phoneField.style.borderColor = '';
+    emailField.style.borderColor = '';
+    if (!phoneField.value.trim() && !emailField.value.trim()) {
+      phoneField.style.borderColor = '#E53E3E';
+      emailField.style.borderColor = '#E53E3E';
+      valid = false;
+    }
+
+    if (!valid) { errorMsg?.classList.remove('hidden'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '...';
+
+    const data = new FormData(form);
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: data,
+    });
+
+    if (response.ok) {
+      form.style.display = 'none';
+      successMsg?.classList.remove('hidden');
+    } else {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar Solicitud';
+      errorMsg?.classList.remove('hidden');
+    }
+  });
+</script>

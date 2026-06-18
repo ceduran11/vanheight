@@ -17,101 +17,77 @@ import Footer from '../../components/Footer.astro';
     <img
       src="https://images.unsplash.com/photo-1530089711124-9ca31fb9e863?w=1800&q=80"
       alt="Houston Downtown Skyline"
-      class="absolute inset-0 w-full h-full object-cover"
+      class="absolute inset-0 w-full h-full object-cover hero-pan"
       loading="eager"
     />
     <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(12,12,12,0.97) 0%, rgba(12,12,12,0.6) 50%, rgba(12,12,12,0.25) 100%);"></div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-6 pb-20 pt-40 w-full">
-      <p class="section-label mb-3" data-i18n="realEstate.label">Market Intelligence</p>
+      <p class="section-label mb-3" data-i18n="flipHero.label">Fix & Flip Concierge · Houston, TX</p>
       <h1 class="text-5xl md:text-7xl font-light leading-tight mb-4" style="font-family: 'Playfair Display', serif;">
-        <span data-i18n="realEstate.title">Investing in Houston</span><br />
-        <span class="text-gold italic" data-i18n="realEstate.titleSpan">Real Estate</span>
+        <span data-i18n="flipHero.title">Tu capital trabaja.</span><br />
+        <span class="text-gold italic" data-i18n="flipHero.titleSpan">Nosotros hacemos el resto.</span>
       </h1>
-      <p class="text-white/60 text-lg max-w-2xl mb-12" data-i18n="realEstate.subtext">
-        A strategic overview of the financial, economic, and tax advantages of Houston real estate investment — and how <a href="#flippertx" class="transition-colors" style="color: #4ade80; text-shadow: 0 0 12px rgba(74,222,128,0.6); text-decoration: underline; text-underline-offset: 4px;">FlipperTX</a> supports your operation.
+      <p class="text-white/60 text-lg max-w-2xl mb-8" data-i18n="flipHero.subtext">
+        Encontramos la propiedad, coordinamos la remodelación y la vendemos por ti. Servicio completo de fix & flip para inversionistas que tienen el capital pero no el tiempo.
       </p>
+
+      <div class="flex flex-wrap gap-4 mb-12">
+        <a href="https://flipper-tx.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-gold" data-i18n="flipHero.cta1">
+          Calcular mi ROI →
+        </a>
+        <a href="/real-estate/services" class="btn-outline" data-i18n="flipHero.cta2">
+          Ver cómo funciona
+        </a>
+      </div>
 
       <!-- Key Stats -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-px" style="background: rgba(42,42,42,0.6); max-width: 640px;">
         {[
-          { number: '#4', label: 'Largest US City', key: 'realEstate.stat1' },
-          { number: '0%', label: 'State Income Tax', key: 'realEstate.stat2' },
-          { number: '7M+', label: 'Metro Population', key: 'realEstate.stat3' },
-          { number: '~6%', label: 'Avg. Cap Rate', key: 'realEstate.stat4' },
+          { numberKey: 'flipHero.stat1Value', number: '$180K', labelKey: 'flipHero.stat1Label', label: 'Compra Típica' },
+          { numberKey: 'flipHero.stat2Value', number: '$40K+', labelKey: 'flipHero.stat2Label', label: 'Ganancia Promedio' },
+          { numberKey: 'flipHero.stat3Value', number: '5 meses', labelKey: 'flipHero.stat3Label', label: 'Ciclo Completo' },
+          { numberKey: 'flipHero.stat4Value', number: '$0', labelKey: 'flipHero.stat4Label', label: 'Tu Tiempo Invertido' },
         ].map(s => (
           <div class="p-6 text-center" style="background: rgba(20,20,20,0.7); backdrop-filter: blur(8px);">
-            <p class="text-2xl font-light text-gold mb-1" style="font-family: 'Playfair Display', serif;">{s.number}</p>
-            <p class="text-xs text-muted-custom uppercase tracking-widest" data-i18n={s.key}>{s.label}</p>
+            <p class="text-2xl font-light text-gold mb-1" style="font-family: 'Playfair Display', serif;" data-i18n={s.numberKey}>{s.number}</p>
+            <p class="text-xs text-muted-custom uppercase tracking-widest" data-i18n={s.labelKey}>{s.label}</p>
           </div>
         ))}
       </div>
+      <p class="text-white/30 text-xs mt-4" data-i18n="flipHero.statsNote">
+        Economía típica de un flip en Houston (ejemplo del modelo)
+      </p>
     </div>
   </div>
 
-  <div class="max-w-7xl mx-auto px-6 py-20" style="background: #0C0C0C;">
-    <div class="flex flex-col gap-12">
+  <div class="max-w-7xl mx-auto px-6 py-12" style="background: #0C0C0C;">
+    <div class="flex flex-col gap-8">
 
-      <!-- Economic -->
-      <div class="fade-in border border-subtle p-10" style="background: #141414;">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">01</div>
-          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.ecoTitle">Economic Fundamentals</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Three Phases -->
+      <div class="fade-in">
+        <p class="section-label mb-3" data-i18n="phases.label">Cómo Funciona</p>
+        <h2 class="text-4xl md:text-5xl font-light mb-10" style="font-family: 'Playfair Display', serif;" data-i18n="phases.title">
+          Tres fases, un solo socio.
+        </h2>
+        <div class="flex flex-col gap-px" style="background: rgba(42,42,42,0.6);">
           {[
-            { title: 'Diversified Economy', text: 'Houston\'s economy extends well beyond oil & gas.', tk: 'realEstate.eco1t', dk: 'realEstate.eco1d' },
-            { title: 'Population Growth', text: 'Houston is one of the fastest-growing metros in the US.', tk: 'realEstate.eco2t', dk: 'realEstate.eco2d' },
-            { title: 'Job Market Depth', text: 'Home to 26 Fortune 500 companies, Houston offers consistent employment.', tk: 'realEstate.eco3t', dk: 'realEstate.eco3d' },
-            { title: 'Affordable Entry Point', text: 'Compared to coastal markets, Houston offers lower price-per-door entry points.', tk: 'realEstate.eco4t', dk: 'realEstate.eco4d' },
-          ].map(item => (
-            <div class="border-l-2 border-gold pl-6">
-              <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
-              <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <!-- Financial -->
-      <div class="fade-in border border-subtle p-10" style="background: #141414;">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">02</div>
-          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.finTitle">Financial Advantages</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {[
-            { title: 'Strong Cash Flow Potential', text: 'Favorable price-to-rent ratios.', tk: 'realEstate.fin1t', dk: 'realEstate.fin1d' },
-            { title: 'Appreciation + Cash Flow', text: 'Houston delivers both appreciation and cash flow.', tk: 'realEstate.fin2t', dk: 'realEstate.fin2d' },
-            { title: 'Value-Add Opportunities', text: 'Inner-loop neighborhoods offer value-add potential.', tk: 'realEstate.fin3t', dk: 'realEstate.fin3d' },
-            { title: 'Short-Term Rental Market', text: 'Consistent short-term rental demand.', tk: 'realEstate.fin4t', dk: 'realEstate.fin4d' },
-          ].map(item => (
-            <div class="border-l-2 border-gold pl-6">
-              <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
-              <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <!-- Tax -->
-      <div class="fade-in border border-subtle p-10" style="background: #141414;">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="w-10 h-10 border border-gold flex items-center justify-center text-gold text-sm font-bold">03</div>
-          <h2 class="text-2xl font-light" style="font-family: 'Playfair Display', serif;" data-i18n="realEstate.taxTitle">Tax Advantages</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {[
-            { title: 'No State Income Tax', text: 'Zero state income tax in Texas.', tk: 'realEstate.tax1t', dk: 'realEstate.tax1d' },
-            { title: 'Depreciation Shield', text: 'Depreciate over 27.5 years.', tk: 'realEstate.tax2t', dk: 'realEstate.tax2d' },
-            { title: 'Cost Segregation', text: 'Accelerate depreciation in early years.', tk: 'realEstate.tax3t', dk: 'realEstate.tax3d' },
-            { title: '1031 Exchange', text: 'Defer capital gains taxes.', tk: 'realEstate.tax4t', dk: 'realEstate.tax4d' },
-            { title: 'Homestead Exemption', text: 'Cap property tax increases at 10%.', tk: 'realEstate.tax5t', dk: 'realEstate.tax5d' },
-            { title: 'Business Deductions', text: 'Renovation costs are fully deductible.', tk: 'realEstate.tax6t', dk: 'realEstate.tax6d' },
-          ].map(item => (
-            <div class="border-l-2 border-gold pl-6">
-              <h3 class="text-white font-semibold mb-2" data-i18n={item.tk}>{item.title}</h3>
-              <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.dk}>{item.text}</p>
+            { num: '01', titleKey: 'phases.step1Title', title: 'Encontramos', descKey: 'phases.step1Desc', desc: 'Nosotros publicamos y te enviamos propiedades de wholesaler y HAR que sí dan los números. Cada propiedad pasa por FlipperTX —nuestro análisis de MAO y ROI— antes que la veas. Negociamos y cerramos como tu realtor.', feeKey: 'phases.step1Fee', fee: 'Descuento de hasta el 1% del precio de compra (aplican condiciones)' },
+            { num: '02', titleKey: 'phases.step2Title', title: 'Remodelamos', descKey: 'phases.step2Desc', desc: 'Diseño, cotizaciones, cuadrillas propias y seguimiento de gastos semana a semana. Tú apruebas, nosotros ejecutamos. Aquí está nuestra ventaja real: somos la empresa de remodelación, no un intermediario que subcontrata.', feeKey: 'phases.step2Fee', fee: 'Desde $400/mes + margen de obra (transparente)' },
+            { num: '03', titleKey: 'phases.step3Title', title: 'Vendemos', descKey: 'phases.step3Desc', desc: 'Staging, fotografía profesional, listing en HAR, open house y negociación de la venta. Comisión preferencial para clientes del paquete completo.', feeKey: 'phases.step3Fee', fee: 'Comisión de venta preferencial' },
+          ].map(step => (
+            <div class="p-10" style="background: #141414;">
+              <div class="flex items-start gap-6">
+                <div class="w-10 h-10 flex-shrink-0 border border-gold flex items-center justify-center text-gold text-sm font-bold">{step.num}</div>
+                <div>
+                  <h3 class="text-2xl font-light mb-3" style="font-family: 'Playfair Display', serif;" data-i18n={step.titleKey}>{step.title}</h3>
+                  <p class="text-white/60 leading-relaxed mb-4 max-w-3xl" data-i18n={step.descKey}>{step.desc}</p>
+                  <div class="flex items-center gap-3">
+                    <span class="inline-block w-1 h-4" style="background: #4ade80;"></span>
+                    <p class="text-sm text-white/50" data-i18n={step.feeKey}>{step.fee}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -128,7 +104,7 @@ import Footer from '../../components/Footer.astro';
         </p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: 'Deal Analysis', text: 'Run ARV calculations, repair cost estimates, and ROI projections.', tk: 'realEstate.ftx1t', dk: 'realEstate.ftx1d' },
+            { title: 'Deal Analysis', text: 'Run MAO calculations, repair cost estimates, and ROI projections.', tk: 'realEstate.ftx1t', dk: 'realEstate.ftx1d' },
             { title: 'Renovation Tracking', text: 'Manage contractor scopes, timelines, and budgets in one place.', tk: 'realEstate.ftx2t', dk: 'realEstate.ftx2d' },
             { title: 'Portfolio Dashboard', text: 'Track all your Houston properties from a single dashboard.', tk: 'realEstate.ftx3t', dk: 'realEstate.ftx3d' },
           ].map(item => (
@@ -155,6 +131,39 @@ import Footer from '../../components/Footer.astro';
           </a>
         </div>
       </div>
+
+    </div>
+  </div>
+
+  <!-- Custom Real Estate CTA -->
+  <section class="py-12 md:py-16 relative overflow-hidden" style="background: #0C0C0C;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <div class="fade-in">
+        <p class="section-label mb-6" data-i18n="reCta.label">Empieza con los números, no con el compromiso</p>
+        <h2
+          class="text-4xl md:text-6xl font-light leading-tight mb-6"
+          style="font-family: 'Playfair Display', serif;"
+        >
+          <span data-i18n="reCta.title">Empieza con los números,</span><br />
+          <span class="text-gold italic" data-i18n="reCta.titleSpan">no con el compromiso.</span>
+        </h2>
+        <p class="text-white/60 text-lg mb-10 leading-relaxed" data-i18n="reCta.subtext">
+          Cuéntanos tu presupuesto y te corremos el análisis de un deal real, gratis. Sin compromiso. Si los números te convencen, hablamos del siguiente paso.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <button id="open-appt-modal" class="btn-gold" style="padding: 1rem 2.5rem;" data-i18n="reCta.button">
+            Solicitar mi análisis gratis →
+          </button>
+          <a href="tel:+13467172406" class="btn-outline" style="padding: 1rem 2.5rem;">
+            (346) 717-2406
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-6 pb-24">
+    <div class="flex flex-col gap-8">
 
       <!-- Legal Disclosure -->
       <div class="fade-in border border-subtle p-8" style="background: #0a0a0a;">
@@ -185,42 +194,11 @@ import Footer from '../../components/Footer.astro';
     </div>
   </div>
 
-  <!-- Custom Real Estate CTA -->
-  <section class="py-24 md:py-32 relative overflow-hidden" style="background: #0C0C0C;">
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gold opacity-40"></div>
-
-    <div class="max-w-3xl mx-auto px-6 text-center">
-      <div class="fade-in">
-        <p class="section-label mb-6" data-i18n="reCta.label">Ready to Invest?</p>
-        <h2
-          class="text-4xl md:text-6xl font-light leading-tight mb-6"
-          style="font-family: 'Playfair Display', serif;"
-        >
-          <span data-i18n="reCta.title">Ready to Invest in</span><br />
-          <span class="text-gold italic" data-i18n="reCta.titleSpan">Real Estate?</span>
-        </h2>
-        <p class="text-white/60 text-lg mb-10 leading-relaxed" data-i18n="reCta.subtext">
-          Whether you're looking for your next investment property or your primary residence, our team of licensed realtors and active investors is here to guide you every step of the way — from deal analysis to closing day.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <button id="open-appt-modal" class="btn-gold" style="padding: 1rem 2.5rem;" data-i18n="reCta.button">
-            Request an Appointment
-          </button>
-          <a href="tel:+13467172406" class="btn-outline" style="padding: 1rem 2.5rem;">
-            (346) 717-2406
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gold opacity-40"></div>
-  </section>
-
   </div>
   <Footer />
 
   <!-- Appointment Modal -->
-  <div id="appt-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4" style="background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);">
+  <div id="appt-modal" class="re-page fixed inset-0 z-[200] hidden items-center justify-center p-4" style="background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);">
     <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-subtle" style="background: #141414;">
 
       <!-- Modal Header -->
@@ -348,6 +326,15 @@ import Footer from '../../components/Footer.astro';
 </Layout>
 
 <style is:global>
+  @keyframes heroPan {
+    0%   { transform: scale(1) translate(0, 0); }
+    50%  { transform: scale(1.08) translate(-1.5%, -1%); }
+    100% { transform: scale(1) translate(0, 0); }
+  }
+  .hero-pan {
+    animation: heroPan 30s ease-in-out infinite;
+  }
+
   .re-page .text-gold          { color: #4ade80 !important; }
   .re-page .bg-gold            { background-color: #4ade80 !important; }
   .re-page .border-gold        { border-color: #4ade80 !important; }

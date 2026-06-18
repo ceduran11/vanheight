@@ -5,18 +5,150 @@ import Footer from '../../components/Footer.astro';
 ---
 
 <Layout
-  title="About | Real Estate — VanHeight"
-  description="About our real estate division, coming soon."
+  title="Sobre Nosotros | Real Estate — VanHeight"
+  description="Fix & Flip Concierge — un equipo de inversionistas activos en Houston haciendo fix & flip desde 2010, ahora abierto a otros inversionistas."
   sidebarLayout={true}
 >
   <Header />
-  <main class="min-h-screen flex items-center justify-center" style="background: #0C0C0C; padding-top: 120px;">
-    <div class="text-center">
-      <p class="section-label mb-4">Coming Soon</p>
+  <div class="re-page">
+
+    <!-- Page Header -->
+    <div class="max-w-7xl mx-auto px-6 pt-40 pb-16">
+      <p class="section-label mb-3">Fix & Flip Concierge</p>
       <h1 class="text-5xl md:text-6xl font-light" style="font-family: 'Playfair Display', serif; color: #F5F5F5;">
-        About
+        <span data-i18n="reAbout.title1">Compramos. Remodelamos.</span><br />
+        <span class="text-gold italic" data-i18n="reAbout.title2">Vendemos. Así lo hacemos desde 2010.</span>
       </h1>
+      <p class="text-white/60 text-lg max-w-2xl mt-4" data-i18n="reAbout.subtext">
+        Somos un equipo de inversionistas activos en Houston. La remodelación es parte de cómo ejecutamos cada deal — no es un servicio aparte. Ahora abrimos ese mismo proceso a otros inversionistas.
+      </p>
     </div>
-  </main>
+
+    <div class="max-w-7xl mx-auto px-6 pb-24">
+      <div class="flex flex-col gap-8">
+
+        <!-- Story -->
+        <div class="fade-in border border-subtle" style="background: #141414;">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+            <div class="p-10 lg:p-12 flex flex-col justify-center">
+              <p class="text-xs uppercase tracking-widest text-gold mb-3" data-i18n="reAbout.storyLabel">Nuestra Historia</p>
+              <h2 class="text-3xl font-light mb-5" style="font-family: 'Playfair Display', serif;" data-i18n="reAbout.storyTitle">
+                No es algo nuevo. Lo hacemos desde el 2010.
+              </h2>
+              <p class="text-white/60 leading-relaxed mb-4" data-i18n="reAbout.storyP1">
+                Nuestro equipo lleva desde el 2010 comprando, remodelando y vendiendo propiedades en Houston — con decenas de tratos exitosos cerrados, incluyendo propiedades que convertimos en rentas. El fix & flip no es algo que estamos probando ahora; es lo que hacemos con nuestro propio dinero desde hace más de una década.
+              </p>
+              <p class="text-white/60 leading-relaxed" data-i18n="reAbout.storyP2">
+                Fix & Flip Concierge es ese mismo proceso, ahora abierto a otros inversionistas. No somos wholesalers ni intermediarios: compramos con números reales (FlipperTX corre MAO y ROI en cada propiedad), ejecutamos la remodelación con cuadrillas propias, y vendemos representados por nuestro propio equipo — de principio a fin, bajo un solo techo.
+              </p>
+            </div>
+            <div class="relative" style="min-height: 320px;">
+              <img
+                src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=900&q=75"
+                alt="Nuestro equipo ejecutando la remodelación de un proyecto fix & flip"
+                class="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Why We're Different -->
+        <div class="fade-in">
+          <p class="section-label mb-3" data-i18n="reAbout.diffLabel">Por Qué Somos Diferentes</p>
+          <h2 class="text-3xl md:text-4xl font-light mb-8" style="font-family: 'Playfair Display', serif;" data-i18n="reAbout.diffTitle">
+            Un solo equipo, todo el proceso.
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-px" style="background: rgba(42,42,42,0.6);">
+            {[
+              { title: 'Ejecución propia', text: 'No subcontratamos la remodelación a un tercero. Tenemos cuadrillas propias y contratistas de confianza con 20+ años de obra real en Houston — es parte de cómo cerramos cada deal, no un servicio aparte.', titleKey: 'reAbout.diff1Title', textKey: 'reAbout.diff1Text' },
+              { title: 'Datos antes que instinto', text: 'Cada propiedad pasa por FlipperTX — nuestro análisis de ARV, MAO y ROI — antes de que la veas. Negociamos con números, no con corazonadas.', titleKey: 'reAbout.diff2Title', textKey: 'reAbout.diff2Text' },
+              { title: 'Un solo punto de contacto', text: 'Compramos, remodelamos y vendemos bajo el mismo techo. No hablas con tres empresas distintas — hablas con nosotros, de principio a fin.', titleKey: 'reAbout.diff3Title', textKey: 'reAbout.diff3Text' },
+            ].map(item => (
+              <div class="p-8" style="background: #141414;">
+                <div class="w-8 h-1 mb-5" style="background: #4ade80;"></div>
+                <h3 class="text-white font-semibold mb-3 text-lg" data-i18n={item.titleKey}>{item.title}</h3>
+                <p class="text-white/60 text-sm leading-relaxed" data-i18n={item.textKey}>{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Track Record -->
+        <div class="fade-in border border-subtle" style="background: #141414;">
+          <div class="p-10">
+            <p class="text-xs uppercase tracking-widest text-gold mb-6" data-i18n="reAbout.trackLabel">Nuestro Track Record</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-px" style="background: rgba(42,42,42,0.6);">
+              {[
+                { number: '2010', label: 'Haciendo Fix & Flip', numberKey: 'reAbout.track1Number', labelKey: 'reAbout.track1Label' },
+                { number: 'Decenas', label: 'De Tratos Exitosos Cerrados', numberKey: 'reAbout.track2Number', labelKey: 'reAbout.track2Label' },
+                { number: '20+', label: 'Años Remodelando en Houston', numberKey: 'reAbout.track3Number', labelKey: 'reAbout.track3Label' },
+                { number: '100%', label: 'Licenciado y Asegurado', numberKey: 'reAbout.track4Number', labelKey: 'reAbout.track4Label' },
+              ].map(stat => (
+                <div class="text-center p-8" style="background: #141414;">
+                  <p class="text-3xl md:text-4xl font-light text-white mb-2" style="font-family: 'Playfair Display', serif;" data-i18n={stat.numberKey}>{stat.number}</p>
+                  <p class="text-xs text-muted-custom uppercase tracking-widest" data-i18n={stat.labelKey}>{stat.label}</p>
+                </div>
+              ))}
+            </div>
+            <p class="text-white/40 text-xs max-w-2xl mt-8" data-i18n="reAbout.trackFootnote">
+              Compramos, remodelamos y vendemos (o rentamos) nuestras propias propiedades desde el 2010. Fix & Flip Concierge pone esa misma experiencia y los mismos recursos al servicio de tu inversión.
+            </p>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="fade-in text-center py-12">
+          <p class="section-label mb-4" data-i18n="reAbout.ctaLabel">¿Listo para Empezar?</p>
+          <h2 class="text-3xl md:text-4xl font-light mb-6" style="font-family: 'Playfair Display', serif;" data-i18n="reAbout.ctaTitle">
+            Hablemos de tu primer deal.
+          </h2>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="/real-estate#open-appt-modal" class="btn-gold" style="padding: 1rem 2.5rem;" data-i18n="reAbout.ctaButton">
+              Solicitar mi análisis gratis →
+            </a>
+            <a href="tel:+13467172406" class="btn-outline" style="padding: 1rem 2.5rem;">
+              (346) 717-2406
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
   <Footer />
 </Layout>
+
+<style is:global>
+  .re-page .text-gold,
+  .re-page .border-gold {
+    color: #4ade80 !important;
+    border-color: #4ade80 !important;
+  }
+  .re-page .bg-gold {
+    background-color: #4ade80 !important;
+  }
+  .re-page .section-label {
+    color: #4ade80 !important;
+  }
+
+  .re-page .btn-gold {
+    background: #4ade80 !important;
+    color: #000 !important;
+    border: none !important;
+    text-shadow: none !important;
+  }
+  .re-page .btn-gold:hover {
+    background: #6ee7b7 !important;
+  }
+
+  .re-page .btn-outline {
+    border-color: #4ade80 !important;
+    color: #4ade80 !important;
+  }
+  .re-page .btn-outline:hover {
+    background: #4ade80 !important;
+    color: #000 !important;
+  }
+</style>
