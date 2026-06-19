@@ -27,7 +27,7 @@ import Footer from '../../components/Footer.astro';
       <div class="flex flex-col gap-8">
 
         <!-- Module 01: Deal Access -->
-        <div class="fade-in border border-subtle" style="background: #141414;">
+        <div class="service-card fade-in border border-subtle" style="background: #F8F6EE; border-color: #DFDBCB !important;">
           <div class="p-10">
             <div class="flex items-center gap-4 mb-3">
               <div class="w-10 h-10 flex-shrink-0 border border-gold flex items-center justify-center text-gold text-sm font-bold">01</div>
@@ -40,19 +40,19 @@ import Footer from '../../components/Footer.astro';
               Acceso directo a propiedades que sí dan los números — analizadas antes de que las veas.
             </p>
 
-            <div class="flex flex-col gap-px ml-14" style="background: rgba(42,42,42,0.6);">
+            <div class="flex flex-col gap-px ml-14" style="background: #E5E2D8;">
               {[
                 { name: 'Lista de propiedades a la venta', price: 'Gratis con suscripción', nameKey: 'reServices.m1Item1Name', priceKey: 'reServices.m1Item1Price' },
                 { name: 'Análisis MAO y ROI', price: 'Gratis con FlipperTX', nameKey: 'reServices.m1Item2Name', priceKey: 'reServices.m1Item2Price' },
                 { name: 'Análisis ARV', price: 'Gratis (caso por caso)', nameKey: 'reServices.m1Item3Name', priceKey: 'reServices.m1Item3Price' },
                 { name: 'Negociación y cierre como tu realtor', price: 'Gratis', nameKey: 'reServices.m1Item4Name', priceKey: 'reServices.m1Item4Price' },
               ].map(item => (
-                <div class="flex items-center justify-between gap-6 p-5" style="background: #18181a;">
+                <div class="flex items-center justify-between gap-6 p-5" style="background: #EFEBDD;">
                   <div class="flex items-center gap-3">
                     <span class="inline-block w-1 h-4 flex-shrink-0" style="background: #4ade80;"></span>
                     <p class="text-white/90" data-i18n={item.nameKey}>{item.name}</p>
                   </div>
-                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #4ade80;" data-i18n={item.priceKey}>{item.price}</p>
+                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #15803d;" data-i18n={item.priceKey}>{item.price}</p>
                 </div>
               ))}
             </div>
@@ -64,7 +64,7 @@ import Footer from '../../components/Footer.astro';
         </div>
 
         <!-- Module 02: Build Track -->
-        <div class="fade-in border border-subtle" style="background: #141414;">
+        <div class="service-card fade-in border border-subtle" style="background: #F8F6EE; border-color: #DFDBCB !important;">
           <div class="p-10">
             <div class="flex items-center gap-4 mb-3">
               <div class="w-10 h-10 flex-shrink-0 border border-gold flex items-center justify-center text-gold text-sm font-bold">02</div>
@@ -77,19 +77,19 @@ import Footer from '../../components/Footer.astro';
               Diseño, cuadrillas y control de gastos — para que la remodelación avance sin que tengas que estar ahí.
             </p>
 
-            <div class="flex flex-col gap-px ml-14" style="background: rgba(42,42,42,0.6);">
+            <div class="flex flex-col gap-px ml-14" style="background: #E5E2D8;">
               {[
                 { name: 'Diseño: te hacemos el diseño de tu cocina o tu baño para que lo puedas visualizar', price: 'Desde $300', nameKey: 'reServices.m2Item1Name', priceKey: 'reServices.m2Item1Price' },
                 { name: 'Cotizaciones con nuestros contratistas', price: 'Margen de obra (caso por caso)', nameKey: 'reServices.m2Item2Name', priceKey: 'reServices.m2Item2Price' },
                 { name: 'Te conseguimos cuadrillas con tarifas diarias', price: 'Margen en la tarifa (caso por caso)', nameKey: 'reServices.m2Item3Name', priceKey: 'reServices.m2Item3Price' },
                 { name: 'Seguimiento de gastos con informes semanales', price: 'Desde $100/semana', nameKey: 'reServices.m2Item4Name', priceKey: 'reServices.m2Item4Price' },
               ].map(item => (
-                <div class="flex items-center justify-between gap-6 p-5" style="background: #18181a;">
+                <div class="flex items-center justify-between gap-6 p-5" style="background: #EFEBDD;">
                   <div class="flex items-center gap-3">
                     <span class="inline-block w-1 h-4 flex-shrink-0" style="background: #4ade80;"></span>
                     <p class="text-white/90" data-i18n={item.nameKey}>{item.name}</p>
                   </div>
-                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #4ade80;" data-i18n={item.priceKey}>{item.price}</p>
+                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #15803d;" data-i18n={item.priceKey}>{item.price}</p>
                 </div>
               ))}
             </div>
@@ -97,7 +97,7 @@ import Footer from '../../components/Footer.astro';
         </div>
 
         <!-- Module 03: Sale Ready -->
-        <div class="fade-in border border-subtle" style="background: #141414;">
+        <div class="service-card fade-in border border-subtle" style="background: #F8F6EE; border-color: #DFDBCB !important;">
           <div class="p-10">
             <div class="flex items-center gap-4 mb-3">
               <div class="w-10 h-10 flex-shrink-0 border border-gold flex items-center justify-center text-gold text-sm font-bold">03</div>
@@ -110,7 +110,7 @@ import Footer from '../../components/Footer.astro';
               Listo para vender, de principio a fin. Todos estos servicios están incluidos si nosotros vendemos la casa.
             </p>
 
-            <div class="flex flex-col gap-px ml-14" style="background: rgba(42,42,42,0.6);">
+            <div class="flex flex-col gap-px ml-14" style="background: #E5E2D8;">
               {[
                 { name: 'Staging: preparamos y ambientamos la propiedad para que se vea lista para vivir desde el primer clic', price: 'Precio a consultar', nameKey: 'reServices.m3Item1Name', priceKey: 'reServices.m3Item1Price' },
                 { name: 'Fotografía: coordinamos tu fotógrafo profesional', price: 'Rebate de hasta $250 al cierre', nameKey: 'reServices.m3Item2Name', priceKey: 'reServices.m3Item2Price' },
@@ -118,12 +118,12 @@ import Footer from '../../components/Footer.astro';
                 { name: 'Open House', price: 'Incluido', nameKey: 'reServices.m3Item4Name', priceKey: 'reServices.m3Item4Price' },
                 { name: 'Negociación y representación en la venta', price: 'Incluido', nameKey: 'reServices.m3Item5Name', priceKey: 'reServices.m3Item5Price' },
               ].map(item => (
-                <div class="flex items-center justify-between gap-6 p-5" style="background: #18181a;">
+                <div class="flex items-center justify-between gap-6 p-5" style="background: #EFEBDD;">
                   <div class="flex items-center gap-3">
                     <span class="inline-block w-1 h-4 flex-shrink-0" style="background: #4ade80;"></span>
                     <p class="text-white/90" data-i18n={item.nameKey}>{item.name}</p>
                   </div>
-                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #4ade80;" data-i18n={item.priceKey}>{item.price}</p>
+                  <p class="text-sm font-semibold whitespace-nowrap" style="color: #15803d;" data-i18n={item.priceKey}>{item.price}</p>
                 </div>
               ))}
             </div>
@@ -163,16 +163,30 @@ import Footer from '../../components/Footer.astro';
 </Layout>
 
 <style is:global>
-  .re-page .text-gold,
-  .re-page .border-gold {
+  /* Dark page, light cards — scoped to this page only */
+  .re-page .section-label {
     color: #4ade80 !important;
-    border-color: #4ade80 !important;
+  }
+
+  /* Tags/badges inside the light cards need a darker green for contrast */
+  .re-page .service-card .text-gold,
+  .re-page .service-card .border-gold {
+    color: #15803d !important;
+    border-color: #15803d !important;
   }
   .re-page .bg-gold {
     background-color: #4ade80 !important;
   }
-  .re-page .section-label {
-    color: #4ade80 !important;
+
+  /* Body text inside the light cards needs dark tones for contrast */
+  .re-page .service-card .text-white\/60 {
+    color: #5B5B54 !important;
+  }
+  .re-page .service-card .text-white\/90 {
+    color: #1A1A18 !important;
+  }
+  .re-page .service-card .text-white\/40 {
+    color: #8B8A80 !important;
   }
 
   .re-page .btn-gold {
