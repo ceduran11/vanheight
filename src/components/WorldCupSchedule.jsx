@@ -16,6 +16,57 @@ function formatDateLabel(iso) {
   return d.toLocaleDateString("es-ES", { weekday: "short", day: "numeric", month: "short" });
 }
 
+function getTodayISO() {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function MatchCard({ m }) {
+  return (
+    <div style={styles.matchRow}>
+      <div style={styles.matchGroupBadge}>{m.group}</div>
+
+      <div style={styles.teamsCol}>
+        <div style={styles.teamLine}>
+          <span style={styles.teamName}>{m.home}</span>
+        </div>
+        <div style={styles.teamLine}>
+          <span style={styles.teamName}>{m.away}</span>
+        </div>
+      </div>
+
+      <div style={styles.scoreCol}>
+        {m.status === "scheduled" ? (
+          <div style={styles.timeBox}>{m.time}</div>
+        ) : (
+          <div style={styles.scoreBox}>
+            <span>{m.homeScore}</span>
+            <span style={styles.scoreDash}>–</span>
+            <span>{m.awayScore}</span>
+          </div>
+        )}
+      </div>
+
+      <div style={styles.metaCol}>
+        <span
+          style={{
+            ...styles.statusTag,
+            ...(m.status === "live" ? styles.statusLive : {}),
+            ...(m.status === "final" ? styles.statusFinal : {}),
+          }}
+        >
+          {m.status === "live" && <span style={styles.liveDot} />}
+          {STATUS_LABEL[m.status]}
+        </span>
+        <span style={styles.venue}>{m.venue}</span>
+      </div>
+    </div>
+  );
+}
+
 // ---------- Live data (worldcup26.ir) ----------
 const LIVE_API_BASE = "https://worldcup26.ir";
 const LIVE_REFRESH_MS = 5 * 60 * 1000; // 5 minutes
@@ -153,6 +204,11 @@ export default function WorldCupSchedule() {
     return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b));
   }, [filtered]);
 
+  const todayMatches = useMemo(() => {
+    const todayISO = getTodayISO();
+    return matches.filter((m) => m.date === todayISO);
+  }, [matches]);
+
   const totalFinal = matches.filter((m) => m.status === "final").length;
   const totalLive = matches.filter((m) => m.status === "live").length;
 
@@ -180,6 +236,13 @@ export default function WorldCupSchedule() {
           </div>
         </div>
       </div>
+
+      {todayMatches.length > 0 && (
+        <div style={styles.todaySection}>
+          <p style={styles.dayLabel}>Hoy · {formatDateLabel(getTodayISO())}</p>
+          {todayMatches.map((m) => <MatchCard key={`today-${m.id}`} m={m} />)}
+        </div>
+      )}
 
       <div style={styles.controls}>
         <input
@@ -221,46 +284,7 @@ export default function WorldCupSchedule() {
               <span style={styles.dayLabel}>{formatDateLabel(date)}</span>
               <span style={{ ...styles.dayChevron, transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)" }}>▾</span>
             </button>
-            {!isCollapsed && dayMatches.map((m) => (
-              <div key={m.id} style={styles.matchRow}>
-                <div style={styles.matchGroupBadge}>{m.group}</div>
-
-                <div style={styles.teamsCol}>
-                  <div style={styles.teamLine}>
-                    <span style={styles.teamName}>{m.home}</span>
-                  </div>
-                  <div style={styles.teamLine}>
-                    <span style={styles.teamName}>{m.away}</span>
-                  </div>
-                </div>
-
-                <div style={styles.scoreCol}>
-                  {m.status === "scheduled" ? (
-                    <div style={styles.timeBox}>{m.time}</div>
-                  ) : (
-                    <div style={styles.scoreBox}>
-                      <span>{m.homeScore}</span>
-                      <span style={styles.scoreDash}>–</span>
-                      <span>{m.awayScore}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div style={styles.metaCol}>
-                  <span
-                    style={{
-                      ...styles.statusTag,
-                      ...(m.status === "live" ? styles.statusLive : {}),
-                      ...(m.status === "final" ? styles.statusFinal : {}),
-                    }}
-                  >
-                    {m.status === "live" && <span style={styles.liveDot} />}
-                    {STATUS_LABEL[m.status]}
-                  </span>
-                  <span style={styles.venue}>{m.venue}</span>
-                </div>
-              </div>
-            ))}
+            {!isCollapsed && dayMatches.map((m) => <MatchCard key={m.id} m={m} />)}
           </div>
           );
         })}
@@ -357,6 +381,10 @@ const styles = {
   statNum: { fontFamily: FONT_DISPLAY, fontSize: 18, fontWeight: 700 },
   statLabel: { fontSize: 11, color: COLORS.textMuted },
 
+  todaySection: {
+    padding: "16px 20px 0",
+    borderBottom: `1px solid ${COLORS.border}`,
+  },
   controls: {
     padding: "16px 20px 8px",
     display: "flex",
