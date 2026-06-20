@@ -108,10 +108,18 @@ function mapApiGames(games, stadiumsById) {
   });
 }
 
+function fetchWithTimeout(url, ms = 10000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { signal: controller.signal })
+    .then((r) => r.json())
+    .finally(() => clearTimeout(timer));
+}
+
 async function fetchLiveMatchesOnce() {
   const [gamesRes, stadiumsRes] = await Promise.allSettled([
-    fetch(`${LIVE_API_BASE}/get/games`).then((r) => r.json()),
-    fetch(`${LIVE_API_BASE}/get/stadiums`).then((r) => r.json()),
+    fetchWithTimeout(`${LIVE_API_BASE}/get/games`),
+    fetchWithTimeout(`${LIVE_API_BASE}/get/stadiums`),
   ]);
 
   if (gamesRes.status !== "fulfilled" || !Array.isArray(gamesRes.value?.games)) {

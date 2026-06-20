@@ -17,12 +17,13 @@ const reNavLinks = [
 
 const wcNavLinks = [
   { href: '/worldcup2026', label: 'Resultados' },
+  { href: '/grupos', label: 'Grupos' },
 ];
 
 const rawPath = Astro.url.pathname;
 const currentPath = rawPath.length > 1 ? rawPath.replace(/\/$/, '') : rawPath;
 const isRealEstate = currentPath.startsWith('/real-estate');
-const isWorldCup = currentPath.startsWith('/worldcup2026');
+const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.startsWith('/grupos');
 ---
 
 {isRealEstate ? (

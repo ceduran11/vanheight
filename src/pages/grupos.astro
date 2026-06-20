@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import GroupStandings from '../components/GroupStandings.jsx';
+---
+
+<Layout
+  title="Grupos | Mundial 2026 | VanHeight"
+  description="Tabla de posiciones de los 12 grupos de la fase de grupos del Mundial 2026."
+  sidebarLayout={true}
+>
+  <Header />
+  <div style="background: #0B1F3A; min-height: 100vh;">
+    <GroupStandings client:load />
+  </div>
+  <Footer />
+</Layout>
