@@ -108,7 +108,7 @@ function mapApiGames(games, stadiumsById) {
   });
 }
 
-function fetchWithTimeout(url, ms = 10000) {
+function fetchWithTimeout(url, ms = 18000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), ms);
   return fetch(url, { signal: controller.signal })
@@ -134,10 +134,13 @@ async function fetchLiveMatchesOnce() {
   return mapApiGames(gamesRes.value.games, stadiumsById);
 }
 
-// worldcup26.ir is occasionally flaky (500s / connection resets) — retry a
-// few times with a short delay before giving up for this sync cycle.
-async function fetchLiveMatches(retries = 8, delayMs = 1500) {
+// worldcup26.ir is occasionally flaky (500s / connection resets / DNS
+// timeouts) — retry a few times with a short delay before giving up for
+// this sync cycle. onAttempt lets the UI show progress instead of sitting
+// on a static "loading" message for up to a minute with no feedback.
+async function fetchLiveMatches(onAttempt, retries = 5, delayMs = 1500) {
   for (let attempt = 1; attempt <= retries; attempt++) {
+    onAttempt?.(attempt, retries);
     try {
       return await fetchLiveMatchesOnce();
     } catch (err) {
@@ -153,6 +156,7 @@ export default function WorldCupSchedule() {
   const [search, setSearch] = useState("");
   const [liveSyncedAt, setLiveSyncedAt] = useState(null);
   const [liveError, setLiveError] = useState(false);
+  const [syncAttempt, setSyncAttempt] = useState(null);
   const [collapsedDates, setCollapsedDates] = useState(new Set());
 
   function toggleDate(date) {
@@ -169,16 +173,22 @@ export default function WorldCupSchedule() {
 
     async function sync() {
       try {
-        const liveMatches = await fetchLiveMatches();
+        const liveMatches = await fetchLiveMatches((attempt, total) => {
+          if (!cancelled) setSyncAttempt({ attempt, total });
+        });
         if (!cancelled) {
           setMatches(liveMatches);
           setLiveSyncedAt(new Date());
           setLiveError(false);
+          setSyncAttempt(null);
         }
       } catch (err) {
         // Live API unavailable — keep showing whatever data is currently loaded.
         console.warn("World Cup live sync failed, keeping existing data:", err);
-        if (!cancelled) setLiveError(true);
+        if (!cancelled) {
+          setLiveError(true);
+          setSyncAttempt(null);
+        }
       }
     }
 
@@ -298,7 +308,12 @@ export default function WorldCupSchedule() {
           );
         })}
         {groupedByDate.length === 0 && matches.length === 0 && !liveError && (
-          <div style={styles.empty}>Cargando resultados en vivo…</div>
+          <div style={styles.empty}>
+            Cargando resultados en vivo…
+            {syncAttempt && syncAttempt.total > 1 && (
+              <> (intento {syncAttempt.attempt} de {syncAttempt.total})</>
+            )}
+          </div>
         )}
         {groupedByDate.length === 0 && matches.length === 0 && liveError && (
           <div style={styles.empty}>No se pudo conectar con el servicio de resultados en vivo. Intentando de nuevo automáticamente…</div>

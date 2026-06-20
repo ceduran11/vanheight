@@ -19,7 +19,7 @@ const COLORS = {
 const LIVE_API_BASE = "https://worldcup26.ir";
 const LIVE_REFRESH_MS = 5 * 60 * 1000;
 
-function fetchWithTimeout(url, ms = 10000) {
+function fetchWithTimeout(url, ms = 18000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), ms);
   return fetch(url, { signal: controller.signal })
@@ -68,8 +68,9 @@ async function fetchGroupsOnce() {
   return byName;
 }
 
-async function fetchGroups(retries = 8, delayMs = 1500) {
+async function fetchGroups(onAttempt, retries = 5, delayMs = 1500) {
   for (let attempt = 1; attempt <= retries; attempt++) {
+    onAttempt?.(attempt, retries);
     try {
       return await fetchGroupsOnce();
     } catch (err) {
@@ -83,21 +84,28 @@ export default function GroupStandings() {
   const [groups, setGroups] = useState(new Map());
   const [liveSyncedAt, setLiveSyncedAt] = useState(null);
   const [liveError, setLiveError] = useState(false);
+  const [syncAttempt, setSyncAttempt] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
 
     async function sync() {
       try {
-        const data = await fetchGroups();
+        const data = await fetchGroups((attempt, total) => {
+          if (!cancelled) setSyncAttempt({ attempt, total });
+        });
         if (!cancelled) {
           setGroups(data);
           setLiveSyncedAt(new Date());
           setLiveError(false);
+          setSyncAttempt(null);
         }
       } catch (err) {
         console.warn("Group standings live sync failed:", err);
-        if (!cancelled) setLiveError(true);
+        if (!cancelled) {
+          setLiveError(true);
+          setSyncAttempt(null);
+        }
       }
     }
 
@@ -121,7 +129,12 @@ export default function GroupStandings() {
       </div>
 
       {!hasData && !liveError && (
-        <div style={styles.empty}>Cargando posiciones en vivo…</div>
+        <div style={styles.empty}>
+          Cargando posiciones en vivo…
+          {syncAttempt && syncAttempt.total > 1 && (
+            <> (intento {syncAttempt.attempt} de {syncAttempt.total})</>
+          )}
+        </div>
       )}
       {!hasData && liveError && (
         <div style={styles.empty}>
