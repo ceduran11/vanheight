@@ -172,8 +172,6 @@ export default function WorldCupSchedule() {
   );
   const [groupFilter, setGroupFilter] = useState("ALL");
   const [search, setSearch] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [draft, setDraft] = useState({ home: "", away: "" });
   const [liveSyncedAt, setLiveSyncedAt] = useState(null);
 
   useEffect(() => {
@@ -221,40 +219,6 @@ export default function WorldCupSchedule() {
     });
     return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b));
   }, [filtered]);
-
-  function startEdit(m) {
-    setEditingId(m.id);
-    setDraft({
-      home: m.homeScore ?? "",
-      away: m.awayScore ?? "",
-    });
-  }
-
-  function cancelEdit() {
-    setEditingId(null);
-  }
-
-  function saveEdit(id) {
-    setMatches((prev) =>
-      prev.map((m) => {
-        if (m.id !== id) return m;
-        const hasScores = draft.home !== "" && draft.away !== "";
-        return {
-          ...m,
-          homeScore: hasScores ? Number(draft.home) : undefined,
-          awayScore: hasScores ? Number(draft.away) : undefined,
-          status: hasScores ? "final" : "scheduled",
-        };
-      })
-    );
-    setEditingId(null);
-  }
-
-  function markLive(id) {
-    setMatches((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, status: "live" } : m))
-    );
-  }
 
   const totalFinal = matches.filter((m) => m.status === "final").length;
   const totalLive = matches.filter((m) => m.status === "live").length;
@@ -329,24 +293,7 @@ export default function WorldCupSchedule() {
                 </div>
 
                 <div style={styles.scoreCol}>
-                  {editingId === m.id ? (
-                    <div style={styles.editScoreBox}>
-                      <input
-                        type="number"
-                        min="0"
-                        style={styles.scoreInput}
-                        value={draft.home}
-                        onChange={(e) => setDraft((d) => ({ ...d, home: e.target.value }))}
-                      />
-                      <input
-                        type="number"
-                        min="0"
-                        style={styles.scoreInput}
-                        value={draft.away}
-                        onChange={(e) => setDraft((d) => ({ ...d, away: e.target.value }))}
-                      />
-                    </div>
-                  ) : m.status === "scheduled" ? (
+                  {m.status === "scheduled" ? (
                     <div style={styles.timeBox}>{m.time}</div>
                   ) : (
                     <div style={styles.scoreBox}>
@@ -370,30 +317,6 @@ export default function WorldCupSchedule() {
                   </span>
                   <span style={styles.venue}>{m.venue}</span>
                 </div>
-
-                <div style={styles.actionsCol}>
-                  {editingId === m.id ? (
-                    <>
-                      <button style={styles.saveBtn} onClick={() => saveEdit(m.id)}>
-                        Guardar
-                      </button>
-                      <button style={styles.cancelBtn} onClick={cancelEdit}>
-                        Cancelar
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button style={styles.editBtn} onClick={() => startEdit(m)}>
-                        {m.status === "final" ? "Editar" : "Resultado"}
-                      </button>
-                      {m.status === "scheduled" && (
-                        <button style={styles.liveBtn} onClick={() => markLive(m.id)}>
-                          En vivo
-                        </button>
-                      )}
-                    </>
-                  )}
-                </div>
               </div>
             ))}
           </div>
@@ -405,11 +328,10 @@ export default function WorldCupSchedule() {
 
       <div style={styles.footnote}>
         {liveSyncedAt ? (
-          <>Resultados en vivo — última actualización {liveSyncedAt.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}. Se actualiza automáticamente cada 5 minutos.</>
+          <>Resultados en vivo, sincronizados automáticamente — última actualización {liveSyncedAt.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}. Se actualiza cada 5 minutos.</>
         ) : (
           <>Cargando resultados en vivo… mostrando datos de ejemplo mientras tanto.</>
-        )}{" "}
-        Usa "Resultado" para actualizar un marcador manualmente.
+        )}
       </div>
       </div>
     </div>
@@ -544,7 +466,7 @@ const styles = {
   matchRow: {
     display: "grid",
     gridTemplateColumns: "28px 1fr auto",
-    gridTemplateAreas: `"badge teams score" "badge meta actions"`,
+    gridTemplateAreas: `"badge teams score" "badge meta meta"`,
     columnGap: 10,
     rowGap: 8,
     background: COLORS.bgCard,
@@ -590,19 +512,6 @@ const styles = {
     color: COLORS.textMuted,
     whiteSpace: "nowrap",
   },
-  editScoreBox: { display: "flex", gap: 6 },
-  scoreInput: {
-    width: 38,
-    textAlign: "center",
-    background: COLORS.bgCardAlt,
-    border: `1px solid ${COLORS.accent}`,
-    borderRadius: 6,
-    color: COLORS.text,
-    fontSize: 14,
-    padding: "4px 2px",
-    outline: "none",
-  },
-
   metaCol: { gridArea: "meta", display: "flex", alignItems: "center", gap: 8 },
   statusTag: {
     fontSize: 11,
@@ -624,45 +533,6 @@ const styles = {
     display: "inline-block",
   },
   venue: { fontSize: 11.5, color: COLORS.textMuted },
-
-  actionsCol: { gridArea: "actions", display: "flex", gap: 6, justifySelf: "end" },
-  editBtn: {
-    background: "transparent",
-    border: `1px solid ${COLORS.border}`,
-    color: COLORS.text,
-    borderRadius: 7,
-    padding: "5px 10px",
-    fontSize: 12,
-    cursor: "pointer",
-  },
-  liveBtn: {
-    background: "transparent",
-    border: `1px solid ${COLORS.live}`,
-    color: COLORS.live,
-    borderRadius: 7,
-    padding: "5px 10px",
-    fontSize: 12,
-    cursor: "pointer",
-  },
-  saveBtn: {
-    background: COLORS.accent,
-    border: `1px solid ${COLORS.accent}`,
-    color: "#06210F",
-    borderRadius: 7,
-    padding: "5px 10px",
-    fontSize: 12,
-    fontWeight: 700,
-    cursor: "pointer",
-  },
-  cancelBtn: {
-    background: "transparent",
-    border: `1px solid ${COLORS.border}`,
-    color: COLORS.textMuted,
-    borderRadius: 7,
-    padding: "5px 10px",
-    fontSize: 12,
-    cursor: "pointer",
-  },
 
   empty: { color: COLORS.textMuted, padding: "40px 0", textAlign: "center" },
   footnote: {
