@@ -170,9 +170,14 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
         {wcNavLinks.map((link) => (
           <a
             href={link.href}
-            class={`wc-sidebar-link ${currentPath === link.href ? 'active' : ''}`}
+            class={`wc-sidebar-link flex items-center gap-2 ${currentPath === link.href ? 'active' : ''}`}
           >
             {link.label}
+            {link.href === '/worldcup2026' && (
+              <span class="wc-live-badge" style="display:none;">
+                <span class="wc-live-dot"></span>VIVO
+              </span>
+            )}
           </a>
         ))}
       </nav>
@@ -223,9 +228,14 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
           {wcNavLinks.map((link) => (
             <a
               href={link.href}
-              class={`wc-sidebar-link ${currentPath === link.href ? 'active' : ''}`}
+              class={`wc-sidebar-link flex items-center gap-2 ${currentPath === link.href ? 'active' : ''}`}
             >
               {link.label}
+              {link.href === '/worldcup2026' && (
+                <span class="wc-live-badge" style="display:none;">
+                  <span class="wc-live-dot"></span>VIVO
+                </span>
+              )}
             </a>
           ))}
         </nav>
@@ -426,6 +436,30 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
     padding-left: 28px;
     background-color: rgba(255,255,255,0.03);
   }
+
+  .wc-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #E0483E;
+    border: 1px solid #E0483E;
+    border-radius: 999px;
+    padding: 2px 6px;
+  }
+  .wc-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #E0483E;
+    animation: wcLiveBlink 1.2s ease-in-out infinite;
+  }
+  @keyframes wcLiveBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
 </style>
 
 <script>
@@ -562,4 +596,26 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
       if (wcLine3) { wcLine3.style.transform = ''; wcLine3.style.width = '16px'; }
     }
   });
+
+  // "VIVO" badge next to Resultados — only lights up if a match is live right now
+  const wcLiveBadges = document.querySelectorAll<HTMLElement>('.wc-live-badge');
+  if (wcLiveBadges.length > 0) {
+    async function checkLiveNow() {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 10000);
+        const res = await fetch('https://worldcup26.ir/get/games', { signal: controller.signal });
+        clearTimeout(timer);
+        const data = await res.json();
+        const isLive = Array.isArray(data?.games) && data.games.some(
+          (g: any) => (g.time_elapsed || '').toLowerCase() === 'live'
+        );
+        wcLiveBadges.forEach((el) => { el.style.display = isLive ? 'inline-flex' : 'none'; });
+      } catch {
+        // Live check failed — leave badge hidden, don't show a stale/wrong state.
+      }
+    }
+    checkLiveNow();
+    setInterval(checkLiveNow, 2 * 60 * 1000);
+  }
 </script>
