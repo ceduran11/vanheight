@@ -98,8 +98,8 @@ function mapApiGames(games, stadiumsById) {
       date: isoDate,
       time: timePart ? apiTimeTo12h(timePart) : undefined,
       group: g.group,
-      home: g.home_team_name_en,
-      away: g.away_team_name_en,
+      home: g.home_team_name_en || g.home_team_label || "TBD",
+      away: g.away_team_name_en || g.away_team_label || "TBD",
       venue,
       homeScore: status === "scheduled" ? undefined : Number(g.home_score),
       awayScore: status === "scheduled" ? undefined : Number(g.away_score),
@@ -187,7 +187,7 @@ export default function WorldCupSchedule() {
       if (groupFilter !== "ALL" && m.group !== groupFilter) return false;
       if (search.trim()) {
         const q = search.trim().toLowerCase();
-        if (!m.home.toLowerCase().includes(q) && !m.away.toLowerCase().includes(q)) {
+        if (!(m.home || "").toLowerCase().includes(q) && !(m.away || "").toLowerCase().includes(q)) {
           return false;
         }
       }
