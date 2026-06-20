@@ -247,12 +247,13 @@ export default function WorldCupSchedule() {
       <div style={styles.controls}>
         <input
           type="text"
-          placeholder="Buscar selección…"
+          placeholder="Buscar país…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={styles.search}
         />
         <div style={styles.groupTabs}>
+          <span style={styles.groupTabsLabel}>Grupo:</span>
           <button
             onClick={() => setGroupFilter("ALL")}
             style={groupFilter === "ALL" ? styles.tabActive : styles.tab}
@@ -402,9 +403,16 @@ const styles = {
   },
   groupTabs: {
     display: "flex",
+    alignItems: "center",
     gap: 6,
     overflowX: "auto",
     paddingBottom: 4,
+  },
+  groupTabsLabel: {
+    fontSize: 12.5,
+    color: COLORS.textMuted,
+    fontWeight: 600,
+    flexShrink: 0,
   },
   tab: {
     flex: "0 0 auto",
