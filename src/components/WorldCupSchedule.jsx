@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 // ---------- Data ----------
 // status: "final" | "live" | "scheduled"
@@ -107,6 +107,65 @@ function formatDateLabel(iso) {
   return d.toLocaleDateString("es-ES", { weekday: "short", day: "numeric", month: "short" });
 }
 
+// ---------- Live data (worldcup26.ir) ----------
+const LIVE_API_BASE = "https://worldcup26.ir";
+const LIVE_REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+
+function apiTimeTo12h(hhmm) {
+  const [h, m] = hhmm.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  const h12 = h % 12 === 0 ? 12 : h % 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${period} ET`;
+}
+
+function apiStatusToLocal(timeElapsed) {
+  const v = (timeElapsed || "").toLowerCase();
+  if (v === "live") return "live";
+  if (v === "notstarted") return "scheduled";
+  return "final";
+}
+
+function mapApiGames(games, stadiumsById) {
+  return games.map((g) => {
+    const [datePart, timePart] = (g.local_date || "").split(" ");
+    const [mm, dd, yyyy] = (datePart || "").split("/");
+    const isoDate = yyyy ? `${yyyy}-${mm}-${dd}` : "";
+    const status = apiStatusToLocal(g.time_elapsed);
+    const venue = stadiumsById.get(g.stadium_id)?.city_en || "";
+
+    return {
+      id: `api-${g.id}`,
+      date: isoDate,
+      time: timePart ? apiTimeTo12h(timePart) : undefined,
+      group: g.group,
+      home: g.home_team_name_en,
+      away: g.away_team_name_en,
+      venue,
+      homeScore: status === "scheduled" ? undefined : Number(g.home_score),
+      awayScore: status === "scheduled" ? undefined : Number(g.away_score),
+      status,
+    };
+  });
+}
+
+async function fetchLiveMatches() {
+  const [gamesRes, stadiumsRes] = await Promise.allSettled([
+    fetch(`${LIVE_API_BASE}/get/games`).then((r) => r.json()),
+    fetch(`${LIVE_API_BASE}/get/stadiums`).then((r) => r.json()),
+  ]);
+
+  if (gamesRes.status !== "fulfilled" || !Array.isArray(gamesRes.value?.games)) {
+    throw new Error("live games fetch failed");
+  }
+
+  const stadiumsById = new Map();
+  if (stadiumsRes.status === "fulfilled" && Array.isArray(stadiumsRes.value?.stadiums)) {
+    stadiumsRes.value.stadiums.forEach((s) => stadiumsById.set(s.id, s));
+  }
+
+  return mapApiGames(gamesRes.value.games, stadiumsById);
+}
+
 export default function WorldCupSchedule() {
   const [matches, setMatches] = useState(
     RAW_MATCHES.map((m, i) => ({ ...m, id: `m${i}` }))
@@ -115,6 +174,31 @@ export default function WorldCupSchedule() {
   const [search, setSearch] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [draft, setDraft] = useState({ home: "", away: "" });
+  const [liveSyncedAt, setLiveSyncedAt] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function sync() {
+      try {
+        const liveMatches = await fetchLiveMatches();
+        if (!cancelled) {
+          setMatches(liveMatches);
+          setLiveSyncedAt(new Date());
+        }
+      } catch (err) {
+        // Live API unavailable — keep showing whatever data is currently loaded.
+        console.warn("World Cup live sync failed, keeping existing data:", err);
+      }
+    }
+
+    sync();
+    const interval = setInterval(sync, LIVE_REFRESH_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     return matches.filter((m) => {
@@ -320,8 +404,12 @@ export default function WorldCupSchedule() {
       </div>
 
       <div style={styles.footnote}>
-        Resultados cargados según la información disponible al 20 de junio de 2026. Usa
-        "Resultado" para actualizar un marcador manualmente conforme avancen los partidos.
+        {liveSyncedAt ? (
+          <>Resultados en vivo — última actualización {liveSyncedAt.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}. Se actualiza automáticamente cada 5 minutos.</>
+        ) : (
+          <>Cargando resultados en vivo… mostrando datos de ejemplo mientras tanto.</>
+        )}{" "}
+        Usa "Resultado" para actualizar un marcador manualmente.
       </div>
       </div>
     </div>
