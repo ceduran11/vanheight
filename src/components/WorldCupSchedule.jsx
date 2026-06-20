@@ -57,7 +57,7 @@ function mapApiGames(games, stadiumsById) {
   });
 }
 
-async function fetchLiveMatches() {
+async function fetchLiveMatchesOnce() {
   const [gamesRes, stadiumsRes] = await Promise.allSettled([
     fetch(`${LIVE_API_BASE}/get/games`).then((r) => r.json()),
     fetch(`${LIVE_API_BASE}/get/stadiums`).then((r) => r.json()),
@@ -75,12 +75,35 @@ async function fetchLiveMatches() {
   return mapApiGames(gamesRes.value.games, stadiumsById);
 }
 
+// worldcup26.ir is occasionally flaky (500s / connection resets) — retry a
+// few times with a short delay before giving up for this sync cycle.
+async function fetchLiveMatches(retries = 8, delayMs = 1500) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await fetchLiveMatchesOnce();
+    } catch (err) {
+      if (attempt === retries) throw err;
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+}
+
 export default function WorldCupSchedule() {
   const [matches, setMatches] = useState([]);
   const [groupFilter, setGroupFilter] = useState("ALL");
   const [search, setSearch] = useState("");
   const [liveSyncedAt, setLiveSyncedAt] = useState(null);
   const [liveError, setLiveError] = useState(false);
+  const [collapsedDates, setCollapsedDates] = useState(new Set());
+
+  function toggleDate(date) {
+    setCollapsedDates((prev) => {
+      const next = new Set(prev);
+      if (next.has(date)) next.delete(date);
+      else next.add(date);
+      return next;
+    });
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -186,10 +209,19 @@ export default function WorldCupSchedule() {
       </div>
 
       <div style={styles.list}>
-        {groupedByDate.map(([date, dayMatches]) => (
+        {groupedByDate.map(([date, dayMatches]) => {
+          const isCollapsed = collapsedDates.has(date);
+          return (
           <div key={date} style={styles.dayBlock}>
-            <div style={styles.dayLabel}>{formatDateLabel(date)}</div>
-            {dayMatches.map((m) => (
+            <button
+              style={styles.dayLabelBtn}
+              onClick={() => toggleDate(date)}
+              aria-expanded={!isCollapsed}
+            >
+              <span style={styles.dayLabel}>{formatDateLabel(date)}</span>
+              <span style={{ ...styles.dayChevron, transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)" }}>▾</span>
+            </button>
+            {!isCollapsed && dayMatches.map((m) => (
               <div key={m.id} style={styles.matchRow}>
                 <div style={styles.matchGroupBadge}>{m.group}</div>
 
@@ -230,7 +262,8 @@ export default function WorldCupSchedule() {
               </div>
             ))}
           </div>
-        ))}
+          );
+        })}
         {groupedByDate.length === 0 && matches.length === 0 && !liveError && (
           <div style={styles.empty}>Cargando resultados en vivo…</div>
         )}
@@ -369,14 +402,30 @@ const styles = {
 
   list: { padding: "8px 20px 0" },
   dayBlock: { marginBottom: 22 },
+  dayLabelBtn: {
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+    width: "100%",
+    background: "transparent",
+    border: "none",
+    padding: 0,
+    marginBottom: 8,
+    marginTop: 8,
+    cursor: "pointer",
+  },
   dayLabel: {
     fontSize: 12,
     color: COLORS.accentWarm,
     fontWeight: 700,
     textTransform: "uppercase",
     letterSpacing: "0.06em",
-    marginBottom: 8,
-    marginTop: 8,
+  },
+  dayChevron: {
+    fontSize: 12,
+    color: COLORS.accentWarm,
+    transition: "transform 0.15s ease",
+    display: "inline-block",
   },
 
   matchRow: {
