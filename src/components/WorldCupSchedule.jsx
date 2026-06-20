@@ -2,98 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 
 // ---------- Data ----------
 // status: "final" | "live" | "scheduled"
-const RAW_MATCHES = [
-  // June 11
-  { date: "2026-06-11", group: "A", home: "México", away: "Sudáfrica", venue: "Ciudad de México", homeScore: 2, awayScore: 0, status: "final" },
-  { date: "2026-06-11", group: "A", home: "Corea del Sur", away: "Chequia", venue: "Zapopan", homeScore: 2, awayScore: 1, status: "final" },
-  // June 12
-  { date: "2026-06-12", group: "B", home: "Canadá", away: "Bosnia y Herzegovina", venue: "Toronto", homeScore: 1, awayScore: 1, status: "final" },
-  { date: "2026-06-12", group: "D", home: "Paraguay", away: "Estados Unidos", venue: "Inglewood", homeScore: 1, awayScore: 4, status: "final" },
-  // June 13
-  { date: "2026-06-13", group: "B", home: "Qatar", away: "Suiza", venue: "Santa Clara", homeScore: 1, awayScore: 1, status: "final" },
-  { date: "2026-06-13", group: "C", home: "Brasil", away: "Marruecos", venue: "East Rutherford", homeScore: 1, awayScore: 1, status: "final" },
-  { date: "2026-06-13", group: "C", home: "Haití", away: "Escocia", venue: "Foxborough", homeScore: 0, awayScore: 1, status: "final" },
-  { date: "2026-06-13", group: "D", home: "Australia", away: "Türkiye", venue: "Vancouver", homeScore: 2, awayScore: 0, status: "final" },
-  // June 14
-  { date: "2026-06-14", group: "E", home: "Alemania", away: "Curazao", venue: "Houston", homeScore: 7, awayScore: 1, status: "final" },
-  { date: "2026-06-14", group: "F", home: "Países Bajos", away: "Japón", venue: "Arlington", homeScore: 2, awayScore: 2, status: "final" },
-  { date: "2026-06-14", group: "E", home: "Costa de Marfil", away: "Ecuador", venue: "Filadelfia", homeScore: 1, awayScore: 0, status: "final" },
-  { date: "2026-06-14", group: "F", home: "Suecia", away: "Túnez", venue: "Guadalupe", homeScore: 5, awayScore: 1, status: "final" },
-  // June 15
-  { date: "2026-06-15", group: "H", home: "España", away: "Cabo Verde", venue: "Atlanta", homeScore: 0, awayScore: 0, status: "final" },
-  { date: "2026-06-15", group: "G", home: "Bélgica", away: "Egipto", venue: "Seattle", homeScore: 1, awayScore: 1, status: "final" },
-  { date: "2026-06-15", group: "H", home: "Uruguay", away: "Arabia Saudita", venue: "Miami Gardens", homeScore: 1, awayScore: 1, status: "final" },
-  { date: "2026-06-15", group: "G", home: "Irán", away: "Nueva Zelanda", venue: "Inglewood", homeScore: 2, awayScore: 2, status: "final" },
-  // June 16
-  { date: "2026-06-16", group: "I", home: "Francia", away: "Senegal", venue: "East Rutherford", homeScore: 2, awayScore: 1, status: "final" },
-  { date: "2026-06-16", group: "I", home: "Irak", away: "Noruega", venue: "Foxborough", homeScore: 1, awayScore: 0, status: "final" },
-  { date: "2026-06-16", group: "J", home: "Argentina", away: "Argelia", venue: "Kansas City", homeScore: 3, awayScore: 1, status: "final" },
-  { date: "2026-06-16", group: "J", home: "Austria", away: "Jordania", venue: "Santa Clara", homeScore: 0, awayScore: 0, status: "final" },
-  // June 17
-  { date: "2026-06-17", group: "K", home: "Portugal", away: "RD Congo", venue: "Houston", homeScore: 1, awayScore: 1, status: "final" },
-  { date: "2026-06-17", group: "L", home: "Inglaterra", away: "Croacia", venue: "Arlington", homeScore: 2, awayScore: 0, status: "final" },
-  { date: "2026-06-17", group: "L", home: "Ghana", away: "Panamá", venue: "Toronto", homeScore: 1, awayScore: 2, status: "final" },
-  { date: "2026-06-17", group: "K", home: "Uzbekistán", away: "Colombia", venue: "Ciudad de México", homeScore: 0, awayScore: 1, status: "final" },
-  // June 18
-  { date: "2026-06-18", group: "A", home: "Chequia", away: "Sudáfrica", venue: "Atlanta", homeScore: 2, awayScore: 2, status: "final" },
-  { date: "2026-06-18", group: "B", home: "Suiza", away: "Bosnia y Herzegovina", venue: "Inglewood", homeScore: 0, awayScore: 1, status: "final" },
-  { date: "2026-06-18", group: "B", home: "Canadá", away: "Qatar", venue: "Vancouver", homeScore: 3, awayScore: 0, status: "final" },
-  { date: "2026-06-18", group: "A", home: "México", away: "Corea del Sur", venue: "Zapopan", homeScore: 1, awayScore: 1, status: "final" },
-  // June 19
-  { date: "2026-06-19", group: "D", home: "Estados Unidos", away: "Australia", venue: "Seattle", homeScore: 1, awayScore: 0, status: "final" },
-  { date: "2026-06-19", group: "C", home: "Escocia", away: "Marruecos", venue: "Foxborough", homeScore: 2, awayScore: 1, status: "final" },
-  { date: "2026-06-19", group: "C", home: "Brasil", away: "Haití", venue: "Filadelfia", homeScore: 2, awayScore: 2, status: "final" },
-  { date: "2026-06-19", group: "D", home: "Türkiye", away: "Paraguay", venue: "Santa Clara", homeScore: 0, awayScore: 2, status: "final" },
-  // June 20
-  { date: "2026-06-20", group: "F", home: "Países Bajos", away: "Suecia", venue: "Houston", homeScore: 1, awayScore: 1, status: "final" },
-  { date: "2026-06-20", group: "E", home: "Alemania", away: "Costa de Marfil", venue: "Toronto", homeScore: 3, awayScore: 2, status: "final" },
-  { date: "2026-06-20", group: "E", home: "Ecuador", away: "Curazao", venue: "Kansas City", homeScore: 0, awayScore: 0, status: "final" },
-  { date: "2026-06-20", group: "F", home: "Túnez", away: "Japón", venue: "Guadalupe", homeScore: 2, awayScore: 0, status: "final" },
-  // June 21
-  { date: "2026-06-21", group: "H", home: "España", away: "Arabia Saudita", venue: "Atlanta", time: "12:00 PM ET", status: "scheduled" },
-  { date: "2026-06-21", group: "G", home: "Bélgica", away: "Irán", venue: "Inglewood", time: "3:00 PM ET", status: "scheduled" },
-  { date: "2026-06-21", group: "H", home: "Uruguay", away: "Cabo Verde", venue: "Miami Gardens", time: "6:00 PM ET", status: "scheduled" },
-  { date: "2026-06-21", group: "G", home: "Nueva Zelanda", away: "Egipto", venue: "Vancouver", time: "9:00 PM ET", status: "scheduled" },
-  // June 22
-  { date: "2026-06-22", group: "J", home: "Argentina", away: "Austria", venue: "Arlington", time: "1:00 PM ET", status: "scheduled" },
-  { date: "2026-06-22", group: "I", home: "Francia", away: "Irak", venue: "Filadelfia", time: "5:00 PM ET", status: "scheduled" },
-  { date: "2026-06-22", group: "I", home: "Noruega", away: "Senegal", venue: "East Rutherford", time: "8:00 PM ET", status: "scheduled" },
-  { date: "2026-06-22", group: "J", home: "Jordania", away: "Argelia", venue: "Santa Clara", time: "11:00 PM ET", status: "scheduled" },
-  // June 23
-  { date: "2026-06-23", group: "K", home: "Portugal", away: "Uzbekistán", venue: "Houston", time: "1:00 PM ET", status: "scheduled" },
-  { date: "2026-06-23", group: "L", home: "Inglaterra", away: "Ghana", venue: "Foxborough", time: "4:00 PM ET", status: "scheduled" },
-  { date: "2026-06-23", group: "L", home: "Panamá", away: "Croacia", venue: "Toronto", time: "7:00 PM ET", status: "scheduled" },
-  { date: "2026-06-23", group: "K", home: "Colombia", away: "RD Congo", venue: "Zapopan", time: "10:00 PM ET", status: "scheduled" },
-  // June 24
-  { date: "2026-06-24", group: "B", home: "Suiza", away: "Canadá", venue: "Vancouver", time: "3:00 PM ET", status: "scheduled" },
-  { date: "2026-06-24", group: "B", home: "Bosnia y Herzegovina", away: "Qatar", venue: "Seattle", time: "3:00 PM ET", status: "scheduled" },
-  { date: "2026-06-24", group: "C", home: "Escocia", away: "Brasil", venue: "Miami Gardens", time: "6:00 PM ET", status: "scheduled" },
-  { date: "2026-06-24", group: "C", home: "Marruecos", away: "Haití", venue: "Atlanta", time: "6:00 PM ET", status: "scheduled" },
-  { date: "2026-06-24", group: "A", home: "Chequia", away: "México", venue: "Ciudad de México", time: "9:00 PM ET", status: "scheduled" },
-  { date: "2026-06-24", group: "A", home: "Sudáfrica", away: "Corea del Sur", venue: "Guadalupe", time: "9:00 PM ET", status: "scheduled" },
-  // June 25
-  { date: "2026-06-25", group: "E", home: "Ecuador", away: "Alemania", venue: "East Rutherford", time: "4:00 PM ET", status: "scheduled" },
-  { date: "2026-06-25", group: "E", home: "Curazao", away: "Costa de Marfil", venue: "Filadelfia", time: "4:00 PM ET", status: "scheduled" },
-  { date: "2026-06-25", group: "F", home: "Japón", away: "Suecia", venue: "Arlington", time: "7:00 PM ET", status: "scheduled" },
-  { date: "2026-06-25", group: "F", home: "Túnez", away: "Países Bajos", venue: "Kansas City", time: "7:00 PM ET", status: "scheduled" },
-  { date: "2026-06-25", group: "D", home: "Türkiye", away: "Estados Unidos", venue: "Inglewood", time: "10:00 PM ET", status: "scheduled" },
-  { date: "2026-06-25", group: "D", home: "Paraguay", away: "Australia", venue: "Santa Clara", time: "10:00 PM ET", status: "scheduled" },
-  // June 26
-  { date: "2026-06-26", group: "I", home: "Noruega", away: "Francia", venue: "Foxborough", time: "3:00 PM ET", status: "scheduled" },
-  { date: "2026-06-26", group: "I", home: "Senegal", away: "Irak", venue: "Toronto", time: "3:00 PM ET", status: "scheduled" },
-  { date: "2026-06-26", group: "H", home: "Cabo Verde", away: "Arabia Saudita", venue: "Houston", time: "8:00 PM ET", status: "scheduled" },
-  { date: "2026-06-26", group: "H", home: "Uruguay", away: "España", venue: "Zapopan", time: "8:00 PM ET", status: "scheduled" },
-  { date: "2026-06-26", group: "G", home: "Egipto", away: "Irán", venue: "Seattle", time: "11:00 PM ET", status: "scheduled" },
-  { date: "2026-06-26", group: "G", home: "Nueva Zelanda", away: "Bélgica", venue: "Vancouver", time: "11:00 PM ET", status: "scheduled" },
-  // June 27
-  { date: "2026-06-27", group: "L", home: "Panamá", away: "Inglaterra", venue: "East Rutherford", time: "5:00 PM ET", status: "scheduled" },
-  { date: "2026-06-27", group: "L", home: "Croacia", away: "Ghana", venue: "Filadelfia", time: "5:00 PM ET", status: "scheduled" },
-  { date: "2026-06-27", group: "K", home: "Colombia", away: "Portugal", venue: "Miami Gardens", time: "7:30 PM ET", status: "scheduled" },
-  { date: "2026-06-27", group: "K", home: "RD Congo", away: "Uzbekistán", venue: "Atlanta", time: "7:30 PM ET", status: "scheduled" },
-  { date: "2026-06-27", group: "J", home: "Argelia", away: "Austria", venue: "Kansas City", time: "10:00 PM ET", status: "scheduled" },
-  { date: "2026-06-27", group: "J", home: "Jordania", away: "Argentina", venue: "Arlington", time: "10:00 PM ET", status: "scheduled" },
-];
-
+// All match data comes live from worldcup26.ir — see fetchLiveMatches() below.
 const GROUPS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 
 const STATUS_LABEL = {
@@ -167,12 +76,11 @@ async function fetchLiveMatches() {
 }
 
 export default function WorldCupSchedule() {
-  const [matches, setMatches] = useState(
-    RAW_MATCHES.map((m, i) => ({ ...m, id: `m${i}` }))
-  );
+  const [matches, setMatches] = useState([]);
   const [groupFilter, setGroupFilter] = useState("ALL");
   const [search, setSearch] = useState("");
   const [liveSyncedAt, setLiveSyncedAt] = useState(null);
+  const [liveError, setLiveError] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -183,10 +91,12 @@ export default function WorldCupSchedule() {
         if (!cancelled) {
           setMatches(liveMatches);
           setLiveSyncedAt(new Date());
+          setLiveError(false);
         }
       } catch (err) {
         // Live API unavailable — keep showing whatever data is currently loaded.
         console.warn("World Cup live sync failed, keeping existing data:", err);
+        if (!cancelled) setLiveError(true);
       }
     }
 
@@ -321,7 +231,13 @@ export default function WorldCupSchedule() {
             ))}
           </div>
         ))}
-        {groupedByDate.length === 0 && (
+        {groupedByDate.length === 0 && matches.length === 0 && !liveError && (
+          <div style={styles.empty}>Cargando resultados en vivo…</div>
+        )}
+        {groupedByDate.length === 0 && matches.length === 0 && liveError && (
+          <div style={styles.empty}>No se pudo conectar con el servicio de resultados en vivo. Intentando de nuevo automáticamente…</div>
+        )}
+        {groupedByDate.length === 0 && matches.length > 0 && (
           <div style={styles.empty}>No hay partidos que coincidan con la búsqueda.</div>
         )}
       </div>
@@ -330,7 +246,7 @@ export default function WorldCupSchedule() {
         {liveSyncedAt ? (
           <>Resultados en vivo, sincronizados automáticamente — última actualización {liveSyncedAt.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}. Se actualiza cada 5 minutos.</>
         ) : (
-          <>Cargando resultados en vivo… mostrando datos de ejemplo mientras tanto.</>
+          <>Conectando con el servicio de resultados en vivo…</>
         )}
       </div>
       </div>
