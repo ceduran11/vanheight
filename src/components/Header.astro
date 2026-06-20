@@ -15,9 +15,14 @@ const reNavLinks = [
   { href: '/real-estate/why-houston', label: 'Why Houston?' },
 ];
 
+const wcNavLinks = [
+  { href: '/mundial', label: 'Home' },
+];
+
 const rawPath = Astro.url.pathname;
 const currentPath = rawPath.length > 1 ? rawPath.replace(/\/$/, '') : rawPath;
 const isRealEstate = currentPath.startsWith('/real-estate');
+const isWorldCup = currentPath.startsWith('/mundial');
 ---
 
 {isRealEstate ? (
@@ -139,13 +144,116 @@ const isRealEstate = currentPath.startsWith('/real-estate');
       </div>
     </div>
   </>
+) : isWorldCup ? (
+  <>
+    <!-- ── World Cup: Vertical Sidebar (desktop) ── -->
+    <aside class="wc-sidebar">
+      <!-- Logo -->
+      <a href="/mundial" class="flex flex-col items-center mb-6">
+        <img src="/images/wc-logo.png" alt="World Cup 2026" style="width:184px;height:184px;object-fit:contain;margin-bottom:-3.0rem;" />
+        <div class="text-center" style="margin-top:0;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.15em; color: #F5F5F5; text-transform: uppercase;">VanHeight</div>
+          <div class="flex items-center justify-center gap-2" style="margin-top:-0.15rem;">
+            <span style="display:inline-block;width:10px;height:1px;background:#00A859;"></span>
+            <span style="font-family:'Playfair Display',serif;font-size:0.55rem;letter-spacing:0.2em;color:#00A859;text-transform:uppercase;">World Cup 2026</span>
+            <span style="display:inline-block;width:10px;height:1px;background:#00A859;"></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Divider -->
+      <div style="width:100%;height:1px;background:#14315c;margin-bottom:1.5rem;"></div>
+
+      <!-- Nav links -->
+      <nav class="flex flex-col gap-1 flex-1">
+        {wcNavLinks.map((link) => (
+          <a
+            href={link.href}
+            class={`wc-sidebar-link ${currentPath === link.href ? 'active' : ''}`}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <!-- Bottom -->
+      <div class="flex flex-col gap-3 mt-6 pt-6" style="border-top:1px solid #14315c;">
+        <p class="text-center" style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.3);">
+          Vuelve a
+        </p>
+        <a href="/" class="remodeling-logo-link flex flex-col items-center leading-none">
+          <span style="font-family: 'Playfair Display', serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; color: #F5F5F5; text-transform: uppercase;">VanHeight</span>
+          <span class="flex items-center gap-2 mt-1">
+            <span style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
+            <span style="font-family: 'Playfair Display', serif; font-size: 0.55rem; font-weight: 400; letter-spacing: 0.28em; color: #C9A84C; text-transform: uppercase;">Remodeling</span>
+            <span style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
+          </span>
+        </a>
+        <a href="tel:+18323069934" class="text-center text-xs tracking-wider" style="color:rgba(255,255,255,0.35);">
+          (832) 306-9934
+        </a>
+      </div>
+    </aside>
+
+    <!-- ── World Cup: Mobile top bar ── -->
+    <div class="wc-mobile-top fixed top-0 left-0 right-0 z-50 px-4 items-center justify-between" style="background:rgba(11,31,58,0.97);border-bottom:1px solid #14315c;height:64px;">
+      <a href="/mundial" class="flex items-center">
+        <img src="/images/wc-logo.png" alt="World Cup 2026" style="width:100px;height:100px;object-fit:contain;flex-shrink:0;margin-right:-2.0rem;" />
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:0.8rem;font-weight:700;letter-spacing:0.15em;color:#F5F5F5;text-transform:uppercase;line-height:1.1;">VanHeight</div>
+          <div style="font-size:0.45rem;letter-spacing:0.2em;color:#00A859;text-transform:uppercase;">World Cup 2026</div>
+        </div>
+      </a>
+      <button id="wc-menu-btn" class="flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
+        <span class="w-6 h-0.5 bg-white transition-all duration-300 block" id="wc-line1"></span>
+        <span class="w-6 h-0.5 bg-white transition-all duration-300 block" id="wc-line2"></span>
+        <span class="w-4 h-0.5 bg-white transition-all duration-300 block" id="wc-line3"></span>
+      </button>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div id="wc-drawer" class="fixed inset-0 z-[100] hidden" style="background:rgba(0,0,0,0.7);">
+      <div id="wc-drawer-panel" class="absolute left-0 top-0 h-full flex flex-col py-8 px-6" style="width:260px;background:#0B1F3A;border-right:1px solid #14315c;">
+        <a href="/mundial" class="flex flex-col items-center mb-8">
+          <img src="/images/wc-logo.png" alt="World Cup 2026" style="width:160px;height:160px;object-fit:contain;" />
+        </a>
+        <div style="width:100%;height:1px;background:#14315c;margin-bottom:1.5rem;"></div>
+        <nav class="flex flex-col gap-1 flex-1">
+          {wcNavLinks.map((link) => (
+            <a
+              href={link.href}
+              class={`wc-sidebar-link ${currentPath === link.href ? 'active' : ''}`}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+        <div class="flex flex-col gap-3 pt-6" style="border-top:1px solid #14315c;">
+          <p class="text-center" style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.3);">
+            Vuelve a
+          </p>
+          <a href="/" class="remodeling-logo-link flex flex-col items-center leading-none">
+            <span style="font-family: 'Playfair Display', serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; color: #F5F5F5; text-transform: uppercase;">VanHeight</span>
+            <span class="flex items-center gap-2 mt-1">
+              <span style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
+              <span style="font-family: 'Playfair Display', serif; font-size: 0.55rem; font-weight: 400; letter-spacing: 0.28em; color: #C9A84C; text-transform: uppercase;">Remodeling</span>
+              <span style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
+            </span>
+          </a>
+          <a href="tel:+18323069934" class="text-center text-xs tracking-wider" style="color:rgba(255,255,255,0.35);">
+            (832) 306-9934
+          </a>
+        </div>
+      </div>
+    </div>
+  </>
 ) : (
   <header
     id="header"
     class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
     style="background: transparent;"
   >
-    <div class="max-w-7xl mx-auto px-6 py-3" style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;">
+    <div class="max-w-7xl mx-auto px-6 py-3" style="display: grid; grid-template-columns: auto auto 1fr; align-items: center; column-gap: 2.5rem;">
 
       <!-- Logo (left) -->
       <a href="/" class="logo-link flex items-center" style="gap: 0px;">
@@ -173,24 +281,34 @@ const isRealEstate = currentPath.startsWith('/real-estate');
           </a>
         ))}
         <a
-          href="/real-estate"
-          class="real-estate-link text-xs tracking-widest uppercase font-semibold px-4 py-1.5 transition-all duration-300"
-          style="border: 1px solid #4ade80; color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6);"
-          data-i18n="nav.realEstate"
+          href="/mundial"
+          class="world-cup-link flex items-center transition-all duration-300"
         >
-          Real Estate
+          <img src="/images/logo world cup.png" alt="World Cup" style="height:70px;width:auto;object-fit:contain;" />
         </a>
       </nav>
 
       <!-- CTA + Language Toggle (right) -->
-      <div style="display: flex; align-items: center; justify-content: flex-end; gap: 1rem;">
-        <a href="https://www.facebook.com/vanheight.cons/" target="_blank" rel="noopener" aria-label="Facebook" class="hidden md:flex text-white/60 hover:text-gold transition-colors">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+      <div style="display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem;">
+        <a
+          href="/real-estate"
+          class="real-estate-link hidden md:flex text-xs tracking-widest uppercase font-semibold px-3 py-1.5 transition-all duration-300"
+          style="border: 1px solid #4ade80; color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6); white-space: nowrap;"
+          data-i18n="nav.realEstate"
+        >
+          Real Estate
         </a>
-        <a href="#" target="_blank" rel="noopener" aria-label="Instagram" class="hidden md:flex text-white/60 hover:text-gold transition-colors">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
-        </a>
-        <a href="tel:+18323069934" class="text-sm text-white hover:text-gold transition-colors">(832) 306-9934</a>
+        <div class="hidden md:flex flex-col items-center" style="gap: 3px;">
+          <a href="tel:+18323069934" class="text-sm text-white hover:text-gold transition-colors">(832) 306-9934</a>
+          <div class="flex items-center gap-2">
+            <a href="https://www.facebook.com/vanheight.cons/" target="_blank" rel="noopener" aria-label="Facebook" class="flex items-center justify-center transition-opacity hover:opacity-70" style="width:16px;height:16px;background:#fff;border-radius:50%;">
+              <img src="/images/face.png" alt="Facebook" class="w-3.5 h-3.5" style="object-fit:contain;" />
+            </a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Instagram" class="flex items-center justify-center transition-opacity hover:opacity-70" style="width:16px;height:16px;background:#fff;border-radius:4px;">
+              <img src="/images/insta.png" alt="Instagram" class="w-3.5 h-3.5" style="object-fit:contain;" />
+            </a>
+          </div>
+        </div>
         <div class="hidden md:flex items-center gap-4 relative" id="lang-dropdown-wrapper">
           <button id="lang-toggle" class="flex items-center gap-1.5 text-xs text-white hover:text-gold transition-colors font-medium tracking-widest uppercase px-3 py-2 border border-transparent hover:border-gold/30">
             <span id="lang-text">EN</span>
@@ -222,6 +340,9 @@ const isRealEstate = currentPath.startsWith('/real-estate');
       <a href="/real-estate" class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-semibold border-b border-subtle" style="color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6);" data-i18n="nav.realEstate">
         Real Estate
       </a>
+      <a href="/mundial" class="mobile-link px-6 py-4 flex items-center border-b border-subtle">
+        <img src="/images/logo world cup.png" alt="World Cup" style="height:72px;width:auto;object-fit:contain;" />
+      </a>
       <div class="px-6 py-5 flex flex-col gap-3">
         <a href="tel:+18323069934" class="text-sm text-muted-custom">(832) 306-9934</a>
         <a href="/contact" class="btn-gold" style="font-size: 0.75rem; padding: 0.75rem 1.5rem; text-align: center;">Free Quote</a>
@@ -235,6 +356,7 @@ const isRealEstate = currentPath.startsWith('/real-estate');
   .logo-link {
     flex-direction: column;
     align-items: flex-start;
+    margin-left: -24px;
   }
   .logo-text {
     margin-left: 8px;
@@ -256,6 +378,11 @@ const isRealEstate = currentPath.startsWith('/real-estate');
     color: #000 !important;
     text-shadow: none !important;
     box-shadow: 0 0 16px rgba(74,222,128,0.5);
+  }
+
+  .world-cup-link:hover {
+    filter: drop-shadow(0 0 10px rgba(255,199,44,0.7));
+    transform: scale(1.05);
   }
 
   .remodeling-logo-link {
@@ -401,6 +528,37 @@ const isRealEstate = currentPath.startsWith('/real-estate');
       if (reLine1) reLine1.style.transform = '';
       if (reLine2) reLine2.style.opacity = '1';
       if (reLine3) { reLine3.style.transform = ''; reLine3.style.width = '16px'; }
+    }
+  });
+
+  // World Cup mobile drawer
+  const wcMenuBtn = document.getElementById('wc-menu-btn');
+  const wcDrawer = document.getElementById('wc-drawer');
+  const wcDrawerPanel = document.getElementById('wc-drawer-panel');
+  const wcLine1 = document.getElementById('wc-line1');
+  const wcLine2 = document.getElementById('wc-line2');
+  const wcLine3 = document.getElementById('wc-line3');
+
+  let wcMenuOpen = false;
+  wcMenuBtn?.addEventListener('click', () => {
+    wcMenuOpen = !wcMenuOpen;
+    wcDrawer?.classList.toggle('hidden', !wcMenuOpen);
+    if (wcLine1) wcLine1.style.transform = wcMenuOpen ? 'translateY(8px) rotate(45deg)' : '';
+    if (wcLine2) wcLine2.style.opacity = wcMenuOpen ? '0' : '1';
+    if (wcLine3) {
+      wcLine3.style.transform = wcMenuOpen ? 'translateY(-8px) rotate(-45deg)' : '';
+      wcLine3.style.width = wcMenuOpen ? '24px' : '16px';
+    }
+  });
+
+  // Close drawer when clicking outside the panel
+  wcDrawer?.addEventListener('click', (e) => {
+    if (!wcDrawerPanel?.contains(e.target as Node)) {
+      wcMenuOpen = false;
+      wcDrawer.classList.add('hidden');
+      if (wcLine1) wcLine1.style.transform = '';
+      if (wcLine2) wcLine2.style.opacity = '1';
+      if (wcLine3) { wcLine3.style.transform = ''; wcLine3.style.width = '16px'; }
     }
   });
 </script>
