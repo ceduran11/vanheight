@@ -174,7 +174,7 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
           >
             {link.label}
             {link.href === '/worldcup2026' && (
-              <span class="wc-live-badge" style="display:none;">
+              <span class="wc-live-badge wc-live-badge--dim">
                 <span class="wc-live-dot"></span>VIVO
               </span>
             )}
@@ -232,7 +232,7 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
             >
               {link.label}
               {link.href === '/worldcup2026' && (
-                <span class="wc-live-badge" style="display:none;">
+                <span class="wc-live-badge wc-live-badge--dim">
                   <span class="wc-live-dot"></span>VIVO
                 </span>
               )}
@@ -444,16 +444,25 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
     font-size: 0.6rem;
     font-weight: 700;
     letter-spacing: 0.05em;
-    color: #E0483E;
-    border: 1px solid #E0483E;
     border-radius: 999px;
     padding: 2px 6px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+  .wc-live-badge--dim {
+    color: rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .wc-live-badge--on {
+    color: #E0483E;
+    border: 1px solid #E0483E;
   }
   .wc-live-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #E0483E;
+    background: currentColor;
+  }
+  .wc-live-badge--on .wc-live-dot {
     animation: wcLiveBlink 1.2s ease-in-out infinite;
   }
   @keyframes wcLiveBlink {
@@ -610,9 +619,12 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
         const isLive = Array.isArray(data?.games) && data.games.some(
           (g: any) => (g.time_elapsed || '').toLowerCase() === 'live'
         );
-        wcLiveBadges.forEach((el) => { el.style.display = isLive ? 'inline-flex' : 'none'; });
+        wcLiveBadges.forEach((el) => {
+          el.classList.toggle('wc-live-badge--on', isLive);
+          el.classList.toggle('wc-live-badge--dim', !isLive);
+        });
       } catch {
-        // Live check failed — leave badge hidden, don't show a stale/wrong state.
+        // Live check failed — leave badge in its dim/default state.
       }
     }
     checkLiveNow();
