@@ -18,6 +18,14 @@ const COLORS = {
 
 const LIVE_API_BASE = "https://worldcup26.ir";
 const GROUPS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+
+// Display-only shorthand for this page — does not affect any other page.
+const DISPLAY_NAME_OVERRIDES = {
+  "Democratic Republic of the Congo": "Republic of the Congo",
+};
+function displayName(name) {
+  return DISPLAY_NAME_OVERRIDES[name] || name;
+}
 const FIXED_THIRD_SLOTS = ["A", "B", "D", "E", "G", "I", "K", "L"];
 
 // Fixed Round-of-32 pairing template for the 2026 (48-team) format — this
@@ -122,7 +130,7 @@ export default function WorldCupSimulator() {
         groupsList.forEach((g) => {
           const rows = (g.teams || []).map((row) => ({
             id: row.team_id,
-            name: teamsById.get(row.team_id)?.name_en || "TBD",
+            name: displayName(teamsById.get(row.team_id)?.name_en || "TBD"),
             flag: teamsById.get(row.team_id)?.flag || null,
             pts: Number(row.pts) || 0,
             gd: Number(row.gd) || 0,
