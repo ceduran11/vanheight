@@ -113,6 +113,11 @@ export default function WorldCupSimulator() {
   const [groupTeams, setGroupTeams] = useState(null); // Map<letter, [{id,name,flag,pts,gd,gf}]>
   const [picks, setPicks] = useState(null); // { [letter]: {first,second,third} }
   const [loadError, setLoadError] = useState(false);
+  const [winners, setWinners] = useState({}); // { [matchId]: "home" | "away" }
+
+  function pickWinner(matchId, side) {
+    setWinners((prev) => ({ ...prev, [matchId]: prev[matchId] === side ? null : side }));
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -241,9 +246,41 @@ export default function WorldCupSimulator() {
         awayFlag: away ? flagFor(away) : null,
         homeUnresolved: !home,
         awayUnresolved: !away,
+        winner: winners[match.id] || null,
       };
     });
-  }, [picksByGroupNames, thirdAssignment, groupTeams]);
+  }, [picksByGroupNames, thirdAssignment, groupTeams, winners]);
+
+  // Each later round is built from the previous round's chosen winners —
+  // clicking a winner checkbox advances that team into the next round's
+  // matching slot, cascading all the way to the Final.
+  const allRounds = useMemo(() => {
+    const rounds = [{ label: "Ronda de 32", matches: r32Resolved }];
+    let prevMatches = r32Resolved;
+    LATER_ROUNDS.forEach((round) => {
+      const matches = [];
+      for (let i = 0; i < round.count; i++) {
+        const feederA = prevMatches[2 * i];
+        const feederB = prevMatches[2 * i + 1];
+        const homeName = feederA && feederA.winner ? feederA[feederA.winner] : null;
+        const awayName = feederB && feederB.winner ? feederB[feederB.winner] : null;
+        const id = `${round.label}-${i}`;
+        matches.push({
+          id,
+          home: homeName,
+          away: awayName,
+          homeFlag: homeName === feederA?.home ? feederA?.homeFlag : feederA?.awayFlag,
+          awayFlag: awayName === feederB?.home ? feederB?.homeFlag : feederB?.awayFlag,
+          homeUnresolved: !homeName,
+          awayUnresolved: !awayName,
+          winner: winners[id] || null,
+        });
+      }
+      rounds.push({ label: round.label, matches });
+      prevMatches = matches;
+    });
+    return rounds;
+  }, [r32Resolved, winners]);
 
   if (loadError) {
     return (
@@ -335,24 +372,10 @@ export default function WorldCupSimulator() {
 
       <div style={styles.bracketHeader}>
         <h2 style={styles.bracketTitle}>Bracket resultante</h2>
-        <p style={styles.bracketSubtitle}>Solo la Ronda de 32 refleja tus elecciones — las rondas siguientes dependen de partidos que aún no se juegan.</p>
+        <p style={styles.bracketSubtitle}>Marca la casilla junto al equipo que gana cada partido para que avance a la siguiente ronda.</p>
       </div>
 
-      <BracketView
-        rounds={[
-          { label: "Ronda de 32", matches: r32Resolved },
-          ...LATER_ROUNDS.map((round) => ({
-            label: round.label,
-            matches: Array.from({ length: round.count }).map((_, i) => ({
-              id: `${round.label}-${i}`,
-              home: null,
-              away: null,
-              homeUnresolved: true,
-              awayUnresolved: true,
-            })),
-          })),
-        ]}
-      />
+      <BracketView rounds={allRounds} onPickWinner={pickWinner} />
 
       <div style={styles.footnote}>
         Resolución de "mejor tercero" usando la tabla oficial de la FIFA (Anexo C, 495 combinaciones). Roster de equipos

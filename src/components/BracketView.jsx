@@ -32,11 +32,12 @@ function computeCenters(counts) {
   return centers;
 }
 
-function MatchBox({ m, top }) {
+function MatchBox({ m, top, onPickWinner }) {
   const isDecided = m.homeScore != null && m.awayScore != null;
   const homeWins = isDecided && m.homeScore > m.awayScore;
   const awayWins = isDecided && m.awayScore > m.homeScore;
   const isLive = m.status === "live";
+  const canPick = typeof onPickWinner === "function" && !m.homeUnresolved && !m.awayUnresolved;
 
   return (
     <div
@@ -50,7 +51,7 @@ function MatchBox({ m, top }) {
         height: SLOT_HEIGHT,
       }}
     >
-      <div style={{ ...styles.slotRow, ...(homeWins ? styles.slotRowWinner : {}) }}>
+      <div style={{ ...styles.slotRow, ...(homeWins || m.winner === "home" ? styles.slotRowWinner : {}) }}>
         <span style={styles.slotTeamInner}>
           {m.homeFlag && <img src={m.homeFlag} alt="" style={styles.slotFlag} />}
           <span style={{ ...styles.slotTeam, ...(m.homeUnresolved ? styles.slotTeamPending : {}) }}>
@@ -58,8 +59,17 @@ function MatchBox({ m, top }) {
           </span>
         </span>
         {isDecided && <span style={styles.slotScore}>{m.homeScore}</span>}
+        {canPick && (
+          <input
+            type="checkbox"
+            checked={m.winner === "home"}
+            onChange={() => onPickWinner(m.id, "home")}
+            style={styles.winnerCheckbox}
+            title={`Avanza: ${m.home}`}
+          />
+        )}
       </div>
-      <div style={{ ...styles.slotRow, ...(awayWins ? styles.slotRowWinner : {}), borderBottom: "none" }}>
+      <div style={{ ...styles.slotRow, ...(awayWins || m.winner === "away" ? styles.slotRowWinner : {}), borderBottom: "none" }}>
         <span style={styles.slotTeamInner}>
           {m.awayFlag && <img src={m.awayFlag} alt="" style={styles.slotFlag} />}
           <span style={{ ...styles.slotTeam, ...(m.awayUnresolved ? styles.slotTeamPending : {}) }}>
@@ -67,6 +77,15 @@ function MatchBox({ m, top }) {
           </span>
         </span>
         {isDecided && <span style={styles.slotScore}>{m.awayScore}</span>}
+        {canPick && (
+          <input
+            type="checkbox"
+            checked={m.winner === "away"}
+            onChange={() => onPickWinner(m.id, "away")}
+            style={styles.winnerCheckbox}
+            title={`Avanza: ${m.away}`}
+          />
+        )}
       </div>
       {isLive && (
         <span style={styles.slotLiveTag}>
@@ -78,9 +97,11 @@ function MatchBox({ m, top }) {
   );
 }
 
-// rounds: [{ label, matches: [{id,home,away,homeFlag,awayFlag,homeScore,awayScore,status,homeUnresolved,awayUnresolved}] }]
+// rounds: [{ label, matches: [{id,home,away,homeFlag,awayFlag,homeScore,awayScore,status,homeUnresolved,awayUnresolved,winner}] }]
 // Match counts must halve each round (16 -> 8 -> 4 -> 2 -> 1).
-export default function BracketView({ rounds, extraColumn }) {
+// onPickWinner(matchId, "home"|"away") — when provided, matches with both
+// sides resolved get a checkbox per side to mark who advances.
+export default function BracketView({ rounds, extraColumn, onPickWinner }) {
   const centers = computeCenters(rounds.map((r) => r.matches));
   const totalHeight = rounds[0].matches.length * (SLOT_HEIGHT + SLOT_GAP) - SLOT_GAP;
 
@@ -92,7 +113,7 @@ export default function BracketView({ rounds, extraColumn }) {
             <div style={styles.columnLabel}>{round.label}</div>
             <div style={{ position: "relative", height: totalHeight }}>
               {round.matches.map((m, i) => (
-                <MatchBox key={m.id ?? i} m={m} top={centers[r][i]} />
+                <MatchBox key={m.id ?? i} m={m} top={centers[r][i]} onPickWinner={onPickWinner} />
               ))}
             </div>
           </div>
@@ -147,6 +168,7 @@ const styles = {
   slotTeamPending: { color: COLORS.textMuted, fontWeight: 500, fontStyle: "italic" },
   slotFlag: { width: 16, height: 12, objectFit: "cover", borderRadius: 2, flexShrink: 0 },
   slotScore: { fontFamily: FONT_DISPLAY, fontSize: 13, fontWeight: 700, color: COLORS.accentWarm },
+  winnerCheckbox: { width: 14, height: 14, accentColor: COLORS.accent, cursor: "pointer", flexShrink: 0, marginLeft: 6 },
   slotLiveTag: {
     position: "absolute",
     bottom: -2,
