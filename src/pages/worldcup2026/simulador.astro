@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import WorldCupSimulator from '../../components/WorldCupSimulator.jsx';
+---
+
+<Layout
+  title="Simulador | Mundial 2026 | VanHeight"
+  description="Elige los 1°, 2° y mejores 3° lugares de cada grupo y mira el bracket actualizarse al instante."
+  sidebarLayout={true}
+>
+  <Header />
+  <div style="background: #0B1F3A; min-height: 100vh;">
+    <WorldCupSimulator client:load />
+  </div>
+</Layout>
