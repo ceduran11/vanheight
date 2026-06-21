@@ -171,7 +171,7 @@ export default function WorldCupSimulator() {
       ...prev,
       [group]: {
         ...prev[group],
-        first: teamId,
+        first: prev[group].first === teamId ? null : teamId,
         second: prev[group].second === teamId ? null : prev[group].second,
         third: prev[group].third === teamId ? null : prev[group].third,
       },
@@ -183,7 +183,7 @@ export default function WorldCupSimulator() {
       ...prev,
       [group]: {
         ...prev[group],
-        second: teamId,
+        second: prev[group].second === teamId ? null : teamId,
         first: prev[group].first === teamId ? null : prev[group].first,
         third: prev[group].third === teamId ? null : prev[group].third,
       },
