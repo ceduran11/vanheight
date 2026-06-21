@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import WorldCupBracket from '../../components/WorldCupBracket.jsx';
+---
+
+<Layout
+  title="Bracket | Mundial 2026 | VanHeight"
+  description="Bracket de eliminación directa del Mundial 2026, actualizado automáticamente con los resultados en vivo."
+  sidebarLayout={true}
+>
+  <Header />
+  <div style="background: #0B1F3A; min-height: 100vh;">
+    <WorldCupBracket client:load />
+  </div>
+  <Footer />
+</Layout>

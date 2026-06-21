@@ -1,0 +1,360 @@
+import React, { useState, useEffect } from "react";
+
+const FONT_DISPLAY = "'Georgia', 'Iowan Old Style', serif";
+const FONT_BODY = "'Helvetica Neue', Arial, sans-serif";
+
+const COLORS = {
+  bg: "#0B1F3A",
+  bgCard: "#11264A",
+  bgCardAlt: "#0E2240",
+  accent: "#00A859",
+  accentWarm: "#FFC72C",
+  text: "#F4F6F8",
+  textMuted: "#9FB3CC",
+  border: "#1E3A5F",
+  live: "#E0483E",
+};
+
+const LIVE_API_BASE = "https://worldcup26.ir";
+const REFRESH_MS = 5 * 60 * 1000;
+
+const ROUNDS = [
+  { type: "r32", label: "Ronda de 32" },
+  { type: "r16", label: "Ronda de 16" },
+  { type: "qf", label: "Cuartos de Final" },
+  { type: "sf", label: "Semifinales" },
+  { type: "final", label: "Final" },
+];
+
+function fetchWithTimeout(url, ms = 18000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { signal: controller.signal })
+    .then((r) => r.json())
+    .finally(() => clearTimeout(timer));
+}
+
+async function fetchWithRetry(url, key, retries = 5, delayMs = 1500) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const data = await fetchWithTimeout(url);
+      if (Array.isArray(data?.[key])) return data[key];
+    } catch {
+      // fall through to retry
+    }
+    if (attempt < retries) await new Promise((r) => setTimeout(r, delayMs));
+  }
+  throw new Error(`failed to fetch ${url}`);
+}
+
+// Sort a group's standings the same way GroupStandings.jsx does:
+// points, then goal difference, then goals for.
+function sortStandings(rows) {
+  return [...rows].sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+}
+
+function buildGroupStandings(groups, teamsById) {
+  const standingsByGroup = new Map();
+  groups.forEach((g) => {
+    const rows = (g.teams || []).map((row) => ({
+      id: row.team_id,
+      name: teamsById.get(row.team_id)?.name_en || "TBD",
+      pts: Number(row.pts) || 0,
+      gd: Number(row.gd) || 0,
+      gf: Number(row.gf) || 0,
+    }));
+    standingsByGroup.set(g.name, sortStandings(rows));
+  });
+  return standingsByGroup;
+}
+
+function winnerOf(match) {
+  if (!match || match.homeScore == null || match.awayScore == null) return null;
+  if (match.homeScore > match.awayScore) return match.home;
+  if (match.awayScore > match.homeScore) return match.away;
+  return null; // draw with no penalty info available — leave unresolved
+}
+
+function loserOf(match) {
+  if (!match || match.homeScore == null || match.awayScore == null) return null;
+  if (match.homeScore > match.awayScore) return match.away;
+  if (match.awayScore > match.homeScore) return match.home;
+  return null;
+}
+
+// Resolves placeholder labels like "Winner Match 74", "Runner-up Group A"
+// into an actual team name, using already-completed matches and group
+// standings — so the bracket advances on its own as real results come in,
+// instead of waiting for the API to rewrite each downstream match.
+function resolveLabel(label, matchesById, standingsByGroup) {
+  if (!label) return "TBD";
+
+  let m = label.match(/^Winner Match (\d+)$/);
+  if (m) return winnerOf(matchesById.get(m[1])) || label;
+
+  m = label.match(/^Loser Match (\d+)$/);
+  if (m) return loserOf(matchesById.get(m[1])) || label;
+
+  m = label.match(/^Winner Group ([A-L])$/);
+  if (m) return standingsByGroup.get(m[1])?.[0]?.name || label;
+
+  m = label.match(/^Runner-up Group ([A-L])$/);
+  if (m) return standingsByGroup.get(m[1])?.[1]?.name || label;
+
+  // "3rd Group A/B/C/D/F" (best-third-place slots) needs FIFA's cross-group
+  // tie-break rules across all 12 groups — not computed locally, shown as-is.
+  return label;
+}
+
+async function fetchBracketData() {
+  const [gamesList, groupsList, teamsList] = await Promise.all([
+    fetchWithRetry(`${LIVE_API_BASE}/get/games`, "games"),
+    fetchWithRetry(`${LIVE_API_BASE}/get/groups`, "groups"),
+    fetchWithRetry(`${LIVE_API_BASE}/get/teams`, "teams"),
+  ]);
+
+  const teamsById = new Map();
+  const flagByName = new Map();
+  teamsList.forEach((t) => {
+    teamsById.set(t.id, t);
+    flagByName.set(t.name_en, t.flag);
+  });
+
+  const standingsByGroup = buildGroupStandings(groupsList, teamsById);
+
+  const matchesById = new Map();
+  gamesList.forEach((g) => {
+    matchesById.set(g.id, {
+      id: g.id,
+      type: g.type,
+      home: g.home_team_id !== "0" ? g.home_team_name_en : null,
+      away: g.away_team_id !== "0" ? g.away_team_name_en : null,
+      homeLabel: g.home_team_label,
+      awayLabel: g.away_team_label,
+      homeScore: g.home_score != null ? Number(g.home_score) : null,
+      awayScore: g.away_score != null ? Number(g.away_score) : null,
+      status: (g.time_elapsed || "").toLowerCase(),
+      date: g.local_date,
+    });
+  });
+
+  // Resolve every knockout match's team names (real, or derived from an
+  // already-decided earlier match / group standing, or the raw label).
+  const byRound = new Map(ROUNDS.map((r) => [r.type, []]));
+  let thirdPlace = null;
+  matchesById.forEach((m) => {
+    if (m.type === "group") return;
+    const home = m.home || resolveLabel(m.homeLabel, matchesById, standingsByGroup);
+    const away = m.away || resolveLabel(m.awayLabel, matchesById, standingsByGroup);
+    const resolved = {
+      ...m,
+      home,
+      away,
+      homeFlag: flagByName.get(home) || null,
+      awayFlag: flagByName.get(away) || null,
+    };
+    if (m.type === "third") {
+      thirdPlace = resolved;
+    } else if (byRound.has(m.type)) {
+      byRound.get(m.type).push(resolved);
+    }
+  });
+  byRound.forEach((list) => list.sort((a, b) => Number(a.id) - Number(b.id)));
+
+  return { byRound, thirdPlace };
+}
+
+function MatchSlot({ m }) {
+  if (!m) return <div style={styles.slotEmpty} />;
+  const isDecided = m.homeScore != null && m.awayScore != null;
+  const homeWins = isDecided && m.homeScore > m.awayScore;
+  const awayWins = isDecided && m.awayScore > m.homeScore;
+  const isLive = m.status === "live";
+
+  return (
+    <div style={{ ...styles.slot, ...(isLive ? styles.slotLive : {}) }}>
+      <div style={{ ...styles.slotRow, ...(homeWins ? styles.slotRowWinner : {}) }}>
+        <span style={styles.slotTeamInner}>
+          {m.homeFlag && <img src={m.homeFlag} alt="" style={styles.slotFlag} />}
+          <span style={styles.slotTeam}>{m.home || "Por definir"}</span>
+        </span>
+        {isDecided && <span style={styles.slotScore}>{m.homeScore}</span>}
+      </div>
+      <div style={{ ...styles.slotRow, ...(awayWins ? styles.slotRowWinner : {}) }}>
+        <span style={styles.slotTeamInner}>
+          {m.awayFlag && <img src={m.awayFlag} alt="" style={styles.slotFlag} />}
+          <span style={styles.slotTeam}>{m.away || "Por definir"}</span>
+        </span>
+        {isDecided && <span style={styles.slotScore}>{m.awayScore}</span>}
+      </div>
+      {isLive && <span style={styles.slotLiveTag}><span style={styles.liveDot} />En vivo</span>}
+    </div>
+  );
+}
+
+export default function WorldCupBracket() {
+  const [data, setData] = useState(null);
+  const [syncedAt, setSyncedAt] = useState(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function sync() {
+      try {
+        const result = await fetchBracketData();
+        if (!cancelled) {
+          setData(result);
+          setSyncedAt(new Date());
+          setError(false);
+        }
+      } catch (err) {
+        console.warn("Bracket sync failed:", err);
+        if (!cancelled) setError(true);
+      }
+    }
+    sync();
+    const interval = setInterval(sync, REFRESH_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div style={styles.page}>
+      <div style={styles.header}>
+        <span style={styles.eyebrow}>FIFA · CANADÁ · MÉXICO · ESTADOS UNIDOS</span>
+        <h1 style={styles.title}>Bracket — Eliminación Directa</h1>
+        <p style={styles.subtitle}>
+          Se llena automáticamente conforme avanzan los resultados. Del 28 de junio (Ronda de 32) al 19 de julio (Final).
+        </p>
+      </div>
+
+      {!data && !error && <div style={styles.empty}>Cargando bracket en vivo…</div>}
+      {!data && error && (
+        <div style={styles.empty}>No se pudo conectar con el servicio de resultados en vivo. Intentando de nuevo automáticamente…</div>
+      )}
+
+      {data && (
+        <div style={styles.bracketScroll}>
+          <div style={styles.bracketInner}>
+            {ROUNDS.map(({ type, label }) => (
+              <div key={type} style={styles.column}>
+                <div style={styles.columnLabel}>{label}</div>
+                <div style={styles.columnSlots}>
+                  {(data.byRound.get(type) || []).map((m) => (
+                    <MatchSlot key={m.id} m={m} />
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div style={styles.column}>
+              <div style={styles.columnLabel}>Tercer Lugar</div>
+              <div style={styles.columnSlots}>
+                <MatchSlot m={data.thirdPlace} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={styles.footnote}>
+        {syncedAt ? (
+          <>Bracket en vivo, sincronizado automáticamente — última actualización {syncedAt.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}.</>
+        ) : (
+          <>Conectando con el servicio de resultados en vivo…</>
+        )}{" "}
+        Equipos no decididos se calculan en el navegador a partir de resultados reales (ganador/perdedor de partido, 1° y 2° de grupo) cuando es posible; los cupos de "mejor tercero" los resuelve la FIFA con reglas cruzadas entre grupos y se muestran como los anuncia la fuente.
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+  page: {
+    fontFamily: FONT_BODY,
+    background: COLORS.bg,
+    color: COLORS.text,
+    minHeight: "100%",
+    padding: "0 0 32px 0",
+    boxSizing: "border-box",
+  },
+  header: {
+    padding: "28px 20px 16px",
+    borderBottom: `1px solid ${COLORS.border}`,
+    background: `linear-gradient(180deg, ${COLORS.bgCardAlt} 0%, ${COLORS.bg} 100%)`,
+  },
+  eyebrow: {
+    fontSize: 11,
+    letterSpacing: "0.14em",
+    color: COLORS.accentWarm,
+    fontWeight: 700,
+  },
+  title: {
+    fontFamily: FONT_DISPLAY,
+    fontSize: 28,
+    margin: "4px 0 6px",
+    fontWeight: 700,
+  },
+  subtitle: { margin: 0, color: COLORS.textMuted, fontSize: 13, maxWidth: 640 },
+
+  empty: { color: COLORS.textMuted, padding: "60px 20px", textAlign: "center" },
+
+  bracketScroll: { overflowX: "auto", padding: "24px 20px" },
+  bracketInner: { display: "flex", gap: 28, minWidth: "max-content" },
+  column: { display: "flex", flexDirection: "column", width: 220, flexShrink: 0 },
+  columnLabel: {
+    fontSize: 11,
+    fontWeight: 700,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    color: COLORS.accentWarm,
+    textAlign: "center",
+    marginBottom: 14,
+  },
+  columnSlots: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    gap: 14,
+  },
+
+  slot: {
+    background: COLORS.bgCard,
+    border: `1px solid ${COLORS.border}`,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  slotLive: { borderColor: COLORS.live },
+  slotEmpty: { minHeight: 56 },
+  slotRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "8px 10px",
+    borderBottom: `1px solid ${COLORS.border}`,
+  },
+  slotRowWinner: { background: "rgba(0,168,89,0.1)" },
+  slotTeamInner: { display: "flex", alignItems: "center", gap: 6, minWidth: 0 },
+  slotTeam: { fontSize: 12.5, fontWeight: 600, color: COLORS.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+  slotFlag: { width: 16, height: 12, objectFit: "cover", borderRadius: 2, flexShrink: 0 },
+  slotScore: { fontFamily: FONT_DISPLAY, fontSize: 14, fontWeight: 700, color: COLORS.accentWarm },
+  slotLiveTag: {
+    display: "flex",
+    alignItems: "center",
+    gap: 4,
+    fontSize: 10,
+    fontWeight: 700,
+    color: COLORS.live,
+    padding: "4px 10px",
+  },
+  liveDot: { width: 5, height: 5, borderRadius: "50%", background: COLORS.live, display: "inline-block" },
+
+  footnote: {
+    padding: "16px 20px 0",
+    fontSize: 11,
+    color: COLORS.textMuted,
+    lineHeight: 1.6,
+  },
+};
