@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import thirdPlaceTable from "../data/wc2026-third-place-table.json";
+import BracketView from "./BracketView.jsx";
 
 const FONT_DISPLAY = "'Georgia', 'Iowan Old Style', serif";
 const FONT_BODY = "'Helvetica Neue', Arial, sans-serif";
@@ -337,49 +338,21 @@ export default function WorldCupSimulator() {
         <p style={styles.bracketSubtitle}>Solo la Ronda de 32 refleja tus elecciones — las rondas siguientes dependen de partidos que aún no se juegan.</p>
       </div>
 
-      <div style={styles.bracketScroll}>
-        <div style={styles.bracketInner}>
-          <div style={styles.column}>
-            <div style={styles.columnLabel}>Ronda de 32</div>
-            <div style={styles.columnSlots}>
-              {r32Resolved.map((m) => (
-                <div key={m.id} style={styles.slot}>
-                  <div style={styles.slotRow}>
-                    <span style={styles.slotTeamInner}>
-                      {m.homeFlag && <img src={m.homeFlag} alt="" style={styles.slotFlag} />}
-                      <span style={{ ...styles.slotTeam, ...(m.homeUnresolved ? styles.slotTeamPending : {}) }}>{m.home}</span>
-                    </span>
-                  </div>
-                  <div style={styles.slotRow}>
-                    <span style={styles.slotTeamInner}>
-                      {m.awayFlag && <img src={m.awayFlag} alt="" style={styles.slotFlag} />}
-                      <span style={{ ...styles.slotTeam, ...(m.awayUnresolved ? styles.slotTeamPending : {}) }}>{m.away}</span>
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {LATER_ROUNDS.map((round) => (
-            <div key={round.label} style={styles.column}>
-              <div style={styles.columnLabel}>{round.label}</div>
-              <div style={styles.columnSlots}>
-                {Array.from({ length: round.count }).map((_, i) => (
-                  <div key={i} style={styles.slot}>
-                    <div style={styles.slotRow}>
-                      <span style={{ ...styles.slotTeam, ...styles.slotTeamPending }}>Por definir</span>
-                    </div>
-                    <div style={styles.slotRow}>
-                      <span style={{ ...styles.slotTeam, ...styles.slotTeamPending }}>Por definir</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <BracketView
+        rounds={[
+          { label: "Ronda de 32", matches: r32Resolved },
+          ...LATER_ROUNDS.map((round) => ({
+            label: round.label,
+            matches: Array.from({ length: round.count }).map((_, i) => ({
+              id: `${round.label}-${i}`,
+              home: null,
+              away: null,
+              homeUnresolved: true,
+              awayUnresolved: true,
+            })),
+          })),
+        ]}
+      />
 
       <div style={styles.footnote}>
         Resolución de "mejor tercero" usando la tabla oficial de la FIFA (Anexo C, 495 combinaciones). Roster de equipos
@@ -437,27 +410,6 @@ const styles = {
   bracketHeader: { padding: "32px 20px 0" },
   bracketTitle: { fontFamily: FONT_DISPLAY, fontSize: 22, fontWeight: 700, margin: "0 0 4px" },
   bracketSubtitle: { margin: 0, color: COLORS.textMuted, fontSize: 12.5 },
-
-  bracketScroll: { overflowX: "auto", padding: "20px 20px" },
-  bracketInner: { display: "flex", gap: 28, minWidth: "max-content" },
-  column: { display: "flex", flexDirection: "column", width: 220, flexShrink: 0 },
-  columnLabel: {
-    fontSize: 11,
-    fontWeight: 700,
-    letterSpacing: "0.08em",
-    textTransform: "uppercase",
-    color: COLORS.accentWarm,
-    textAlign: "center",
-    marginBottom: 14,
-  },
-  columnSlots: { flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-around", gap: 14 },
-
-  slot: { background: COLORS.bgCard, border: `1px solid ${COLORS.border}`, borderRadius: 10, overflow: "hidden" },
-  slotRow: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 10px", borderBottom: `1px solid ${COLORS.border}` },
-  slotTeamInner: { display: "flex", alignItems: "center", gap: 6, minWidth: 0 },
-  slotTeam: { fontSize: 12.5, fontWeight: 600, color: COLORS.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
-  slotTeamPending: { color: COLORS.textMuted, fontWeight: 500, fontStyle: "italic" },
-  slotFlag: { width: 16, height: 12, objectFit: "cover", borderRadius: 2, flexShrink: 0 },
 
   footnote: { padding: "20px 20px 0", fontSize: 11, color: COLORS.textMuted, lineHeight: 1.6 },
 };

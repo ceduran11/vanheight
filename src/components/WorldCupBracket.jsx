@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import thirdPlaceTable from "../data/wc2026-third-place-table.json";
+import BracketView from "./BracketView.jsx";
 
 const FONT_DISPLAY = "'Georgia', 'Iowan Old Style', serif";
 const FONT_BODY = "'Helvetica Neue', Arial, sans-serif";
@@ -214,34 +215,6 @@ async function fetchBracketData() {
   return { byRound, thirdPlace };
 }
 
-function MatchSlot({ m }) {
-  if (!m) return <div style={styles.slotEmpty} />;
-  const isDecided = m.homeScore != null && m.awayScore != null;
-  const homeWins = isDecided && m.homeScore > m.awayScore;
-  const awayWins = isDecided && m.awayScore > m.homeScore;
-  const isLive = m.status === "live";
-
-  return (
-    <div style={{ ...styles.slot, ...(isLive ? styles.slotLive : {}) }}>
-      <div style={{ ...styles.slotRow, ...(homeWins ? styles.slotRowWinner : {}) }}>
-        <span style={styles.slotTeamInner}>
-          {m.homeFlag && <img src={m.homeFlag} alt="" style={styles.slotFlag} />}
-          <span style={styles.slotTeam}>{m.home || "Por definir"}</span>
-        </span>
-        {isDecided && <span style={styles.slotScore}>{m.homeScore}</span>}
-      </div>
-      <div style={{ ...styles.slotRow, ...(awayWins ? styles.slotRowWinner : {}) }}>
-        <span style={styles.slotTeamInner}>
-          {m.awayFlag && <img src={m.awayFlag} alt="" style={styles.slotFlag} />}
-          <span style={styles.slotTeam}>{m.away || "Por definir"}</span>
-        </span>
-        {isDecided && <span style={styles.slotScore}>{m.awayScore}</span>}
-      </div>
-      {isLive && <span style={styles.slotLiveTag}><span style={styles.liveDot} />En vivo</span>}
-    </div>
-  );
-}
-
 export default function WorldCupBracket() {
   const [data, setData] = useState(null);
   const [syncedAt, setSyncedAt] = useState(null);
@@ -288,26 +261,10 @@ export default function WorldCupBracket() {
       )}
 
       {data && (
-        <div style={styles.bracketScroll}>
-          <div style={styles.bracketInner}>
-            {ROUNDS.map(({ type, label }) => (
-              <div key={type} style={styles.column}>
-                <div style={styles.columnLabel}>{label}</div>
-                <div style={styles.columnSlots}>
-                  {(data.byRound.get(type) || []).map((m) => (
-                    <MatchSlot key={m.id} m={m} />
-                  ))}
-                </div>
-              </div>
-            ))}
-            <div style={styles.column}>
-              <div style={styles.columnLabel}>Tercer Lugar</div>
-              <div style={styles.columnSlots}>
-                <MatchSlot m={data.thirdPlace} />
-              </div>
-            </div>
-          </div>
-        </div>
+        <BracketView
+          rounds={ROUNDS.map(({ type, label }) => ({ label, matches: data.byRound.get(type) || [] }))}
+          extraColumn={data.thirdPlace ? { label: "Tercer Lugar", match: data.thirdPlace } : null}
+        />
       )}
 
       <div style={styles.footnote}>
@@ -351,57 +308,6 @@ const styles = {
   subtitle: { margin: 0, color: COLORS.textMuted, fontSize: 13, maxWidth: 640 },
 
   empty: { color: COLORS.textMuted, padding: "60px 20px", textAlign: "center" },
-
-  bracketScroll: { overflowX: "auto", padding: "24px 20px" },
-  bracketInner: { display: "flex", gap: 28, minWidth: "max-content" },
-  column: { display: "flex", flexDirection: "column", width: 220, flexShrink: 0 },
-  columnLabel: {
-    fontSize: 11,
-    fontWeight: 700,
-    letterSpacing: "0.08em",
-    textTransform: "uppercase",
-    color: COLORS.accentWarm,
-    textAlign: "center",
-    marginBottom: 14,
-  },
-  columnSlots: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    gap: 14,
-  },
-
-  slot: {
-    background: COLORS.bgCard,
-    border: `1px solid ${COLORS.border}`,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  slotLive: { borderColor: COLORS.live },
-  slotEmpty: { minHeight: 56 },
-  slotRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "8px 10px",
-    borderBottom: `1px solid ${COLORS.border}`,
-  },
-  slotRowWinner: { background: "rgba(0,168,89,0.1)" },
-  slotTeamInner: { display: "flex", alignItems: "center", gap: 6, minWidth: 0 },
-  slotTeam: { fontSize: 12.5, fontWeight: 600, color: COLORS.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
-  slotFlag: { width: 16, height: 12, objectFit: "cover", borderRadius: 2, flexShrink: 0 },
-  slotScore: { fontFamily: FONT_DISPLAY, fontSize: 14, fontWeight: 700, color: COLORS.accentWarm },
-  slotLiveTag: {
-    display: "flex",
-    alignItems: "center",
-    gap: 4,
-    fontSize: 10,
-    fontWeight: 700,
-    color: COLORS.live,
-    padding: "4px 10px",
-  },
-  liveDot: { width: 5, height: 5, borderRadius: "50%", background: COLORS.live, display: "inline-block" },
 
   footnote: {
     padding: "16px 20px 0",
