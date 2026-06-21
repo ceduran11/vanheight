@@ -53,7 +53,7 @@ function MatchBox({ m, top, onPickWinner }) {
     >
       <div style={{ ...styles.slotRow, ...(homeWins || m.winner === "home" ? styles.slotRowWinner : {}) }}>
         <span style={styles.slotTeamInner}>
-          {m.homeFlag && <img src={m.homeFlag} alt="" style={styles.slotFlag} />}
+          {m.homeFlag && !m.homeUnresolved && <img src={m.homeFlag} alt="" style={styles.slotFlag} />}
           <span style={{ ...styles.slotTeam, ...(m.homeUnresolved ? styles.slotTeamPending : {}) }}>
             {m.home || "Por definir"}
           </span>
@@ -71,7 +71,7 @@ function MatchBox({ m, top, onPickWinner }) {
       </div>
       <div style={{ ...styles.slotRow, ...(awayWins || m.winner === "away" ? styles.slotRowWinner : {}), borderBottom: "none" }}>
         <span style={styles.slotTeamInner}>
-          {m.awayFlag && <img src={m.awayFlag} alt="" style={styles.slotFlag} />}
+          {m.awayFlag && !m.awayUnresolved && <img src={m.awayFlag} alt="" style={styles.slotFlag} />}
           <span style={{ ...styles.slotTeam, ...(m.awayUnresolved ? styles.slotTeamPending : {}) }}>
             {m.away || "Por definir"}
           </span>
