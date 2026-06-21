@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { timeZoneForCity, zonedWallTimeToUtc, formatLocalKickoff } from "../lib/worldcupTime.js";
 
 // ---------- Data ----------
 // status: "final" | "live" | "scheduled"
@@ -73,13 +74,6 @@ function MatchCard({ m }) {
 const LIVE_API_BASE = "https://worldcup26.ir";
 const LIVE_REFRESH_MS = 5 * 60 * 1000; // 5 minutes
 
-function apiTimeTo12h(hhmm) {
-  const [h, m] = hhmm.split(":").map(Number);
-  const period = h >= 12 ? "PM" : "AM";
-  const h12 = h % 12 === 0 ? 12 : h % 12;
-  return `${h12}:${String(m).padStart(2, "0")} ${period} ET`;
-}
-
 function apiStatusToLocal(timeElapsed) {
   const v = (timeElapsed || "").toLowerCase();
   if (v === "live") return "live";
@@ -95,10 +89,19 @@ function mapApiGames(games, stadiumsById, teamsById) {
     const status = apiStatusToLocal(g.time_elapsed);
     const venue = stadiumsById.get(g.stadium_id)?.city_en || "";
 
+    // The API only gives wall-clock time + host city, not a UTC offset — so
+    // we have to know the city's real timezone to convert correctly (it's
+    // NOT always Eastern; Houston is Central, LA/Seattle/Vancouver Pacific).
+    let kickoffUtc;
+    if (timePart && yyyy) {
+      const [hh, mm2] = timePart.split(":").map(Number);
+      kickoffUtc = zonedWallTimeToUtc(+yyyy, +mm, +dd, hh, mm2, timeZoneForCity(venue));
+    }
+
     return {
       id: `api-${g.id}`,
       date: isoDate,
-      time: timePart ? apiTimeTo12h(timePart) : undefined,
+      time: formatLocalKickoff(kickoffUtc),
       group: g.group,
       home: g.home_team_name_en || g.home_team_label || "TBD",
       away: g.away_team_name_en || g.away_team_label || "TBD",
@@ -354,7 +357,8 @@ export default function WorldCupSchedule() {
           <>Resultados en vivo, sincronizados automáticamente — última actualización {liveSyncedAt.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}. Se actualiza cada 5 minutos.</>
         ) : (
           <>Conectando con el servicio de resultados en vivo…</>
-        )}
+        )}{" "}
+        Los horarios de partidos programados se muestran en tu hora local, según la zona horaria de tu navegador.
       </div>
       </div>
     </div>

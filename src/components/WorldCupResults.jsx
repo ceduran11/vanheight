@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { fixedOffsetWallTimeToUtc, formatLocalKickoff } from "../lib/worldcupTime.js";
 
 // ---------- Data ----------
 // status: "final" | "scheduled" (this source has no live/in-play concept —
@@ -85,17 +86,17 @@ function fetchWithTimeout(url, ms = 15000) {
     .finally(() => clearTimeout(timer));
 }
 
-function formatOpenFootballTime(timeStr) {
-  // e.g. "13:00 UTC-6" -> "1:00 PM (UTC-6)"
-  if (!timeStr) return undefined;
+// openfootball already gives an explicit UTC offset per match (e.g.
+// "13:00 UTC-6"), so converting to the viewer's browser time just needs
+// that offset — no per-venue timezone lookup needed like the other source.
+function openFootballKickoffUtc(dateIso, timeStr) {
+  if (!timeStr || !dateIso) return undefined;
   const [hhmm, ...rest] = timeStr.split(" ");
   const [hStr, mStr] = (hhmm || "").split(":");
-  const h = Number(hStr);
-  if (Number.isNaN(h)) return timeStr;
-  const period = h >= 12 ? "PM" : "AM";
-  const h12 = h % 12 === 0 ? 12 : h % 12;
-  const offset = rest.join(" ");
-  return `${h12}:${mStr} ${period}${offset ? ` (${offset})` : ""}`;
+  const [y, mo, d] = dateIso.split("-").map(Number);
+  const offsetMatch = rest.join(" ").match(/UTC([+-]\d+)/);
+  if (!offsetMatch) return undefined;
+  return fixedOffsetWallTimeToUtc(y, mo, d, Number(hStr), Number(mStr), Number(offsetMatch[1]));
 }
 
 function mapOpenFootballMatches(rawMatches) {
@@ -104,7 +105,7 @@ function mapOpenFootballMatches(rawMatches) {
     return {
       id: `of-${i}-${m.date}-${m.team1}-${m.team2}`,
       date: m.date,
-      time: hasScore ? undefined : formatOpenFootballTime(m.time),
+      time: hasScore ? undefined : formatLocalKickoff(openFootballKickoffUtc(m.date, m.time)),
       group: (m.group || "").replace("Group ", ""),
       home: m.team1,
       away: m.team2,
@@ -297,7 +298,8 @@ export default function WorldCupResults() {
         ) : (
           <>Conectando con la fuente de datos…</>
         )}{" "}
-        Esta fuente se actualiza a mano aproximadamente una vez al día — no son marcadores en vivo minuto a minuto.
+        Esta fuente se actualiza a mano aproximadamente una vez al día — no son marcadores en vivo minuto a minuto. Los horarios
+        de partidos programados se muestran en tu hora local, según la zona horaria de tu navegador.
       </div>
       </div>
     </div>
