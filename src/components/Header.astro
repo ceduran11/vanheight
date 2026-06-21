@@ -609,23 +609,36 @@ const isWorldCup = currentPath.startsWith('/worldcup2026') || currentPath.starts
   // "VIVO" badge next to Resultados — only lights up if a match is live right now
   const wcLiveBadges = document.querySelectorAll<HTMLElement>('.wc-live-badge');
   if (wcLiveBadges.length > 0) {
-    async function checkLiveNow() {
+    async function fetchIsLiveOnce(): Promise<boolean> {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 12000);
       try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 10000);
         const res = await fetch('https://worldcup26.ir/get/games', { signal: controller.signal });
-        clearTimeout(timer);
         const data = await res.json();
-        const isLive = Array.isArray(data?.games) && data.games.some(
-          (g: any) => (g.time_elapsed || '').toLowerCase() === 'live'
-        );
-        wcLiveBadges.forEach((el) => {
-          el.classList.toggle('wc-live-badge--on', isLive);
-          el.classList.toggle('wc-live-badge--dim', !isLive);
-        });
-      } catch {
-        // Live check failed — leave badge in its dim/default state.
+        if (!Array.isArray(data?.games)) throw new Error('bad payload');
+        return data.games.some((g: any) => (g.time_elapsed || '').toLowerCase() === 'live');
+      } finally {
+        clearTimeout(timer);
       }
+    }
+
+    async function checkLiveNow() {
+      // worldcup26.ir fails a meaningful fraction of single requests — retry
+      // a few times before settling for "dim" this cycle.
+      const maxAttempts = 7;
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          const isLive = await fetchIsLiveOnce();
+          wcLiveBadges.forEach((el) => {
+            el.classList.toggle('wc-live-badge--on', isLive);
+            el.classList.toggle('wc-live-badge--dim', !isLive);
+          });
+          return;
+        } catch {
+          if (attempt < maxAttempts) await new Promise((r) => setTimeout(r, 1500));
+        }
+      }
+      // All attempts failed — leave badge in its current/dim state.
     }
     checkLiveNow();
     setInterval(checkLiveNow, 2 * 60 * 1000);
