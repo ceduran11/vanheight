@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import thirdPlaceTable from "../data/wc2026-third-place-table.json";
 
 const FONT_DISPLAY = "'Georgia', 'Iowan Old Style', serif";
 const FONT_BODY = "'Helvetica Neue', Arial, sans-serif";
@@ -82,11 +83,42 @@ function loserOf(match) {
   return null;
 }
 
+// The 8 Round-of-32 slots that face a third-placed team instead of a
+// runner-up, per FIFA's official 48-team format (verified against the
+// 2026 knockout-stage match list: matches 74/77/79/80/81/82/85/87 pair
+// the winners of groups A, B, D, E, G, I, K, L with a third-place team).
+const FIXED_THIRD_SLOTS = ["A", "B", "D", "E", "G", "I", "K", "L"];
+
+// Ranks all 12 third-placed teams by FIFA's published criteria — points,
+// goal difference, goals scored — to find the 8 that advance. (FIFA's full
+// regulations also break remaining ties on disciplinary/fair-play points
+// and then the FIFA World Ranking; neither is available from this API, so
+// fully tied teams keep their group-letter order here instead.)
+function rankBestThirds(standingsByGroup) {
+  const thirds = [];
+  standingsByGroup.forEach((rows, group) => {
+    const third = rows[2];
+    if (third) thirds.push({ group, pts: third.pts, gd: third.gd, gf: third.gf });
+  });
+  thirds.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+  return thirds;
+}
+
+// Given which 8 groups' thirds advance, looks up FIFA's Annex C table
+// (495 possible combinations) for which specific third fills which of the
+// 8 fixed slots above.
+function lookupThirdPlaceAssignment(standingsByGroup) {
+  const advancing = rankBestThirds(standingsByGroup).slice(0, 8).map((t) => t.group);
+  if (advancing.length < 8) return null;
+  const key = [...advancing].sort().join("");
+  return thirdPlaceTable[key] || null;
+}
+
 // Resolves placeholder labels like "Winner Match 74", "Runner-up Group A"
 // into an actual team name, using already-completed matches and group
 // standings — so the bracket advances on its own as real results come in,
 // instead of waiting for the API to rewrite each downstream match.
-function resolveLabel(label, matchesById, standingsByGroup) {
+function resolveLabel(label, matchesById, standingsByGroup, thirdPlaceAssignment) {
   if (!label) return "TBD";
 
   let m = label.match(/^Winner Match (\d+)$/);
@@ -101,9 +133,19 @@ function resolveLabel(label, matchesById, standingsByGroup) {
   m = label.match(/^Runner-up Group ([A-L])$/);
   if (m) return standingsByGroup.get(m[1])?.[1]?.name || label;
 
-  // "3rd Group A/B/C/D/F" (best-third-place slots) needs FIFA's cross-group
-  // tie-break rules across all 12 groups — not computed locally, shown as-is.
   return label;
+}
+
+// "3rd Group A/B/C/D/F" only resolves once we know which fixed slot this
+// particular match is (read off its sibling side's "Winner Group X" label,
+// X being one of FIXED_THIRD_SLOTS) and FIFA's table for the current best-8.
+function resolveThirdPlaceSide(label, siblingLabel, standingsByGroup, thirdPlaceAssignment) {
+  if (!label?.startsWith("3rd Group")) return null;
+  const siblingGroup = siblingLabel?.match(/^Winner Group ([A-L])$/)?.[1];
+  if (!siblingGroup || !FIXED_THIRD_SLOTS.includes(siblingGroup)) return label;
+  const assignedGroup = thirdPlaceAssignment?.[`1${siblingGroup}`];
+  if (!assignedGroup) return label;
+  return standingsByGroup.get(assignedGroup)?.[2]?.name || label;
 }
 
 async function fetchBracketData() {
@@ -138,14 +180,22 @@ async function fetchBracketData() {
     });
   });
 
+  const thirdPlaceAssignment = lookupThirdPlaceAssignment(standingsByGroup);
+
   // Resolve every knockout match's team names (real, or derived from an
   // already-decided earlier match / group standing, or the raw label).
   const byRound = new Map(ROUNDS.map((r) => [r.type, []]));
   let thirdPlace = null;
   matchesById.forEach((m) => {
     if (m.type === "group") return;
-    const home = m.home || resolveLabel(m.homeLabel, matchesById, standingsByGroup);
-    const away = m.away || resolveLabel(m.awayLabel, matchesById, standingsByGroup);
+    const home =
+      m.home ||
+      resolveThirdPlaceSide(m.homeLabel, m.awayLabel, standingsByGroup, thirdPlaceAssignment) ||
+      resolveLabel(m.homeLabel, matchesById, standingsByGroup);
+    const away =
+      m.away ||
+      resolveThirdPlaceSide(m.awayLabel, m.homeLabel, standingsByGroup, thirdPlaceAssignment) ||
+      resolveLabel(m.awayLabel, matchesById, standingsByGroup);
     const resolved = {
       ...m,
       home,
@@ -230,7 +280,9 @@ export default function WorldCupBracket() {
         </p>
       </div>
 
-      {!data && !error && <div style={styles.empty}>Cargando bracket en vivo…</div>}
+      {!data && !error && (
+        <div style={styles.empty}>Cargando bracket en vivo… puede tardar hasta un minuto.</div>
+      )}
       {!data && error && (
         <div style={styles.empty}>No se pudo conectar con el servicio de resultados en vivo. Intentando de nuevo automáticamente…</div>
       )}
@@ -264,7 +316,7 @@ export default function WorldCupBracket() {
         ) : (
           <>Conectando con el servicio de resultados en vivo…</>
         )}{" "}
-        Equipos no decididos se calculan en el navegador a partir de resultados reales (ganador/perdedor de partido, 1° y 2° de grupo) cuando es posible; los cupos de "mejor tercero" los resuelve la FIFA con reglas cruzadas entre grupos y se muestran como los anuncia la fuente.
+        Equipos no decididos se calculan en el navegador a partir de resultados reales: ganador/perdedor de partido, 1°/2° de grupo, y los cupos de "mejor tercero" usando la tabla oficial de la FIFA (Anexo C, 495 combinaciones) que asigna cada tercer lugar a su cruce exacto. El desempate de terceros usa puntos, diferencia de gol y goles a favor — los criterios de juego limpio y ranking FIFA (para empates totales) no están disponibles en esta fuente.
       </div>
     </div>
   );
