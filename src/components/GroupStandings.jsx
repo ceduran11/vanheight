@@ -27,10 +27,26 @@ function fetchWithTimeout(url, ms = 18000) {
     .finally(() => clearTimeout(timer));
 }
 
+// teams is "enrichment" data (names, flags) — retry it a few times on its
+// own so one unlucky parallel request doesn't blank out names for an
+// entire cycle even though groups succeeded.
+async function fetchEnrichmentWithRetry(url, key, retries = 3) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const data = await fetchWithTimeout(url);
+      if (Array.isArray(data?.[key])) return data[key];
+    } catch {
+      // fall through to retry
+    }
+    if (attempt < retries) await new Promise((r) => setTimeout(r, 1000));
+  }
+  return [];
+}
+
 async function fetchGroupsOnce() {
-  const [groupsRes, teamsRes] = await Promise.allSettled([
+  const [groupsRes, teamsList] = await Promise.allSettled([
     fetchWithTimeout(`${LIVE_API_BASE}/get/groups`),
-    fetchWithTimeout(`${LIVE_API_BASE}/get/teams`),
+    fetchEnrichmentWithRetry(`${LIVE_API_BASE}/get/teams`, "teams"),
   ]);
 
   if (groupsRes.status !== "fulfilled" || !Array.isArray(groupsRes.value?.groups)) {
@@ -38,8 +54,8 @@ async function fetchGroupsOnce() {
   }
 
   const teamsById = new Map();
-  if (teamsRes.status === "fulfilled" && Array.isArray(teamsRes.value?.teams)) {
-    teamsRes.value.teams.forEach((t) => teamsById.set(t.id, t));
+  if (teamsList.status === "fulfilled") {
+    teamsList.value.forEach((t) => teamsById.set(t.id, t));
   }
 
   const byName = new Map();

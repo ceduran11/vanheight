@@ -31,9 +31,11 @@ function MatchCard({ m }) {
 
       <div style={styles.teamsCol}>
         <div style={styles.teamLine}>
+          {m.homeFlag && <img src={m.homeFlag} alt="" style={styles.flag} />}
           <span style={styles.teamName}>{m.home}</span>
         </div>
         <div style={styles.teamLine}>
+          {m.awayFlag && <img src={m.awayFlag} alt="" style={styles.flag} />}
           <span style={styles.teamName}>{m.away}</span>
         </div>
       </div>
@@ -85,7 +87,7 @@ function apiStatusToLocal(timeElapsed) {
   return "final";
 }
 
-function mapApiGames(games, stadiumsById) {
+function mapApiGames(games, stadiumsById, teamsById) {
   return games.map((g) => {
     const [datePart, timePart] = (g.local_date || "").split(" ");
     const [mm, dd, yyyy] = (datePart || "").split("/");
@@ -100,6 +102,8 @@ function mapApiGames(games, stadiumsById) {
       group: g.group,
       home: g.home_team_name_en || g.home_team_label || "TBD",
       away: g.away_team_name_en || g.away_team_label || "TBD",
+      homeFlag: teamsById.get(g.home_team_id)?.flag || null,
+      awayFlag: teamsById.get(g.away_team_id)?.flag || null,
       venue,
       homeScore: status === "scheduled" ? undefined : Number(g.home_score),
       awayScore: status === "scheduled" ? undefined : Number(g.away_score),
@@ -116,10 +120,27 @@ function fetchWithTimeout(url, ms = 18000) {
     .finally(() => clearTimeout(timer));
 }
 
+// Stadiums/teams are "enrichment" data (venue names, flags) — worth a few
+// quick retries of their own so one unlucky parallel request doesn't blank
+// out flags/venues for an entire 5-minute cycle even though games succeeded.
+async function fetchEnrichmentWithRetry(url, key, retries = 3) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const data = await fetchWithTimeout(url);
+      if (Array.isArray(data?.[key])) return data[key];
+    } catch {
+      // fall through to retry
+    }
+    if (attempt < retries) await new Promise((r) => setTimeout(r, 1000));
+  }
+  return [];
+}
+
 async function fetchLiveMatchesOnce() {
-  const [gamesRes, stadiumsRes] = await Promise.allSettled([
+  const [gamesRes, stadiumsList, teamsList] = await Promise.allSettled([
     fetchWithTimeout(`${LIVE_API_BASE}/get/games`),
-    fetchWithTimeout(`${LIVE_API_BASE}/get/stadiums`),
+    fetchEnrichmentWithRetry(`${LIVE_API_BASE}/get/stadiums`, "stadiums"),
+    fetchEnrichmentWithRetry(`${LIVE_API_BASE}/get/teams`, "teams"),
   ]);
 
   if (gamesRes.status !== "fulfilled" || !Array.isArray(gamesRes.value?.games)) {
@@ -127,11 +148,16 @@ async function fetchLiveMatchesOnce() {
   }
 
   const stadiumsById = new Map();
-  if (stadiumsRes.status === "fulfilled" && Array.isArray(stadiumsRes.value?.stadiums)) {
-    stadiumsRes.value.stadiums.forEach((s) => stadiumsById.set(s.id, s));
+  if (stadiumsList.status === "fulfilled") {
+    stadiumsList.value.forEach((s) => stadiumsById.set(s.id, s));
   }
 
-  return mapApiGames(gamesRes.value.games, stadiumsById);
+  const teamsById = new Map();
+  if (teamsList.status === "fulfilled") {
+    teamsList.value.forEach((t) => teamsById.set(t.id, t));
+  }
+
+  return mapApiGames(gamesRes.value.games, stadiumsById, teamsById);
 }
 
 // worldcup26.ir is occasionally flaky (500s / connection resets / DNS
@@ -515,8 +541,9 @@ const styles = {
     color: COLORS.textMuted,
   },
   teamsCol: { gridArea: "teams", display: "flex", flexDirection: "column", gap: 4 },
-  teamLine: { display: "flex", alignItems: "center" },
+  teamLine: { display: "flex", alignItems: "center", gap: 6 },
   teamName: { fontSize: 14.5, fontWeight: 600 },
+  flag: { width: 18, height: 13, objectFit: "cover", borderRadius: 2, flexShrink: 0 },
 
   scoreCol: { gridArea: "score", justifySelf: "end" },
   scoreBox: {
