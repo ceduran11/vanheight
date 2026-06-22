@@ -59,7 +59,7 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
             {link.label}
           </a>
         ))}
-        <a href="/worldcup2026" class="world-cup-link flex justify-center mt-4 transition-all duration-300">
+        <a href="/worldcup2026" class="world-cup-link flex justify-center mt-4 transition-all duration-300" onclick="sessionStorage.setItem('vh_wc_origin','realestate')">
           <img src="/images/logo world cup.png" alt="World Cup 2026" style="height:70px;width:auto;object-fit:contain;" />
         </a>
       </nav>
@@ -123,7 +123,7 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
               {link.label}
             </a>
           ))}
-          <a href="/worldcup2026" class="world-cup-link flex justify-center mt-4 transition-all duration-300">
+          <a href="/worldcup2026" class="world-cup-link flex justify-center mt-4 transition-all duration-300" onclick="sessionStorage.setItem('vh_wc_origin','realestate')">
             <img src="/images/logo world cup.png" alt="World Cup 2026" style="height:70px;width:auto;object-fit:contain;" />
           </a>
         </nav>
@@ -196,12 +196,12 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
         <p class="text-center" style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.3);">
           Vuelve a
         </p>
-        <a href="/" class="remodeling-logo-link flex flex-col items-center leading-none">
+        <a id="wc-back-link" href="/" class="remodeling-logo-link flex flex-col items-center leading-none">
           <span style="font-family: 'Playfair Display', serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; color: #F5F5F5; text-transform: uppercase;">VanHeight</span>
           <span class="flex items-center gap-2 mt-1">
-            <span style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
-            <span style="font-family: 'Playfair Display', serif; font-size: 0.55rem; font-weight: 400; letter-spacing: 0.28em; color: #C9A84C; text-transform: uppercase;">Remodeling</span>
-            <span style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
+            <span id="wc-back-dash1" style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
+            <span id="wc-back-label" style="font-family: 'Playfair Display', serif; font-size: 0.55rem; font-weight: 400; letter-spacing: 0.28em; color: #C9A84C; text-transform: uppercase;">Remodeling</span>
+            <span id="wc-back-dash2" style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
           </span>
         </a>
         <a href="tel:+18323069934" class="text-center text-xs tracking-wider" style="color:rgba(255,255,255,0.35);">
@@ -252,12 +252,12 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
           <p class="text-center" style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.3);">
             Vuelve a
           </p>
-          <a href="/" class="remodeling-logo-link flex flex-col items-center leading-none">
+          <a id="wc-back-link-mobile" href="/" class="remodeling-logo-link flex flex-col items-center leading-none">
             <span style="font-family: 'Playfair Display', serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; color: #F5F5F5; text-transform: uppercase;">VanHeight</span>
             <span class="flex items-center gap-2 mt-1">
-              <span style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
-              <span style="font-family: 'Playfair Display', serif; font-size: 0.55rem; font-weight: 400; letter-spacing: 0.28em; color: #C9A84C; text-transform: uppercase;">Remodeling</span>
-              <span style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
+              <span id="wc-back-dash1-mobile" style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
+              <span id="wc-back-label-mobile" style="font-family: 'Playfair Display', serif; font-size: 0.55rem; font-weight: 400; letter-spacing: 0.28em; color: #C9A84C; text-transform: uppercase;">Remodeling</span>
+              <span id="wc-back-dash2-mobile" style="display: inline-block; width: 14px; height: 1px; background: #C9A84C;"></span>
             </span>
           </a>
           <a href="tel:+18323069934" class="text-center text-xs tracking-wider" style="color:rgba(255,255,255,0.35);">
@@ -303,6 +303,7 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
         <a
           href="/worldcup2026"
           class="world-cup-link flex items-center transition-all duration-300"
+          onclick="sessionStorage.setItem('vh_wc_origin','remodeling')"
         >
           <img src="/images/logo world cup.png" alt="World Cup" style="height:70px;width:auto;object-fit:contain;" />
         </a>
@@ -364,7 +365,7 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
       <a href="/real-estate" class="mobile-link px-6 py-4 text-sm tracking-widest uppercase font-semibold border-b border-subtle" style="color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6);" data-i18n="nav.realEstate">
         Real Estate
       </a>
-      <a href="/worldcup2026" class="mobile-link px-6 py-4 flex items-center border-b border-subtle">
+      <a href="/worldcup2026" class="mobile-link px-6 py-4 flex items-center border-b border-subtle" onclick="sessionStorage.setItem('vh_wc_origin','remodeling')">
         <img src="/images/logo world cup.png" alt="World Cup" style="height:72px;width:auto;object-fit:contain;" />
       </a>
       <div class="px-6 py-5 flex flex-col gap-3">
@@ -628,6 +629,33 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
       if (wcLine2) wcLine2.style.opacity = '1';
       if (wcLine3) { wcLine3.style.transform = ''; wcLine3.style.width = '16px'; }
     }
+  });
+
+  // World Cup "Vuelve a" — points back to wherever the visitor entered the
+  // World Cup section from (main site vs. Real Estate). Remembered in
+  // sessionStorage (set by the World Cup logo links on each site) since it
+  // must survive navigating between World Cup pages, where document.referrer
+  // would just be the previous World Cup page instead of the original entry.
+  const wcOrigin = sessionStorage.getItem('vh_wc_origin') || 'remodeling';
+  const wcBack = wcOrigin === 'realestate'
+    ? { href: '/real-estate', label: 'Real Estate', color: '#4ade80' }
+    : { href: '/', label: 'Remodeling', color: '#C9A84C' };
+
+  [
+    ['wc-back-link', 'wc-back-label', 'wc-back-dash1', 'wc-back-dash2'],
+    ['wc-back-link-mobile', 'wc-back-label-mobile', 'wc-back-dash1-mobile', 'wc-back-dash2-mobile'],
+  ].forEach(([linkId, labelId, dash1Id, dash2Id]) => {
+    const link = document.getElementById(linkId) as HTMLAnchorElement | null;
+    const label = document.getElementById(labelId) as HTMLElement | null;
+    const dash1 = document.getElementById(dash1Id) as HTMLElement | null;
+    const dash2 = document.getElementById(dash2Id) as HTMLElement | null;
+    if (link) link.href = wcBack.href;
+    if (label) {
+      label.textContent = wcBack.label;
+      label.style.color = wcBack.color;
+    }
+    if (dash1) dash1.style.background = wcBack.color;
+    if (dash2) dash2.style.background = wcBack.color;
   });
 
   // "VIVO" badge next to Resultados — only lights up if a match is live right now
