@@ -383,6 +383,12 @@ export default function WorldCupSimulator() {
     return rounds;
   }, [r32Resolved, winners]);
 
+  const champion = useMemo(() => {
+    const final = allRounds.find((r) => r.label === "Final")?.matches?.[0];
+    if (!final || !final.winner) return null;
+    return { name: final[final.winner], flag: final.winner === "home" ? final.homeFlag : final.awayFlag };
+  }, [allRounds]);
+
   if (loadError) {
     return (
       <div style={styles.page}>
@@ -428,6 +434,13 @@ export default function WorldCupSimulator() {
           </span>
         </div>
       </div>
+
+      {champion && (
+        <div style={styles.championBanner}>
+          {champion.flag && <img src={champion.flag} alt="" style={styles.championFlag} />}
+          <span style={styles.championText}>Campeón {champion.name} 2026</span>
+        </div>
+      )}
 
       <div style={styles.groupsGrid}>
         {GROUPS.map((g) => {
@@ -533,6 +546,26 @@ const styles = {
     flexShrink: 0,
   },
   autoFillHint: { fontSize: 11.5, color: COLORS.textMuted, maxWidth: 480 },
+
+  championBanner: {
+    margin: "20px 20px 0",
+    padding: "22px 24px",
+    background: `linear-gradient(135deg, ${COLORS.accentWarm} 0%, #FFE9A8 100%)`,
+    borderRadius: 14,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 16,
+    boxShadow: "0 8px 24px rgba(255,199,44,0.35)",
+  },
+  championFlag: { width: 48, height: 36, objectFit: "cover", borderRadius: 6, flexShrink: 0 },
+  championText: {
+    fontFamily: FONT_DISPLAY,
+    fontSize: 32,
+    fontWeight: 700,
+    color: "#06210F",
+    textAlign: "center",
+  },
 
   empty: { color: COLORS.textMuted, padding: "60px 20px", textAlign: "center" },
 
