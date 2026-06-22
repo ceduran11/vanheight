@@ -174,19 +174,46 @@ export default function WorldCupSimulator() {
     setAutoFillState("loading");
     try {
       const finished = await fetchFinishedGroupStandings();
+      const allGroupsDone = finished.size === GROUPS.length;
+
       setPicks((prev) => {
         const next = { ...prev };
-        finished.forEach((standings, letter) => {
+        const findId = (letter, name) => {
           const teams = groupTeams.get(letter) || [];
-          const findId = (name) => teams.find((t) => t.name === name || displayName(t.name) === name)?.id || null;
-          const firstId = findId(standings[0]?.name);
-          const secondId = findId(standings[1]?.name);
+          return teams.find((t) => t.name === name || displayName(t.name) === name)?.id || null;
+        };
+
+        finished.forEach((standings, letter) => {
+          const firstId = findId(letter, standings[0]?.name);
+          const secondId = findId(letter, standings[1]?.name);
           if (!firstId || !secondId) return; // couldn't match team names — skip this group, don't guess
           next[letter] = { ...next[letter], first: firstId, second: secondId };
         });
+
+        // "Best third" only makes sense once ALL 12 groups are final — it's
+        // a cross-group comparison, so a partial picture would be misleading.
+        if (allGroupsDone) {
+          const thirdCandidates = [];
+          finished.forEach((standings, letter) => {
+            const third = standings[2];
+            const id = third ? findId(letter, third.name) : null;
+            if (id) thirdCandidates.push({ letter, id, pts: third.pts, gd: third.gd, gf: third.gf });
+          });
+          thirdCandidates.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+          const bestEight = new Set(thirdCandidates.slice(0, 8).map((t) => t.letter));
+
+          GROUPS.forEach((letter) => {
+            const candidate = thirdCandidates.find((t) => t.letter === letter);
+            next[letter] = {
+              ...next[letter],
+              third: bestEight.has(letter) ? candidate.id : null,
+            };
+          });
+        }
+
         return next;
       });
-      setAutoFillState("idle");
+      setAutoFillState(allGroupsDone ? "done-all" : "idle");
     } catch (err) {
       console.warn("Auto-fill from openfootball failed:", err);
       setAutoFillState("error");
@@ -395,7 +422,9 @@ export default function WorldCupSimulator() {
           <span style={styles.autoFillHint}>
             {autoFillState === "error"
               ? "No se pudo conectar con la fuente de resultados. Intenta de nuevo."
-              : "Marca 1° y 2° lugar solo en grupos donde ya se jugaron los 6 partidos (fuente: openfootball/worldcup.json). No toca \"mejor tercero\"."}
+              : autoFillState === "done-all"
+              ? "Los 12 grupos ya terminaron — se marcaron 1°, 2° y los 8 mejores terceros automáticamente."
+              : "Marca 1° y 2° lugar en grupos terminados (fuente: openfootball/worldcup.json). \"Mejor tercero\" se completa solo cuando los 12 grupos hayan terminado."}
           </span>
         </div>
       </div>
