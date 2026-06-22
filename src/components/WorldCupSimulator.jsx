@@ -83,6 +83,56 @@ function sortByStats(rows) {
   return [...rows].sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
 }
 
+const OPENFOOTBALL_URL = "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json";
+
+// Looks at the real (hand-updated, but official) openfootball results and
+// returns final 1st/2nd/3rd/4th standings ONLY for groups where all 6 group
+// matches already have a score — i.e. fully decided, zero ambiguity. Groups
+// still missing any result are left out entirely rather than guessed at.
+async function fetchFinishedGroupStandings() {
+  const data = await fetchWithTimeout(OPENFOOTBALL_URL);
+  if (!Array.isArray(data?.matches)) throw new Error("bad openfootball payload");
+
+  const byGroup = new Map();
+  data.matches.forEach((m) => {
+    if (!m.group) return; // knockout matches have no "group"
+    const letter = m.group.replace("Group ", "");
+    if (!byGroup.has(letter)) byGroup.set(letter, []);
+    byGroup.get(letter).push(m);
+  });
+
+  const finished = new Map();
+  byGroup.forEach((matches, letter) => {
+    if (matches.length < 6 || !matches.every((m) => Array.isArray(m.score?.ft))) return;
+
+    const stats = new Map();
+    const ensure = (name) => {
+      if (!stats.has(name)) stats.set(name, { name, pts: 0, gf: 0, ga: 0 });
+      return stats.get(name);
+    };
+    matches.forEach((m) => {
+      const home = ensure(m.team1);
+      const away = ensure(m.team2);
+      const [hs, as] = m.score.ft;
+      home.gf += hs;
+      home.ga += as;
+      away.gf += as;
+      away.ga += hs;
+      if (hs > as) home.pts += 3;
+      else if (as > hs) away.pts += 3;
+      else {
+        home.pts += 1;
+        away.pts += 1;
+      }
+    });
+
+    const standings = sortByStats([...stats.values()].map((s) => ({ ...s, gd: s.gf - s.ga })));
+    finished.set(letter, standings);
+  });
+
+  return finished;
+}
+
 // Resolve a R32 label using the user's manual picks instead of live results.
 function resolveSimLabel(label, picksByGroup, thirdAssignment) {
   let m = label.match(/^Winner Group ([A-L])$/);
@@ -114,9 +164,33 @@ export default function WorldCupSimulator() {
   const [picks, setPicks] = useState(null); // { [letter]: {first,second,third} }
   const [loadError, setLoadError] = useState(false);
   const [winners, setWinners] = useState({}); // { [matchId]: "home" | "away" }
+  const [autoFillState, setAutoFillState] = useState("idle"); // idle | loading | error
 
   function pickWinner(matchId, side) {
     setWinners((prev) => ({ ...prev, [matchId]: prev[matchId] === side ? null : side }));
+  }
+
+  async function autoFillFinishedGroups() {
+    setAutoFillState("loading");
+    try {
+      const finished = await fetchFinishedGroupStandings();
+      setPicks((prev) => {
+        const next = { ...prev };
+        finished.forEach((standings, letter) => {
+          const teams = groupTeams.get(letter) || [];
+          const findId = (name) => teams.find((t) => t.name === name || displayName(t.name) === name)?.id || null;
+          const firstId = findId(standings[0]?.name);
+          const secondId = findId(standings[1]?.name);
+          if (!firstId || !secondId) return; // couldn't match team names — skip this group, don't guess
+          next[letter] = { ...next[letter], first: firstId, second: secondId };
+        });
+        return next;
+      });
+      setAutoFillState("idle");
+    } catch (err) {
+      console.warn("Auto-fill from openfootball failed:", err);
+      setAutoFillState("error");
+    }
   }
 
   useEffect(() => {
@@ -310,6 +384,20 @@ export default function WorldCupSimulator() {
         <div style={styles.thirdCounter}>
           Mejores terceros elegidos: <strong>{thirdCount} / 8</strong>
         </div>
+        <div style={styles.autoFillRow}>
+          <button
+            onClick={autoFillFinishedGroups}
+            disabled={autoFillState === "loading"}
+            style={styles.autoFillBtn}
+          >
+            {autoFillState === "loading" ? "Consultando resultados…" : "Autocompletar grupos terminados"}
+          </button>
+          <span style={styles.autoFillHint}>
+            {autoFillState === "error"
+              ? "No se pudo conectar con la fuente de resultados. Intenta de nuevo."
+              : "Marca 1° y 2° lugar solo en grupos donde ya se jugaron los 6 partidos (fuente: openfootball/worldcup.json). No toca \"mejor tercero\"."}
+          </span>
+        </div>
       </div>
 
       <div style={styles.groupsGrid}>
@@ -403,6 +491,19 @@ const styles = {
   title: { fontFamily: FONT_DISPLAY, fontSize: 28, margin: "4px 0 6px", fontWeight: 700 },
   subtitle: { margin: "0 0 10px", color: COLORS.textMuted, fontSize: 13, maxWidth: 720, lineHeight: 1.5 },
   thirdCounter: { fontSize: 13, color: COLORS.accentWarm },
+  autoFillRow: { marginTop: 12, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 },
+  autoFillBtn: {
+    background: COLORS.accent,
+    color: "#06210F",
+    border: "none",
+    borderRadius: 8,
+    padding: "8px 14px",
+    fontSize: 12.5,
+    fontWeight: 700,
+    cursor: "pointer",
+    flexShrink: 0,
+  },
+  autoFillHint: { fontSize: 11.5, color: COLORS.textMuted, maxWidth: 480 },
 
   empty: { color: COLORS.textMuted, padding: "60px 20px", textAlign: "center" },
 
