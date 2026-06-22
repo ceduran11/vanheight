@@ -306,11 +306,15 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
       <div style="display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem;">
         <a
           href="/real-estate"
-          class="real-estate-link hidden md:flex text-xs tracking-widest uppercase font-semibold px-3 py-1.5 transition-all duration-300"
-          style="border: 1px solid #4ade80; color: #4ade80; text-shadow: 0 0 8px rgba(74,222,128,0.6); white-space: nowrap;"
-          data-i18n="nav.realEstate"
+          class="real-estate-link hidden md:flex flex-col items-center leading-none transition-all duration-300"
+          style="white-space: nowrap;"
         >
-          Real Estate
+          <span style="font-family: 'Playfair Display', serif; font-size: 1.01rem; font-weight: 700; letter-spacing: 0.13em; color: #F5F5F5; text-transform: uppercase;">VanHeight</span>
+          <span class="flex items-center gap-1.5 mt-1">
+            <span style="display: inline-block; width: 12.65px; height: 1px; background: #4ade80;"></span>
+            <span data-i18n="nav.realEstate" style="font-family: 'Playfair Display', serif; font-size: 0.6325rem; font-weight: 400; letter-spacing: 0.26em; color: #4ade80; text-transform: uppercase;">Real Estate</span>
+            <span style="display: inline-block; width: 12.65px; height: 1px; background: #4ade80;"></span>
+          </span>
         </a>
         <div class="hidden md:flex flex-col items-center" style="gap: 3px;">
           <a href="tel:+18323069934" class="text-sm text-white hover:text-gold transition-colors">(832) 306-9934</a>
@@ -397,11 +401,11 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
     }
   }
 
+  .real-estate-link {
+    transition: opacity 0.25s ease;
+  }
   .real-estate-link:hover {
-    background: #4ade80 !important;
-    color: #000 !important;
-    text-shadow: none !important;
-    box-shadow: 0 0 16px rgba(74,222,128,0.5);
+    opacity: 0.7;
   }
 
   .world-cup-link:hover {
