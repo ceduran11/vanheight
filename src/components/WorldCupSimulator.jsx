@@ -170,6 +170,17 @@ export default function WorldCupSimulator() {
     setWinners((prev) => ({ ...prev, [matchId]: prev[matchId] === side ? null : side }));
   }
 
+  function resetAll() {
+    if (!window.confirm("¿Borrar toda la predicción? Se perderán los grupos y el bracket elegidos.")) return;
+    const blank = {};
+    GROUPS.forEach((g) => {
+      blank[g] = { first: null, second: null, third: null };
+    });
+    setPicks(blank);
+    setWinners({});
+    setAutoFillState("idle");
+  }
+
   async function autoFillFinishedGroups() {
     setAutoFillState("loading");
     try {
@@ -389,6 +400,25 @@ export default function WorldCupSimulator() {
     return { name: final[final.winner], flag: final.winner === "home" ? final.homeFlag : final.awayFlag };
   }, [allRounds]);
 
+  function teamNameById(letter, id) {
+    if (!id) return null;
+    return (groupTeams?.get(letter) || []).find((t) => t.id === id)?.name || null;
+  }
+
+  const finalExtra = champion ? (
+    <div style={styles.championBlock}>
+      <div style={styles.championBanner}>
+        {champion.flag && <img src={champion.flag} alt="" style={styles.championFlag} />}
+        <span style={styles.championText}>Campeón {champion.name} 2026</span>
+      </div>
+      <button onClick={() => window.print()} style={styles.printBtn}>
+        Imprimir mi predicción
+      </button>
+    </div>
+  ) : null;
+
+  const renderedRounds = allRounds.map((r) => (r.label === "Final" ? { ...r, extra: finalExtra } : r));
+
   if (loadError) {
     return (
       <div style={styles.page}>
@@ -406,7 +436,60 @@ export default function WorldCupSimulator() {
   }
 
   return (
-    <div style={styles.page}>
+    <>
+      <style>{`
+        .wc-sim-print-only { display: none; }
+        @media print {
+          .wc-sim-screen-only { display: none !important; }
+          .wc-sim-print-only { display: block !important; }
+        }
+      `}</style>
+      <div className="wc-sim-print-only" style={styles.printOnly}>
+        <h1 style={styles.printTitle}>Mi predicción — Mundial 2026</h1>
+        {champion && <p style={styles.printChampion}>Campeón: {champion.name} 2026</p>}
+
+        <h2 style={styles.printSectionTitle}>Grupos</h2>
+        <table style={styles.printTable}>
+          <thead>
+            <tr>
+              <th style={styles.printTh}>Grupo</th>
+              <th style={styles.printTh}>1°</th>
+              <th style={styles.printTh}>2°</th>
+              <th style={styles.printTh}>Mejor 3°</th>
+            </tr>
+          </thead>
+          <tbody>
+            {GROUPS.map((g) => {
+              const p = picks[g] || {};
+              return (
+                <tr key={g}>
+                  <td style={styles.printTd}>{g}</td>
+                  <td style={styles.printTd}>{teamNameById(g, p.first) || "—"}</td>
+                  <td style={styles.printTd}>{teamNameById(g, p.second) || "—"}</td>
+                  <td style={styles.printTd}>{teamNameById(g, p.third) || "—"}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        <h2 style={styles.printSectionTitle}>Eliminación directa</h2>
+        {allRounds.map((round) => (
+          <div key={round.label}>
+            <h3 style={styles.printRoundTitle}>{round.label}</h3>
+            <ul style={styles.printList}>
+              {round.matches.map((m) => (
+                <li key={m.id}>
+                  {m.home || "Por definir"} vs {m.away || "Por definir"}
+                  {m.winner ? ` → ${m[m.winner]}` : " (sin definir)"}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="wc-sim-screen-only" style={styles.page}>
       <div style={styles.header}>
         <span style={styles.eyebrow}>FIFA · CANADÁ · MÉXICO · ESTADOS UNIDOS</span>
         <h1 style={styles.title}>Simulador de Bracket</h1>
@@ -434,13 +517,6 @@ export default function WorldCupSimulator() {
           </span>
         </div>
       </div>
-
-      {champion && (
-        <div style={styles.championBanner}>
-          {champion.flag && <img src={champion.flag} alt="" style={styles.championFlag} />}
-          <span style={styles.championText}>Campeón {champion.name} 2026</span>
-        </div>
-      )}
 
       <div style={styles.groupsGrid}>
         {GROUPS.map((g) => {
@@ -505,13 +581,20 @@ export default function WorldCupSimulator() {
         <p style={styles.bracketSubtitle}>Marca la casilla junto al equipo que gana cada partido para que avance a la siguiente ronda.</p>
       </div>
 
-      <BracketView rounds={allRounds} onPickWinner={pickWinner} />
+      <BracketView rounds={renderedRounds} onPickWinner={pickWinner} />
+
+      <div style={styles.resetRow}>
+        <button onClick={resetAll} style={styles.resetBtn}>
+          Borrar todo
+        </button>
+      </div>
 
       <div style={styles.footnote}>
         Resolución de "mejor tercero" usando la tabla oficial de la FIFA (Anexo C, 495 combinaciones). Roster de equipos
         y posición de partida tomados de worldcup26.ir — todo lo demás es una simulación local, no se guarda ni se envía a ningún lado.
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -547,25 +630,57 @@ const styles = {
   },
   autoFillHint: { fontSize: 11.5, color: COLORS.textMuted, maxWidth: 480 },
 
+  championBlock: {
+    position: "relative",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "max-content",
+    maxWidth: 260,
+    marginTop: 14,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 8,
+  },
   championBanner: {
-    margin: "20px 20px 0",
-    padding: "22px 24px",
+    padding: "8px 14px",
     background: `linear-gradient(135deg, ${COLORS.accentWarm} 0%, #FFE9A8 100%)`,
-    borderRadius: 14,
+    borderRadius: 10,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: 16,
-    boxShadow: "0 8px 24px rgba(255,199,44,0.35)",
+    gap: 8,
+    boxShadow: "0 4px 14px rgba(255,199,44,0.3)",
   },
-  championFlag: { width: 48, height: 36, objectFit: "cover", borderRadius: 6, flexShrink: 0 },
+  championFlag: { width: 22, height: 16, objectFit: "cover", borderRadius: 3, flexShrink: 0 },
   championText: {
     fontFamily: FONT_DISPLAY,
-    fontSize: 32,
+    fontSize: 13,
     fontWeight: 700,
     color: "#06210F",
     textAlign: "center",
+    lineHeight: 1.3,
   },
+  printBtn: {
+    background: COLORS.accent,
+    color: "#06210F",
+    border: "none",
+    borderRadius: 8,
+    padding: "7px 12px",
+    fontSize: 11.5,
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+
+  printOnly: { display: "none", background: "#fff", color: "#111", padding: 28, fontFamily: FONT_BODY },
+  printTitle: { fontFamily: FONT_DISPLAY, fontSize: 22, margin: "0 0 12px" },
+  printChampion: { fontSize: 14, fontWeight: 700, margin: "0 0 16px" },
+  printSectionTitle: { fontFamily: FONT_DISPLAY, fontSize: 16, margin: "20px 0 8px", borderBottom: "1px solid #ccc", paddingBottom: 4 },
+  printTable: { width: "100%", borderCollapse: "collapse", fontSize: 12 },
+  printTh: { textAlign: "left", borderBottom: "1px solid #999", padding: "4px 6px" },
+  printTd: { borderBottom: "1px solid #ddd", padding: "4px 6px" },
+  printRoundTitle: { fontSize: 13, fontWeight: 700, margin: "10px 0 4px" },
+  printList: { margin: "0 0 4px", paddingLeft: 18, fontSize: 12, lineHeight: 1.5 },
 
   empty: { color: COLORS.textMuted, padding: "60px 20px", textAlign: "center" },
 
@@ -596,6 +711,18 @@ const styles = {
   bracketHeader: { padding: "32px 20px 0" },
   bracketTitle: { fontFamily: FONT_DISPLAY, fontSize: 22, fontWeight: 700, margin: "0 0 4px" },
   bracketSubtitle: { margin: 0, color: COLORS.textMuted, fontSize: 12.5 },
+
+  resetRow: { padding: "16px 20px 0", display: "flex", justifyContent: "flex-start" },
+  resetBtn: {
+    background: "transparent",
+    color: COLORS.live,
+    border: `1px solid ${COLORS.live}`,
+    borderRadius: 8,
+    padding: "8px 14px",
+    fontSize: 12.5,
+    fontWeight: 700,
+    cursor: "pointer",
+  },
 
   footnote: { padding: "20px 20px 0", fontSize: 11, color: COLORS.textMuted, lineHeight: 1.6 },
 };

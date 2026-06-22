@@ -366,6 +366,16 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
 )}
 
 <style>
+  /* Hide site navigation when printing a World Cup page (e.g. the bracket
+     simulator's "print my prediction") so only the page's own content shows. */
+  @media print {
+    .wc-sidebar,
+    .wc-mobile-top,
+    #wc-drawer {
+      display: none !important;
+    }
+  }
+
   /* Logo layout */
   .logo-link {
     flex-direction: column;
@@ -520,8 +530,9 @@ const isWorldCup = currentPath.startsWith('/worldcup2026');
     if (langChevron) langChevron.style.transform = '';
   });
 
-  // Scroll effect
+  // Scroll effect (only present on the default header — World Cup/Real Estate use a sidebar instead)
   window.addEventListener('scroll', () => {
+    if (!header) return;
     if (window.scrollY > 5) {
       header.style.background = 'rgba(12,12,12,0.97)';
       header.style.borderBottom = '1px solid #000000';

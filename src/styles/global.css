@@ -118,6 +118,12 @@ body.re-layout {
   padding-left: 220px;
 }
 
+@media print {
+  /* The sidebar (real estate or World Cup) hides itself in print, but the
+     body keeps the 220px padding reserved for it unless we zero it here. */
+  body.re-layout { padding-left: 0 !important; }
+}
+
 .re-sidebar {
   position: fixed;
   left: 0;

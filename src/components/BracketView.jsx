@@ -17,22 +17,16 @@ const SLOT_GAP = 18;
 const COLUMN_WIDTH = 220;
 const COLUMN_GAP = 36;
 
-// Computes the vertical center (px) of every match in every round, given
-// only the first round's match count — round k+1's centers are just the
-// midpoint of each pair of round k centers. This sidesteps flexbox's
-// space-around/gap math (which gets unreliable once a `gap` is mixed in)
-// in favor of plain arithmetic we fully control.
-function computeCenters(counts) {
-  const centers = [];
-  centers[0] = counts[0].map((_, i) => i * (SLOT_HEIGHT + SLOT_GAP) + SLOT_HEIGHT / 2);
-  for (let r = 1; r < counts.length; r++) {
-    const prev = centers[r - 1];
-    centers[r] = counts[r].map((_, i) => (prev[2 * i] + prev[2 * i + 1]) / 2);
-  }
-  return centers;
+// Splits a round's matches into the pairs that feed the next round
+// (indices 2i/2i+1 always feed index i of the following round — the same
+// pairing every caller of BracketView already relies on).
+function pairUp(matches) {
+  const pairs = [];
+  for (let i = 0; i < matches.length; i += 2) pairs.push([matches[i], matches[i + 1]]);
+  return pairs;
 }
 
-function MatchBox({ m, top, onPickWinner }) {
+function MatchBox({ m, onPickWinner }) {
   const isDecided = m.homeScore != null && m.awayScore != null;
   const homeWins = isDecided && m.homeScore > m.awayScore;
   const awayWins = isDecided && m.awayScore > m.homeScore;
@@ -40,17 +34,7 @@ function MatchBox({ m, top, onPickWinner }) {
   const canPick = typeof onPickWinner === "function" && !m.homeUnresolved && !m.awayUnresolved;
 
   return (
-    <div
-      style={{
-        ...styles.slot,
-        ...(isLive ? styles.slotLive : {}),
-        position: "absolute",
-        top,
-        left: 0,
-        width: COLUMN_WIDTH,
-        height: SLOT_HEIGHT,
-      }}
-    >
+    <div style={{ ...styles.slot, ...(isLive ? styles.slotLive : {}) }}>
       <div style={{ ...styles.slotRow, ...(homeWins || m.winner === "home" ? styles.slotRowWinner : {}) }}>
         <span style={styles.slotTeamInner}>
           {m.homeFlag && !m.homeUnresolved && <img src={m.homeFlag} alt="" style={styles.slotFlag} />}
@@ -97,38 +81,63 @@ function MatchBox({ m, top, onPickWinner }) {
   );
 }
 
-// rounds: [{ label, matches: [{id,home,away,homeFlag,awayFlag,homeScore,awayScore,status,homeUnresolved,awayUnresolved,winner}] }]
+// rounds: [{ label, matches: [{id,home,away,homeFlag,awayFlag,homeScore,awayScore,status,homeUnresolved,awayUnresolved,winner}], extra }]
+// `extra` (optional) renders as a normal-flow block directly below that round's matches — e.g. a champion banner under the Final.
 // Match counts must halve each round (16 -> 8 -> 4 -> 2 -> 1).
 // onPickWinner(matchId, "home"|"away") — when provided, matches with both
 // sides resolved get a checkbox per side to mark who advances.
+//
+// Connector lines: every round except the last groups its matches into pairs
+// (the two feeders of the next round's match). Each pair lives in its own
+// position:relative wrapper that is split 50/50 by two flex:1 slots — so the
+// pair's vertical connector (anchored to that wrapper) always spans exactly
+// from the first slot's center (25%) to the second slot's center (75%),
+// with no pixel math, however the column's height changes across breakpoints.
 export default function BracketView({ rounds, extraColumn, onPickWinner }) {
-  const centers = computeCenters(rounds.map((r) => r.matches));
-  const totalHeight = rounds[0].matches.length * (SLOT_HEIGHT + SLOT_GAP) - SLOT_GAP;
+  const totalHeight = rounds[0].matches.length * (SLOT_HEIGHT + SLOT_GAP);
 
   return (
     <div style={styles.scroll}>
-      <div style={{ ...styles.inner, height: totalHeight }}>
-        {rounds.map((round, r) => (
-          <div key={round.label} style={{ ...styles.column, left: r * (COLUMN_WIDTH + COLUMN_GAP) }}>
-            <div style={styles.columnLabel}>{round.label}</div>
-            <div style={{ position: "relative", height: totalHeight }}>
-              {round.matches.map((m, i) => (
-                <MatchBox key={m.id ?? i} m={m} top={centers[r][i]} onPickWinner={onPickWinner} />
-              ))}
+      <div style={styles.inner}>
+        {rounds.map((round, r) => {
+          const isFirst = r === 0;
+          const isLast = r === rounds.length - 1;
+          return (
+            <div key={round.label} style={styles.column}>
+              <div style={styles.columnLabel}>{round.label}</div>
+              <div style={{ ...styles.matchesCol, height: totalHeight }}>
+                {isLast
+                  ? round.matches.map((m, i) => (
+                      <div key={m.id ?? i} style={styles.slotRegion}>
+                        {!isFirst && <span style={styles.stubLeft} />}
+                        <MatchBox m={m} onPickWinner={onPickWinner} />
+                      </div>
+                    ))
+                  : pairUp(round.matches).map((pair, pi) => (
+                      <div key={pi} style={styles.pairWrap}>
+                        {pair.map((m, si) => (
+                          <div key={m.id ?? si} style={styles.slotRegion}>
+                            {!isFirst && <span style={styles.stubLeft} />}
+                            <MatchBox m={m} onPickWinner={onPickWinner} />
+                            <span style={styles.stubRight} />
+                          </div>
+                        ))}
+                        <span style={styles.vConnector} />
+                      </div>
+                    ))}
+              </div>
+              {round.extra}
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {extraColumn && (
-          <div
-            style={{
-              ...styles.column,
-              left: rounds.length * (COLUMN_WIDTH + COLUMN_GAP),
-            }}
-          >
+          <div style={styles.column}>
             <div style={styles.columnLabel}>{extraColumn.label}</div>
-            <div style={{ position: "relative", height: totalHeight }}>
-              <MatchBox m={extraColumn.match} top={totalHeight / 2 - SLOT_HEIGHT / 2} />
+            <div style={{ ...styles.matchesCol, height: totalHeight }}>
+              <div style={styles.slotRegion}>
+                <MatchBox m={extraColumn.match} />
+              </div>
             </div>
           </div>
         )}
@@ -139,8 +148,10 @@ export default function BracketView({ rounds, extraColumn, onPickWinner }) {
 
 const styles = {
   scroll: { overflowX: "auto", padding: "24px 20px 32px" },
-  inner: { position: "relative", minWidth: "max-content" },
-  column: { position: "absolute", top: 0, width: COLUMN_WIDTH },
+  // Columns are plain flex siblings now — the browser handles spacing and
+  // horizontal scroll the same way regardless of viewport width.
+  inner: { display: "flex", flexDirection: "row", gap: COLUMN_GAP, minWidth: "max-content" },
+  column: { flexShrink: 0, width: COLUMN_WIDTH },
   columnLabel: {
     fontSize: 11,
     fontWeight: 700,
@@ -151,7 +162,43 @@ const styles = {
     marginBottom: 14,
   },
 
-  slot: { background: COLORS.bgCard, border: `1px solid ${COLORS.border}`, borderRadius: 10, overflow: "hidden" },
+  // A round's matches column: fixed total height, split evenly by the
+  // flex:1 pair-wraps/slot-regions inside it — same math as a manual
+  // pixel-center calculation, but computed by the browser's layout engine.
+  matchesCol: { display: "flex", flexDirection: "column" },
+  // Wraps exactly the 2 matches that feed one match in the next round.
+  // position:relative so its own vConnector child has a direct, local
+  // anchor — never the page or a distant ancestor.
+  pairWrap: { flex: 1, position: "relative", display: "flex", flexDirection: "column", minHeight: 0 },
+  // One match's share of its column/pair — centers the (fixed-height) card
+  // inside an evenly-split region instead of placing it via a computed top.
+  // position:relative so the stub lines below anchor to THIS match's own
+  // container, never the card itself (which stays overflow:hidden for its
+  // rounded corners) and never a distant ancestor.
+  slotRegion: { flex: 1, position: "relative", display: "flex", alignItems: "center", minHeight: 0 },
+  // Vertical bracket line: spans the middle 50% of its pairWrap parent,
+  // i.e. exactly from the first match's center (25%) to the second's (75%).
+  vConnector: {
+    position: "absolute",
+    top: "25%",
+    bottom: "25%",
+    right: -COLUMN_GAP / 2,
+    borderRight: `1px solid ${COLORS.border}`,
+  },
+  // Short horizontal stubs reaching halfway into the gap on either side of
+  // a card — anchored to that card's own slotRegion (their direct parent).
+  stubLeft: { position: "absolute", left: -COLUMN_GAP / 2, top: "50%", width: COLUMN_GAP / 2, height: 1, background: COLORS.border },
+  stubRight: { position: "absolute", right: -COLUMN_GAP / 2, top: "50%", width: COLUMN_GAP / 2, height: 1, background: COLORS.border },
+
+  slot: {
+    position: "relative",
+    width: "100%",
+    height: SLOT_HEIGHT,
+    background: COLORS.bgCard,
+    border: `1px solid ${COLORS.border}`,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
   slotLive: { borderColor: COLORS.live },
   slotRow: {
     display: "flex",
