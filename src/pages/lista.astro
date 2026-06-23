@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ChecklistApp from '../components/ChecklistApp.jsx';
+---
+
+<Layout
+  title="Lista de Control | VanHeight"
+  description="Checklist interno de control de avance para proyectos de remodelación."
+  noindex={true}
+>
+  <ChecklistApp client:load />
+</Layout>
